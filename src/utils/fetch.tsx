@@ -1,6 +1,9 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
-export const BASE_URL = "https://oevtp9dizy.gzg.sealos.run/";
+export const BASE_URL = (() =>
+  import.meta?.env?.VITE_API_URL ||
+  "http://localhost:8000" ||
+  "https://django-suss.zeabur.app")();
 
 class HttpClient {
   private api: AxiosInstance;
@@ -48,12 +51,12 @@ const httpClient = new HttpClient({
 
 export const post = async (url: string, body: any): Promise<any> => {
   try {
-    const { data } = await httpClient.post(url, body, {
+    const res = await httpClient.post(url, body, {
       headers: {
         Authorization: localStorage.getItem("token"),
       },
     });
-    return data;
+    return res;
   } catch (e: any) {
     console.error("Error:", e);
   }

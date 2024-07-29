@@ -10,6 +10,7 @@ const Register = () => {
   const email = useUserStore((state) => state.email);
   const loading = useUserStore((state) => state.loading);
   const navigate = useNavigate();
+
   function handleSubmit(): void {
     form.validateFields().then((value) => {
       const { name, email, password, confirmPwd } = value;

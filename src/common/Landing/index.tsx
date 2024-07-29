@@ -7,23 +7,23 @@ import { useNavigate } from "react-router-dom";
 const Landing = () => {
   const [form] = Form.useForm();
   const loginUser = useUserStore((state) => state.loginUser);
-  const email = useUserStore((state) => state.email);
+  const name = useUserStore((state) => state.name);
   const loading = useUserStore((state) => state.loading);
   const navigate = useNavigate();
   function handleSubmit(): void {
     form.validateFields().then(() => {
-      const { email, password } = form.getFieldsValue();
-      void loginUser({ email, password });
+      const { username, password } = form.getFieldsValue();
+      void loginUser({ username, password });
     });
   }
 
   useEffect(() => {
-    if (email) {
+    if (name) {
       setTimeout(() => {
         navigate("/");
       }, 500);
     }
-  }, [email, navigate]);
+  }, [name, navigate]);
 
   return (
     <div className="min-h-screen bg-blue-500 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -37,13 +37,15 @@ const Landing = () => {
           <Form form={form}>
             <Spin spinning={loading}>
               <Form.Item
-                label="Email"
-                name="email"
-                rules={[{ required: true, message: "Please fill your email" }]}
+                label="Username"
+                name="username"
+                rules={[
+                  { required: true, message: "Please fill your username" },
+                ]}
               >
                 <Input
                   inputMode={"email"}
-                  placeholder="Please fill your email"
+                  placeholder="Please fill your username"
                 />
               </Form.Item>
               <Form.Item

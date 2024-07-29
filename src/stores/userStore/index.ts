@@ -13,7 +13,7 @@ interface IUserStoreState {
     email: string;
     password: string;
   }) => Promise<any>;
-  loginUser: (props: { email: string; password: string }) => Promise<any>;
+  loginUser: (props: { username: string; password: string }) => Promise<any>;
   init: () => Promise<any>;
 }
 export const useUserStore = create<IUserStoreState>()((set) => ({
@@ -46,10 +46,10 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
       set(() => ({ loading: true }));
       const { user, token } = await login({
         ...props,
-        password: btoa(props.password),
+        password: props.password,
       });
       set(() => ({
-        ...user,
+        name: user,
         loading: false,
       }));
 
