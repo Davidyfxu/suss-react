@@ -1,7 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
-export const BASE_URL =
-  "http://localhost:8000" || "https://django-suss.zeabur.app";
+export const BASE_URL = "https://django-suss.zeabur.app";
 
 class HttpClient {
   private api: AxiosInstance;
