@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const Landing = () => {
   const [form] = Form.useForm();
   const loginUser = useUserStore((state) => state.loginUser);
-  const name = useUserStore((state) => state.username);
+  const username = useUserStore((state) => state.username);
   const loading = useUserStore((state) => state.loading);
   const navigate = useNavigate();
   function handleSubmit(): void {
@@ -18,12 +18,12 @@ const Landing = () => {
   }
 
   useEffect(() => {
-    if (name) {
+    if (username) {
       setTimeout(() => {
         navigate("/");
-      }, 500);
+      }, 100);
     }
-  }, [name, navigate]);
+  }, [username, navigate]);
 
   return (
     <div className="min-h-screen bg-blue-500 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
