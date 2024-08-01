@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button, Checkbox, Form, Input, Spin } from "antd";
 import { useUserStore } from "../../stores/userStore";
@@ -7,25 +7,32 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
   const [form] = Form.useForm();
   const registerUser = useUserStore((state) => state.registerUser);
-  const email = useUserStore((state) => state.email);
+  const username = useUserStore((state) => state.username);
   const loading = useUserStore((state) => state.loading);
   const navigate = useNavigate();
 
   function handleSubmit(): void {
-    form.validateFields().then((value) => {
-      const { name, email, password, confirmPwd } = value;
-      if (password !== confirmPwd) return;
-      void registerUser({ name, email, password });
-    });
+    form
+      .validateFields()
+      .then((value) => {
+        const { username, email, password, confirmPwd } = value;
+        if (password !== confirmPwd) return;
+        void registerUser({ username, email, password });
+      })
+      .then(() =>
+        setTimeout(() => {
+          navigate("/landing");
+        }, 500),
+      );
   }
 
   useEffect(() => {
-    if (email) {
+    if (username) {
       setTimeout(() => {
         navigate("/");
       }, 500);
     }
-  }, [email, navigate]);
+  }, [username, navigate]);
 
   return (
     <div className="min-h-screen bg-blue-500 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -44,11 +51,11 @@ const Register = () => {
         >
           <Spin spinning={loading}>
             <Form.Item
-              label="Nickname"
-              name="name"
-              rules={[{ required: true, message: "Please fill your nickname" }]}
+              label="Username"
+              name="username"
+              rules={[{ required: true, message: "Please fill your username" }]}
             >
-              <Input placeholder="Please fill your nickname" />
+              <Input placeholder="Please fill your username" />
             </Form.Item>
             <Form.Item
               label="Email"

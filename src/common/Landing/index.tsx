@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const Landing = () => {
   const [form] = Form.useForm();
   const loginUser = useUserStore((state) => state.loginUser);
-  const name = useUserStore((state) => state.name);
+  const name = useUserStore((state) => state.username);
   const loading = useUserStore((state) => state.loading);
   const navigate = useNavigate();
   function handleSubmit(): void {

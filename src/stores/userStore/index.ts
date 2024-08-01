@@ -3,13 +3,13 @@ import { message } from "antd";
 import { init, login, register } from "../../common/api";
 import { isEmpty } from "lodash-es";
 interface IUserStoreState {
-  name: string;
+  username: string;
   email: string;
   avatar: string;
   // setUser: (props: { name: string; email: string }) => void;
   loading: boolean;
   registerUser: (props: {
-    name: string;
+    username: string;
     email: string;
     password: string;
   }) => Promise<any>;
@@ -17,7 +17,7 @@ interface IUserStoreState {
   init: () => Promise<any>;
 }
 export const useUserStore = create<IUserStoreState>()((set) => ({
-  name: "",
+  username: "",
   email: "",
   avatar: "",
   loading: false,
@@ -25,20 +25,16 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
   registerUser: async (props): Promise<any> => {
     try {
       set(() => ({ loading: true }));
-      const { user, token } = await register({
+      await register({
         ...props,
-        password: btoa(props.password),
       });
       set(() => ({
-        ...user,
         loading: false,
       }));
-
-      localStorage.setItem("token", `Bearer ${token}`);
-      message.success("注册成功，跳转中");
+      message.success("注册成功");
     } catch (e) {
       message.error("注册失败");
-      console.error("registerUser", e);
+      throw new Error("注册失败", e?.message);
     }
   },
   loginUser: async (props): Promise<any> => {
@@ -50,7 +46,7 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
       });
 
       set(() => ({
-        name: res?.user,
+        ...res,
         loading: false,
       }));
       res?.token && localStorage.setItem("token", `Bearer ${res?.token}`);

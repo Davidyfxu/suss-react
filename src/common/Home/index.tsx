@@ -11,7 +11,7 @@ const Home = (): any => {
   const navigate = useNavigate();
   const [selectItem, setSelectItem] = useState({ k: [], label: "" });
   const email = useUserStore((state) => state.email);
-  const name = useUserStore((state) => state.name);
+  const name = useUserStore((state) => state.username);
   const avatar = useUserStore((state) => state.avatar);
   return (
     <Layout
