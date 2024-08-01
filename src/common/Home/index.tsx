@@ -3,7 +3,6 @@ import { Layout, Menu, Avatar, Dropdown, Breadcrumb, Button } from "antd";
 import { routers2 } from "../config/routers";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useUserStore } from "../../stores/userStore";
-import { Watermark } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import menuLogo from "../../assets/SUSS_LOGO.jpg";
 const { Header, Footer, Content, Sider } = Layout;
@@ -79,9 +78,7 @@ const Home = (): any => {
             overflow: "auto",
           }}
         >
-          <Watermark content="Offer Expert">
-            <Outlet />
-          </Watermark>
+          <Outlet />
         </Content>
         <Footer className={"flex items-center justify-center bg-white"}>
           <span>

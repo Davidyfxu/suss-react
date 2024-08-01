@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ProtectedRoute } from "./components";
+import { LazyRouter, ProtectedRoute } from "./components";
 import { Home, Landing, Register, Error } from "./common";
+
+const Test = LazyRouter(() => import("./pages/Test"));
 function App() {
   return (
     <BrowserRouter>
@@ -12,7 +14,9 @@ function App() {
               <Home />
             </ProtectedRoute>
           }
-        ></Route>
+        >
+          <Route path={"test"} element={<Test />} />
+        </Route>
         <Route path="/register" element={<Register />} />
         <Route path="/landing" element={<Landing />} />
         <Route path="*" element={<Error />} />

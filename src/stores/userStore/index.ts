@@ -21,7 +21,7 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
   email: "",
   avatar: "",
   loading: false,
-  // setUser: (props) => set({ ...props }),
+  setUser: (props) => set({ ...props }),
   registerUser: async (props): Promise<any> => {
     try {
       set(() => ({ loading: true }));
@@ -44,16 +44,16 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
   loginUser: async (props): Promise<any> => {
     try {
       set(() => ({ loading: true }));
-      const { user, token } = await login({
+      const res = await login({
         ...props,
         password: props.password,
       });
+
       set(() => ({
-        name: user,
+        name: res?.user,
         loading: false,
       }));
-
-      localStorage.setItem("token", `Bearer ${token}`);
+      res?.token && localStorage.setItem("token", `Bearer ${res?.token}`);
       message.success("登录成功，跳转中");
     } catch (e) {
       console.error("loginUser", e);
@@ -66,7 +66,7 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
       const res = await init({});
 
       set(() => ({
-        ...res?.user,
+        ...res,
         loading: false,
       }));
       return { redirect: isEmpty(res) };
