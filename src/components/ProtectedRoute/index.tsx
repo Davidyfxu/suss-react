@@ -24,7 +24,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }): any => {
     void checkToken();
   }, []);
 
-  return loading ? <Spin size={"large"} /> : children;
+  return loading ? <Spin className={"w-full mt-8"} size={"large"} /> : children;
 };
 
 export default ProtectedRoute;

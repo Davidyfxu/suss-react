@@ -3,6 +3,8 @@ import { LazyRouter, ProtectedRoute } from "./components";
 import { Home, Landing, Register, Error } from "./common";
 
 const Test = LazyRouter(() => import("./pages/Test"));
+const Dashboard = LazyRouter(() => import("./pages/Dashboard"));
+const Profile = LazyRouter(() => import("./pages/Profile"));
 function App() {
   return (
     <BrowserRouter>
@@ -16,6 +18,8 @@ function App() {
           }
         >
           <Route path={"test"} element={<Test />} />
+          <Route path={"dashboard"} element={<Dashboard />} />
+          <Route path={"profile"} element={<Profile />} />
         </Route>
         <Route path="/register" element={<Register />} />
         <Route path="/landing" element={<Landing />} />

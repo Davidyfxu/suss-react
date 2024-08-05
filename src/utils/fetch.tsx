@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
+// export const BASE_URL = "http://localhost:8000";
 export const BASE_URL = "https://django-suss.zeabur.app";
 
 class HttpClient {
@@ -47,14 +48,10 @@ const httpClient = new HttpClient({
 });
 
 export const post = async (url: string, body: any): Promise<any> => {
-  try {
-    const res = await httpClient.post(url, body, {
-      headers: {
-        Authorization: localStorage.getItem("token"),
-      },
-    });
-    return res;
-  } catch (e: any) {
-    console.error("Error:", e);
-  }
+  const res = await httpClient.post(url, body, {
+    headers: {
+      Authorization: localStorage.getItem("token"),
+    },
+  });
+  return res;
 };

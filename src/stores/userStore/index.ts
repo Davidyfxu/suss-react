@@ -31,10 +31,12 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
       set(() => ({
         loading: false,
       }));
-      message.success("注册成功");
+      message.success("register success");
     } catch (e) {
-      message.error("注册失败");
-      throw new Error("注册失败", e?.message);
+      set(() => ({
+        loading: false,
+      }));
+      message.error("register error");
     }
   },
   loginUser: async (props): Promise<any> => {
@@ -50,10 +52,12 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
         loading: false,
       }));
       res?.token && localStorage.setItem("token", `Bearer ${res?.token}`);
-      message.success("登录成功，跳转中");
+      message.success("login success");
     } catch (e) {
-      console.error("loginUser", e);
-      message.error("登录失败 ");
+      set(() => ({
+        loading: false,
+      }));
+      message.error("login error");
     }
   },
   init: async (): Promise<any> => {
@@ -67,7 +71,6 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
       }));
       return { redirect: isEmpty(res) };
     } catch (e) {
-      console.error("loginUser", e);
       set(() => ({
         loading: false,
       }));
