@@ -11,9 +11,9 @@ const contentStyle: React.CSSProperties = {
 };
 
 const CAROUSEL_IMGs = [
-  'src/assets/suss_happylearning-1.jpg',
-  'src/assets/suss_outdoorwithstudents.jpeg',
-  'src/assets/suss-happylearning-2.jpg'
+  '../../src/assets/suss_happylearning-1.jpg',
+  '../../src/assets/suss_outdoorwithstudents.jpeg',
+  '../../src/assets/suss-happylearning-2.jpg'
 ];
 
 const INTRO_PARTs = [

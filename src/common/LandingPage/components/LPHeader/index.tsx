@@ -14,7 +14,10 @@ const LPHeader = () => {
         backgroundColor: 'white'
       }}
     >
-      <Image height={40} src={'src/assets/suss-logo-with-tagline.jpg'} />
+      <Image
+        height={40}
+        src={'../../../src/assets/suss-logo-with-tagline.jpg'}
+      />
       <Link to={'/login'}>
         <Button type="primary" size="large" icon={<UserOutlined />}>
           Log in
