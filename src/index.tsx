@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { LazyRouter, ProtectedRoute } from "./components";
-import { Home, Landing, Register, Error } from "./common";
+import { Home, Login, Register, Error, LandingPage } from "./common";
 
 const Test = LazyRouter(() => import("./pages/Test"));
 const Dashboard = LazyRouter(() => import("./pages/Dashboard"));
@@ -9,8 +9,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route
-          path={"/"}
+          path={"/dashboard"}
           element={
             <ProtectedRoute>
               <Home />
@@ -22,7 +23,7 @@ function App() {
           <Route path={"profile"} element={<Profile />} />
         </Route>
         <Route path="/register" element={<Register />} />
-        <Route path="/landing" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </BrowserRouter>

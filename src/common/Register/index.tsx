@@ -21,7 +21,7 @@ const Register = () => {
       })
       .then(() =>
         setTimeout(() => {
-          navigate("/landing");
+          navigate("/login");
         }, 500),
       );
   }
@@ -101,7 +101,7 @@ const Register = () => {
             <div className={"flex justify-between items-center"}>
               <p>
                 <span>Or</span>
-                <Link to={"/landing"}>
+                <Link to={"/login"}>
                   <Button className="ml-2">Log in</Button>
                 </Link>
               </p>

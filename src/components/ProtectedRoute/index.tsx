@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }): any => {
     try {
       const { redirect } = await init();
       if (redirect) {
-        navigate("/landing");
+        navigate("/login");
         return;
       }
     } catch (e) {

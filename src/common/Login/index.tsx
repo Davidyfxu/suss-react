@@ -4,7 +4,7 @@ import { Button, Form, Input, Spin } from "antd";
 import { useUserStore } from "../../stores/userStore";
 import { useNavigate } from "react-router-dom";
 
-const Landing = () => {
+const Login = () => {
   const [form] = Form.useForm();
   const loginUser = useUserStore((state) => state.loginUser);
   const username = useUserStore((state) => state.username);
@@ -73,4 +73,4 @@ const Landing = () => {
   );
 };
 
-export default Landing;
+export default Login;
