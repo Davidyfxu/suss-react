@@ -61,12 +61,7 @@ const LPContent = () => {
           Enjoy your learning journey with Canvas Dashboard!
         </Title>
         <Link to={'/login'}>
-          <Button
-            icon={<UserOutlined />}
-            size={'large'}
-            type={'primary'}
-            style={{ backgroundColor: '#DA291C' }}
-          >
+          <Button icon={<UserOutlined />} size={'large'} type={'primary'}>
             Log in
           </Button>
         </Link>

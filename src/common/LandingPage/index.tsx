@@ -8,7 +8,7 @@ const LandingPage = () => {
     <ConfigProvider
       theme={{
         components: {
-          Button: { colorPrimary: '#001e60' }
+          Button: { colorPrimary: '#DA291C' }
         }
       }}
     >
