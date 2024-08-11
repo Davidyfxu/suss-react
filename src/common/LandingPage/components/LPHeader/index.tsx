@@ -1,7 +1,7 @@
 import { Button, Image, Layout } from 'antd';
 import { Link } from 'react-router-dom';
 import { UserOutlined } from '@ant-design/icons';
-
+import sussLogoWithTagline from '../../../../assets/suss-logo-with-tagline.jpg';
 const { Header } = Layout;
 
 const LPHeader = () => {
@@ -14,10 +14,7 @@ const LPHeader = () => {
         backgroundColor: 'white'
       }}
     >
-      <Image
-        height={40}
-        src={'../../../src/assets/suss-logo-with-tagline.jpg'}
-      />
+      <Image height={40} src={sussLogoWithTagline} />
       <Link to={'/login'}>
         <Button type="primary" size="large" icon={<UserOutlined />}>
           Log in

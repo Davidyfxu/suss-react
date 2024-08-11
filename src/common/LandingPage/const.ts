@@ -1,5 +1,7 @@
 import React from 'react';
-
+import sussHappyLearning1 from '../../assets/suss_happylearning-1.jpg';
+import sussOutdoorWithStudents from '../../assets/suss_outdoorwithstudents.jpeg';
+import sussHappyLearning2 from '../../assets/suss-happylearning-2.jpg';
 const contentStyle: React.CSSProperties = {
   margin: 0,
   height: '400px',
@@ -11,9 +13,9 @@ const contentStyle: React.CSSProperties = {
 };
 
 const CAROUSEL_IMGs = [
-  '../../src/assets/suss_happylearning-1.jpg',
-  '../../src/assets/suss_outdoorwithstudents.jpeg',
-  '../../src/assets/suss-happylearning-2.jpg'
+  sussHappyLearning1,
+  sussOutdoorWithStudents,
+  sussHappyLearning2
 ];
 
 const INTRO_PARTs = [
