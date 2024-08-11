@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Button, Checkbox, Form, Input, Spin } from "antd";
-import { useUserStore } from "../../stores/userStore";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Button, Checkbox, Form, Input, Spin } from 'antd';
+import { useUserStore } from '../../stores/userStore';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [form] = Form.useForm();
@@ -21,22 +21,22 @@ const Register = () => {
       })
       .then(() =>
         setTimeout(() => {
-          navigate("/login");
-        }, 500),
+          navigate('/login');
+        }, 500)
       );
   }
 
   useEffect(() => {
     if (username) {
       setTimeout(() => {
-        navigate("/");
+        navigate('/');
       }, 500);
     }
   }, [username, navigate]);
 
   return (
     <div className="min-h-screen bg-blue-500 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="bg-white mt-8 sm:mx-auto sm:w-full sm:max-w-md rounded-lg shadow-xl">
+      <div className="bg-white m-4 sm:mx-auto sm:w-full sm:max-w-md rounded-lg shadow-xl">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Register
@@ -53,7 +53,7 @@ const Register = () => {
             <Form.Item
               label="Username"
               name="username"
-              rules={[{ required: true, message: "Please fill your username" }]}
+              rules={[{ required: true, message: 'Please fill your username' }]}
             >
               <Input placeholder="Please fill your username" />
             </Form.Item>
@@ -62,10 +62,10 @@ const Register = () => {
               name="email"
               rules={[
                 {
-                  type: "email",
+                  type: 'email',
                   required: true,
-                  message: "Please fill your email",
-                },
+                  message: 'Please fill your email'
+                }
               ]}
             >
               <Input allowClear placeholder="Please fill your email" />
@@ -74,7 +74,7 @@ const Register = () => {
             <Form.Item
               label="Password"
               name="password"
-              rules={[{ required: true, message: "Please fill your password" }]}
+              rules={[{ required: true, message: 'Please fill your password' }]}
             >
               <Input.Password
                 allowClear
@@ -85,7 +85,7 @@ const Register = () => {
               label="Confirm Password"
               name="confirmPwd"
               rules={[
-                { required: true, message: "Please confirm your password" },
+                { required: true, message: 'Please confirm your password' }
               ]}
             >
               <Input.Password allowClear placeholder="Confirm your password" />
@@ -98,10 +98,10 @@ const Register = () => {
               <Checkbox>I have read and agree to the terms of service</Checkbox>
             </Form.Item>
 
-            <div className={"flex justify-between items-center"}>
+            <div className={'flex justify-between items-center'}>
               <p>
                 <span>Or</span>
-                <Link to={"/login"}>
+                <Link to={'/login'}>
                   <Button className="ml-2">Log in</Button>
                 </Link>
               </p>
