@@ -1,25 +1,30 @@
-import { Tabs } from "antd";
-import { useEffect } from "react";
-import { getAllReadData } from "../../api.ts";
-import DiscussionData from "../DiscussionData";
-import ReadData from "../ReadData";
+import { Tabs } from 'antd';
+import { useEffect } from 'react';
+import { getAllReadData } from '../../api.ts';
+import DiscussionData from '../DiscussionData';
+import ReadData from '../ReadData';
 
 const DASHBOARD_TABS = [
   {
-    label: "discussion_data",
-    key: "discussion_data",
-    children: <DiscussionData />,
+    label: 'Canvas Discussion Participation',
+    key: 'discussion_data',
+    children: <DiscussionData />
   },
   {
-    label: "read_data",
-    key: "read_data",
-    children: <ReadData />,
+    label: 'Social Interaction (Social Network Analysis Graph)',
+    key: 'read_data',
+    children: <ReadData />
   },
   {
-    label: "others",
-    key: "others",
-    children: <div>others</div>,
+    label: 'World Cloud',
+    key: 'others',
+    children: <div>World Cloud</div>
   },
+  {
+    label: 'Check Assignment Progress',
+    key: 'others2',
+    children: <div>Check Assignment Progress</div>
+  }
 ];
 
 const DashboardTabs = () => {

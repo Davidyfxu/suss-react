@@ -29,7 +29,7 @@ const Home = (): any => {
         items={routers.map((router: any) => ({
           ...router,
           onClick: () => {
-            navigate(`/${router?.key}`);
+            navigate(`/dashboard/${router?.key}`);
             setSelectItem({ k: [router?.key], label: router?.label });
           }
         }))}
