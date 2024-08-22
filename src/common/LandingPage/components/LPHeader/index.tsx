@@ -1,5 +1,4 @@
 import { Button, Image, Layout } from 'antd';
-import { Link } from 'react-router-dom';
 import { UserOutlined } from '@ant-design/icons';
 import sussLogoWithTagline from '../../../../assets/suss-logo-with-tagline.jpg';
 const { Header } = Layout;
@@ -14,12 +13,22 @@ const LPHeader = () => {
         backgroundColor: 'white'
       }}
     >
-      <Image height={40} src={sussLogoWithTagline} />
-      <Link to={'/login'}>
-        <Button type="primary" size="large" icon={<UserOutlined />}>
-          Log in
-        </Button>
-      </Link>
+      <Image
+        preview={false}
+        style={{ cursor: 'pointer' }}
+        height={40}
+        src={sussLogoWithTagline}
+        onClick={() => window.open(`https://www.suss.edu.sg/`, '_blank')}
+      />
+
+      <Button
+        type="primary"
+        size="large"
+        icon={<UserOutlined />}
+        onClick={() => window.open(`${location.origin}/login`, '_blank')}
+      >
+        Log in
+      </Button>
     </Header>
   );
 };
