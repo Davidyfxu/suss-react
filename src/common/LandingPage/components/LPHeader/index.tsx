@@ -25,6 +25,7 @@ const LPHeader = () => {
         type="primary"
         size="large"
         icon={<UserOutlined />}
+        style={{ backgroundColor: '#D92D27' }}
         onClick={() => window.open(`${location.origin}/login`, '_blank')}
       >
         Log in
