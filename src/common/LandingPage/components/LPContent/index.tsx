@@ -10,7 +10,7 @@ const LPContent = () => {
       <div
         className={'flex flex-col md:flex-row justify-evenly'}
         style={{
-          background: 'linear-gradient(to right, #001e60, #3498db)'
+          background: 'linear-gradient(to right, #20275C, #3498db)'
         }}
       >
         <div className={'flex flex-col items-center justify-center p-8'}>
@@ -39,8 +39,8 @@ const LPContent = () => {
             key={idx}
             title={
               <Space>
-                <span style={{ color: '#DA291C' }}>{idx + 1}</span>
-                <span className={'text-lg'} style={{ color: '#001e60' }}>
+                <span style={{ color: '#D92D27' }}>{idx + 1}</span>
+                <span className={'text-lg'} style={{ color: '#20275C' }}>
                   {p.title}
                 </span>
               </Space>
@@ -52,19 +52,23 @@ const LPContent = () => {
         ))}
       </div>
       <div
-        className={
-          'text-center p-8 bg-opacity-30 bg-gradient-to-br from-blue-200 to-gray-100'
-        }
+        style={{
+          background: 'linear-gradient(to right, #20275C, #3498db)'
+        }}
+        className={'text-center p-12'}
       >
-        <Title style={{ color: '#001e60' }}>
-          {/*<Title style={{ color: '#DA291C' }}>*/}
+        <Title style={{ color: 'white' }}>
           Enjoy your learning journey with Canvas Dashboard!
         </Title>
-        <Link to={'/login'}>
-          <Button icon={<UserOutlined />} size={'large'} type={'primary'}>
-            Log in
-          </Button>
-        </Link>
+        <Button
+          type="primary"
+          size="large"
+          icon={<UserOutlined />}
+          style={{ backgroundColor: '#D92D27' }}
+          onClick={() => window.open(`${location.origin}/login`, '_blank')}
+        >
+          Log in
+        </Button>
       </div>
     </Content>
   );

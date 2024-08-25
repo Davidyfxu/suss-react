@@ -9,7 +9,7 @@ const contentStyle: React.CSSProperties = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  background: 'linear-gradient(to right, #001e60, #3498db)'
+  background: 'linear-gradient(to right, #20275C, #3498db)'
 };
 
 const CAROUSEL_IMGs = [
