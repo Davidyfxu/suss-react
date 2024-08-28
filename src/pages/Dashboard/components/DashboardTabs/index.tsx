@@ -1,24 +1,30 @@
 import { Tabs } from 'antd';
-import { useEffect } from 'react';
-import { getAllReadData } from '../../api.ts';
+
 import DiscussionData from '../DiscussionData';
-import ReadData from '../ReadData';
+import Visualization from '../Visualization';
+import WordCloudComp from '../WordCloudComp';
+import SocialInteraction from '../SocialInteraction';
 
 const DASHBOARD_TABS = [
+  {
+    label: 'Discussion Visualization',
+    key: 'discussion_visual',
+    children: <Visualization />
+  },
+  {
+    label: 'Social Interaction',
+    key: 'social_interaction',
+    children: <SocialInteraction />
+  },
+  {
+    label: 'Word Cloud',
+    key: 'word_cloud',
+    children: <WordCloudComp />
+  },
   {
     label: 'Canvas Discussion Participation',
     key: 'discussion_data',
     children: <DiscussionData />
-  },
-  {
-    label: 'Social Interaction (Social Network Analysis Graph)',
-    key: 'read_data',
-    children: <ReadData />
-  },
-  {
-    label: 'World Cloud',
-    key: 'others',
-    children: <div>World Cloud</div>
   },
   {
     label: 'Check Assignment Progress',

@@ -1,7 +1,7 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-// export const BASE_URL = "http://localhost:8000";
-export const BASE_URL = "https://django-suss.zeabur.app";
+export const BASE_URL = 'http://localhost:8000';
+// export const BASE_URL = "https://django-suss.zeabur.app";
 
 class HttpClient {
   private api: AxiosInstance;
@@ -10,9 +10,9 @@ class HttpClient {
     this.api = axios.create({
       ...config,
       headers: {
-        Authorization: localStorage.getItem("token"),
-        ...config.headers,
-      },
+        Authorization: localStorage.getItem('token'),
+        ...config.headers
+      }
     });
 
     this.api.interceptors.response.use(
@@ -20,13 +20,13 @@ class HttpClient {
       (error) => {
         // Add more error handling logic here.
         throw error;
-      },
+      }
     );
   }
 
   public get<T = any, R = AxiosResponse<T>>(
     url: string,
-    config?: AxiosRequestConfig,
+    config?: AxiosRequestConfig
   ): Promise<R> {
     return this.api.get(url, config);
   }
@@ -34,7 +34,7 @@ class HttpClient {
   public post<T = any, R = AxiosResponse<T>>(
     url: string,
     data?: T,
-    config?: AxiosRequestConfig,
+    config?: AxiosRequestConfig
   ): Promise<R> {
     return this.api.post(url, data, config);
   }
@@ -44,14 +44,14 @@ class HttpClient {
 
 // Now we can create an instance of HttpClient
 const httpClient = new HttpClient({
-  baseURL: BASE_URL,
+  baseURL: BASE_URL
 });
 
 export const post = async (url: string, body: any): Promise<any> => {
   const res = await httpClient.post(url, body, {
     headers: {
-      Authorization: localStorage.getItem("token"),
-    },
+      Authorization: localStorage.getItem('token')
+    }
   });
   return res;
 };

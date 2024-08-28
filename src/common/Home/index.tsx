@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Layout, Menu, Avatar, Dropdown, Button, Select } from 'antd';
+import { Layout, Menu, Avatar, Dropdown, Button } from 'antd';
 import { routers } from '../config/routers';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../stores/userStore';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import menuLogo from '../../assets/SUSS_LOGO.jpg';
+import { SelectSUSSHeader } from '../../components';
 
 const { Header, Footer, Content, Sider } = Layout;
 const Home = (): any => {
@@ -43,14 +44,7 @@ const Home = (): any => {
   const renderHeader = () => (
     <Header className={'bg-white flex justify-end items-center'}>
       <div className={'flex justify-between items-center gap-4'}>
-        <Select
-          placeholder="Select a semester"
-          options={[
-            { value: '1', label: 'semester 1' },
-            { value: '2', label: 'semester 2' },
-            { value: '3', label: 'semester 3' }
-          ]}
-        />
+        <SelectSUSSHeader />
         <Dropdown
           menu={{
             items: [

@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { message } from "antd";
-import { init, login, register } from "../../common/api";
-import { isEmpty } from "lodash-es";
+import { create } from 'zustand';
+import { message } from 'antd';
+import { init, login, register } from '../../common/api';
+import { isEmpty } from 'lodash-es';
 interface IUserStoreState {
   username: string;
   email: string;
@@ -15,28 +15,31 @@ interface IUserStoreState {
   }) => Promise<any>;
   loginUser: (props: { username: string; password: string }) => Promise<any>;
   init: () => Promise<any>;
+  courseCode?: string;
+  setCourseCode?: (code: string) => void;
 }
 export const useUserStore = create<IUserStoreState>()((set) => ({
-  username: "",
-  email: "",
-  avatar: "",
+  username: '',
+  email: '',
+  avatar: '',
   loading: false,
   setUser: (props) => set({ ...props }),
+  setCourseCode: (p) => set({ courseCode: p }),
   registerUser: async (props): Promise<any> => {
     try {
       set(() => ({ loading: true }));
       await register({
-        ...props,
+        ...props
       });
       set(() => ({
-        loading: false,
+        loading: false
       }));
-      message.success("register success");
+      message.success('register success');
     } catch (e) {
       set(() => ({
-        loading: false,
+        loading: false
       }));
-      message.error("register error");
+      message.error('register error');
     }
   },
   loginUser: async (props): Promise<any> => {
@@ -44,20 +47,20 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
       set(() => ({ loading: true }));
       const res = await login({
         ...props,
-        password: props.password,
+        password: props.password
       });
 
       set(() => ({
         ...res,
-        loading: false,
+        loading: false
       }));
-      res?.token && localStorage.setItem("token", `Bearer ${res?.token}`);
-      message.success("login success");
+      res?.token && localStorage.setItem('token', `Bearer ${res?.token}`);
+      message.success('login success');
     } catch (e) {
       set(() => ({
-        loading: false,
+        loading: false
       }));
-      message.error("login error");
+      message.error('login error');
     }
   },
   init: async (): Promise<any> => {
@@ -67,14 +70,14 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
 
       set(() => ({
         ...res,
-        loading: false,
+        loading: false
       }));
       return { redirect: isEmpty(res) };
     } catch (e) {
       set(() => ({
-        loading: false,
+        loading: false
       }));
       return { redirect: true };
     }
-  },
+  }
 }));
