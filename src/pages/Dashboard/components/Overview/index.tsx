@@ -57,6 +57,7 @@ const Overview = () => {
         </Col>
         <Col span={5}>
           <Statistic
+            loading={loading}
             title="Number of 'Reads'"
             value={overview?.user_read_number || 0}
             formatter={formatter}
