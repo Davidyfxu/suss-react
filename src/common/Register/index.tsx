@@ -29,7 +29,7 @@ const Register = () => {
   useEffect(() => {
     if (username) {
       setTimeout(() => {
-        navigate('/');
+        navigate('/login');
       }, 500);
     }
   }, [username, navigate]);
