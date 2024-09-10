@@ -80,7 +80,7 @@ const Home = (): any => {
   return (
     <Layout
       style={{
-        height: '100vh'
+        minHeight: '100vh'
       }}
     >
       {renderSider()}
