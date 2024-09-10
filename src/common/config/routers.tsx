@@ -8,7 +8,7 @@ export const routers = [
   },
   {
     key: 'profile',
-    label: 'profile',
+    label: 'update user',
     icon: <UserSwitchOutlined />
   }
 ];
