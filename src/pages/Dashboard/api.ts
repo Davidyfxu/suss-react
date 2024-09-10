@@ -16,3 +16,9 @@ export const draw_wordcloud = (p: any = {}) =>
 
 export const draw_network = (p: any = {}) =>
   post('/api/discussions/draw_network', p);
+
+export const get_discussion_participation = (p: any = {}) =>
+  post('/api/discussions/get_discussion_participation', p);
+
+export const get_active_topics = (p: any = {}) =>
+  post('/api/discussions/course_active_topics', p);

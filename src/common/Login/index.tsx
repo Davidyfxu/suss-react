@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Form, Input, Spin } from 'antd';
+import { Button, Form, Input, Spin, Typography } from 'antd';
 import { useUserStore } from '../../stores/userStore';
 import { useNavigate } from 'react-router-dom';
 import styles from './index.module.scss';
@@ -45,10 +45,7 @@ const Login = () => {
                     { required: true, message: 'Please fill your username' }
                   ]}
                 >
-                  <Input
-                    inputMode={'email'}
-                    placeholder="Please fill your username"
-                  />
+                  <Input placeholder="Please fill your username" />
                 </Form.Item>
                 <Form.Item
                   label="Password"
@@ -59,13 +56,18 @@ const Login = () => {
                 >
                   <Input.Password placeholder="Please fill your password" />
                 </Form.Item>
-                <div className={'flex justify-end items-center gap-4'}>
-                  <Link to={'/register'}>
-                    <Button>Sign up</Button>
+                <div className={'flex justify-between items-center'}>
+                  <Link to={'/forgetPsw'}>
+                    <Typography.Link>Forget Password?</Typography.Link>
                   </Link>
-                  <Button type={'primary'} onClick={handleSubmit}>
-                    Log in
-                  </Button>
+                  <div className={'flex gap-4'}>
+                    <Link to={'/register'}>
+                      <Button>Sign up</Button>
+                    </Link>
+                    <Button type={'primary'} onClick={handleSubmit}>
+                      Log in
+                    </Button>
+                  </div>
                 </div>
               </Spin>
             </Form>

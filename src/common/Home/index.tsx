@@ -64,13 +64,7 @@ const Home = (): any => {
             ]
           }}
         >
-          <Avatar
-            className={'cursor-pointer'}
-            src={avatar}
-            // onClick={() => navigate("/")}
-          >
-            {name.slice(0, 2)}
-          </Avatar>
+          <Avatar src={avatar}>{name.slice(0, 2)}</Avatar>
         </Dropdown>
       </div>
     </Header>

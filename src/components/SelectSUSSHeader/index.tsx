@@ -8,6 +8,7 @@ const SelectSUSSHeader = () => {
   const [loading, setLoading] = useState(false);
 
   const setCourseCode = useUserStore((state) => state.setCourseCode);
+  const courseCode = useUserStore((state) => state.courseCode);
 
   const getCourseOptions = async () => {
     try {
@@ -16,6 +17,7 @@ const SelectSUSSHeader = () => {
       setCourseCodes(
         course_codes.map((value: string) => ({ value: value, label: value }))
       );
+      course_codes[0] && setCourseCode && setCourseCode(course_codes?.[0]);
     } catch (e) {
       console.error('get_course_options', e);
     } finally {
@@ -31,6 +33,7 @@ const SelectSUSSHeader = () => {
       <Select
         className={'w-36'}
         allowClear
+        value={courseCode}
         loading={loading}
         placeholder="Select a Course"
         options={courseCodes}

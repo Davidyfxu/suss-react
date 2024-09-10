@@ -13,7 +13,7 @@ const Error = () => {
         <p className="text-white text-lg mt-2">
           Please try again later, or contact our support team.
         </p>
-        <Button className="btn btn-primary mt-6" onClick={() => navigate("/")}>
+        <Button className="btn btn-primary mt-6" onClick={() => navigate("/login")}>
           Back
         </Button>
       </div>

@@ -12,6 +12,11 @@ const DASHBOARD_TABS = [
     children: <Visualization />
   },
   {
+    label: 'Canvas Discussion Participation',
+    key: 'discussion_data',
+    children: <DiscussionData />
+  },
+  {
     label: 'Social Interaction',
     key: 'social_interaction',
     children: <SocialInteraction />
@@ -21,11 +26,7 @@ const DASHBOARD_TABS = [
     key: 'word_cloud',
     children: <WordCloudComp />
   },
-  {
-    label: 'Canvas Discussion Participation',
-    key: 'discussion_data',
-    children: <DiscussionData />
-  },
+
   {
     label: 'Check Assignment Progress',
     key: 'others2',

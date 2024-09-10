@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts/core';
 import {
   TitleComponent,
@@ -23,6 +23,8 @@ const BasicGraph: React.FC = () => {
   const courseCode = useUserStore((state) => state.courseCode);
   const [loading, setLoading] = useState(false);
   const [rawData, setData] = useState({});
+  const chartRef = useRef<HTMLDivElement>(null);
+  const myChartRef = useRef<echarts.ECharts | null>(null);
 
   const getNetwork = async () => {
     try {
@@ -40,60 +42,83 @@ const BasicGraph: React.FC = () => {
   }, [courseCode]);
 
   useEffect(() => {
-    const chartDom = document.getElementById('main')!;
-    const myChart = echarts.init(chartDom);
-    const option: EChartsOption = {
-      title: {
-        text: 'Basic Graph'
-      },
-      tooltip: {},
-      animationDurationUpdate: 1500,
-      animationEasingUpdate: 'quinticInOut',
-      series: [
-        {
-          type: 'graph',
-          layout: 'none',
-          symbolSize: 50,
-          roam: true,
-          label: {
-            show: true
-          },
-          edgeSymbol: ['circle', 'arrow'],
-          edgeSymbolSize: [4, 10],
-          edgeLabel: {
-            fontSize: 20
-          },
-          data: (rawData?.nodes || []).map((node: string) => ({
-            name: node,
-            x: Math.random() * 100,
-            y: Math.random() * 100
-          })),
-          links: (rawData?.edges || []).map((edge) => ({
-            source: edge?.source,
-            target: edge?.target,
-            label: edge?.weight
-          })),
-          lineStyle: {
-            opacity: 0.9,
-            width: 2,
-            curveness: 0
+    if (chartRef.current) {
+      myChartRef.current = echarts.init(chartRef.current);
+      const option: EChartsOption = {
+        title: {
+          text: 'Basic Graph'
+        },
+        tooltip: {},
+        animationDurationUpdate: 1500,
+        animationEasingUpdate: 'quinticInOut',
+        series: [
+          {
+            type: 'graph',
+            layout: 'none',
+            symbolSize: 50,
+            roam: true,
+            label: {
+              show: true
+            },
+            edgeSymbol: ['circle', 'arrow'],
+            edgeSymbolSize: [4, 10],
+            edgeLabel: {
+              fontSize: 20
+            },
+            data: (rawData?.nodes || []).map((node: string) => ({
+              name: node,
+              x: Math.random() * 100,
+              y: Math.random() * 100
+            })),
+            links: (rawData?.edges || []).map((edge) => ({
+              source: edge?.source,
+              target: edge?.target,
+              label: edge?.weight
+            })),
+            lineStyle: {
+              opacity: 0.9,
+              width: 2,
+              curveness: 0
+            }
           }
-        }
-      ]
-    };
+        ]
+      };
 
-    // Set the option for the chart
-    myChart.setOption(option);
-
+      // Set the option for the chart
+      myChartRef.current.setOption(option);
+    }
     // Cleanup on component unmount
     return () => {
-      myChart.dispose();
+      myChartRef.current?.dispose();
     };
   }, [rawData]);
 
+  const handleResize = useCallback(() => {
+    if (myChartRef.current) {
+      myChartRef.current.resize();
+    }
+  }, []);
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [handleResize]);
+
   return (
-    <Spin spinning={loading}>
-      <div id="main" style={{ width: '100%', height: '400px' }} />
+    <Spin
+      spinning={loading}
+      className={'flex justify-center items-center w-full h-full'}
+    >
+      <div
+        ref={chartRef}
+        style={{
+          width: '100%', // 可以调整宽度
+          height: '400px',
+          margin: '0 auto' // 自动水平居中
+        }}
+      />
     </Spin>
   );
 };
