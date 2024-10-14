@@ -5,7 +5,7 @@ import {
   Login,
   Register,
   Error,
-  LandingPage,
+  LandingPageNew,
   ForgetPsw,
   ResetPsw
 } from './common';
@@ -17,7 +17,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<LandingPageNew />} />
         <Route
           path={'/dashboard'}
           element={
