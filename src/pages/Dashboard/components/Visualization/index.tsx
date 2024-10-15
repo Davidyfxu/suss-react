@@ -45,11 +45,9 @@ const Visualization = () => {
     loading
   };
   return (
-    <div className={'overflow-auto'}>
-      <div className={'flex'}>
-        <Bar {...config_part} />
-        <Bar {...config_reply} />
-      </div>
+    <div className={'overflow-auto flex flex-wrap'}>
+      <Bar {...config_part} />
+      <Bar {...config_reply} />
       <Column {...config_post_by_week} />
     </div>
   );
