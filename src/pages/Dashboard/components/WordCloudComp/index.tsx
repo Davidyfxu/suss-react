@@ -34,7 +34,17 @@ const WordCloudComp = () => {
     paddingTop: 40,
     data: words,
     layout: { spiral: 'rectangular' },
-    colorField: 'text'
+    colorField: 'text',
+    wordStyle: {
+      rotation: 0, // 固定旋转角度为0，使词云更紧凑
+      rotationSteps: 2, // 减少旋转步数，使词云更紧凑
+      fontSize: [12, 60], // 设置字体大小范围
+      padding: 2 // 设置单词之间的间距
+    },
+    mask: {
+      width: 800, // 设置词云的宽度
+      height: 600 // 设置词云的高度
+    }
   };
 
   return <WordCloud loading={loading} {...config} />;

@@ -44,11 +44,18 @@ const Visualization = () => {
     title: 'Number of posts by week',
     loading
   };
+
   return (
-    <div className={'overflow-auto flex flex-wrap'}>
-      <Bar {...config_part} />
-      <Bar {...config_reply} />
-      <Column {...config_post_by_week} />
+    <div className={'overflow-auto flex flex-wrap gap-4'}>
+      <div style={{ flex: 1, minWidth: '300px', maxWidth: '50%' }}>
+        <Bar {...config_part} />
+      </div>
+      <div style={{ flex: 1, minWidth: '300px', maxWidth: '50%' }}>
+        <Bar {...config_reply} />
+      </div>
+      <div style={{ flex: 2, minWidth: '300px', maxWidth: '100%' }}>
+        <Column {...config_post_by_week} />
+      </div>
     </div>
   );
 };
