@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Select, Space, Table } from 'antd';
-import { get_discussion_participation, get_active_topics } from '../../api.ts';
+import { Space, Table } from 'antd';
+import { get_discussion_participation } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
+import { SelectSUSS } from '../../../../components';
 
 const DiscussionData = () => {
   const courseCode = useUserStore((state) => state.courseCode);
   // get_active_topics
-  const [topics, setTopics] = useState([]);
-  const [topic, setTopic] = useState();
+  const [topic, setTopic] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [records, setRecords] = useState([]);
   const get_participation = async () => {
@@ -68,29 +68,16 @@ const DiscussionData = () => {
     }
   ];
 
-  const getActiveTopics = async () => {
-    try {
-      const { active_topics = [] } = await get_active_topics({
-        option_course: courseCode
-      });
-      setTopics(active_topics.map((t: any) => ({ label: t, value: t })));
-    } catch (err) {}
-  };
-
   useEffect(() => {
     topic && get_participation();
   }, [courseCode, topic]);
-  useEffect(() => {
-    courseCode && getActiveTopics();
-  }, [courseCode]);
 
   return (
     <Space direction={'vertical'} className={'w-full'}>
-      <Select
+      <SelectSUSS
         placeholder={'Please select a topic from the course.'}
         className={'w-full'}
-        onChange={(v) => setTopic(v)}
-        options={topics}
+        handleSelect={(v) => setTopic(v)}
       />
       <Table columns={columns} dataSource={records} loading={loading}></Table>
     </Space>

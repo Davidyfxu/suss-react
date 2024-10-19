@@ -4,6 +4,7 @@ import DiscussionData from '../DiscussionData';
 import Visualization from '../Visualization';
 import WordCloudComp from '../WordCloudComp';
 import SocialInteraction from '../SocialInteraction';
+import CheckAssignment from '../CheckAssignment';
 
 const DASHBOARD_TABS = [
   {
@@ -29,8 +30,8 @@ const DASHBOARD_TABS = [
 
   {
     label: 'Check Assignment Progress',
-    key: 'others2',
-    children: <div>Check Assignment Progress</div>
+    key: 'check_assignment',
+    children: <CheckAssignment />
   }
 ];
 
