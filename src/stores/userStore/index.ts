@@ -27,6 +27,7 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
   setCourseCode: (p) => set({ courseCode: p }),
   registerUser: async (props): Promise<any> => {
     try {
+      localStorage.removeItem('token');
       set(() => ({ loading: true }));
       await register({
         ...props
@@ -44,6 +45,7 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
   },
   loginUser: async (props): Promise<any> => {
     try {
+      localStorage.removeItem('token');
       set(() => ({ loading: true }));
       const res = await login({
         ...props,

@@ -48,10 +48,12 @@ const httpClient = new HttpClient({
 });
 
 export const post = async (url: string, body: any): Promise<any> => {
-  const res = await httpClient.post(url, body, {
+  if (url.includes('no_auth')) {
+    return await httpClient.post(url, body);
+  }
+  return await httpClient.post(url, body, {
     headers: {
       Authorization: localStorage.getItem('token')
     }
   });
-  return res;
 };
