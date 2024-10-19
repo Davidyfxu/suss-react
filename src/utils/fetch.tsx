@@ -10,7 +10,7 @@ class HttpClient {
     this.api = axios.create({
       ...config,
       headers: {
-        Authorization: localStorage.getItem('token'),
+        // Authorization: localStorage.getItem('token'),
         ...config.headers
       }
     });
