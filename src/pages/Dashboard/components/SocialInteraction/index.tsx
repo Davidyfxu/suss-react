@@ -67,6 +67,7 @@ const SocialGraph: React.FC = () => {
         legend: {
           data: ['Discussion Student', 'Topic Poster']
         },
+
         animationDurationUpdate: 1500,
         animationEasingUpdate: 'quinticInOut',
         series: [
@@ -164,6 +165,7 @@ const SocialGraph: React.FC = () => {
       <div
         ref={chartRef}
         style={{
+          minWidth: 500,
           width: '100%', // 可以调整宽度
           height: '500px',
           margin: '0 auto' // 自动水平居中
