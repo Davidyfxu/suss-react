@@ -81,7 +81,12 @@ const SocialGraph: React.FC = () => {
           {
             name: 'Social Graph',
             type: 'graph',
-            layout: 'force', // 使用力导向布局
+            layout: 'force',
+            force: {
+              repulsion: 2000, // 更大的斥力
+              gravity: 0.05, // 更小的向心力
+              edgeLength: 400 // 更长的边长
+            },
             symbolSize: 50,
             roam: true,
             label: {
@@ -95,6 +100,10 @@ const SocialGraph: React.FC = () => {
             data: rawData.nodes.map((node, index) => ({
               name: node,
               category: index % 2 === 0 ? 'Topic Poster' : 'Discussion Student', // 根据索引分配类别
+              label: {
+                show: index % 2 === 0, // 只有 Topic Poster 显示标签
+                position: 'right'
+              },
               itemStyle: {
                 color: index % 2 === 0 ? '#5470C6' : '#EE6666'
               }
@@ -103,8 +112,7 @@ const SocialGraph: React.FC = () => {
               source: edge.source,
               target: edge.target,
               label: {
-                show: true,
-                formatter: edge.weight.toString()
+                show: false
               },
               lineStyle: {
                 color:
@@ -132,10 +140,14 @@ const SocialGraph: React.FC = () => {
               width: 2,
               curveness: 0
             },
-            force: {
-              repulsion: 100,
-              gravity: 0.03,
-              edgeLength: [100, 200] // 调整边的长度范围
+            emphasis: {
+              focus: 'adjacency',
+              lineStyle: {
+                width: 6
+              },
+              label: {
+                fontSize: 14
+              }
             }
           }
         ]
