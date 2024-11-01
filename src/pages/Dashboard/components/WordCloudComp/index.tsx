@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { draw_wordcloud } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
 import { WordCloud } from '@ant-design/charts';
 
 const WordCloudComp = () => {
   const courseCode = useUserStore((state) => state.courseCode);
-  const [words, setWords] = useState<{ value: number; text: string }>([]);
+  const [words, setWords] = useState<{ value: number; text: string }[]>([]);
   const [loading, setLoading] = useState(false);
-  const getWords = async () => {
+  const [width, setWidth] = useState(window.innerWidth); // 初始化宽度为窗口宽度
+
+  const getWords = useCallback(async () => {
     try {
       setLoading(true);
       const { entry_contents = {} } = await draw_wordcloud({
@@ -24,11 +26,20 @@ const WordCloudComp = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [courseCode]);
 
   useEffect(() => {
     courseCode && getWords();
-  }, [courseCode]);
+  }, [courseCode, getWords]);
+  const handleResize = () => {
+    setWidth(window.innerWidth);
+  };
+  useEffect(() => {
+    // 监听窗口大小变化
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const config = {
     paddingTop: 40,
@@ -42,7 +53,7 @@ const WordCloudComp = () => {
       padding: 2 // 设置单词之间的间距
     },
     mask: {
-      width: 800, // 设置词云的宽度
+      width: width * 0.8, // 设置词云的宽度
       height: 600 // 设置词云的高度
     }
   };

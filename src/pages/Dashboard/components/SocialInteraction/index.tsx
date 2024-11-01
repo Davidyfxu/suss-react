@@ -13,6 +13,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 import { useUserStore } from '../../../../stores/userStore';
 import { draw_network } from '../../api.ts';
 import { Spin } from 'antd';
+import { debounce } from 'lodash-es';
 
 // Register the components with ECharts
 echarts.use([
@@ -58,7 +59,13 @@ const SocialGraph: React.FC = () => {
 
   useEffect(() => {
     if (chartRef.current) {
-      myChartRef.current = echarts.init(chartRef.current);
+      const container = chartRef.current;
+      const width = container?.clientWidth || window.innerWidth - 300;
+      const height = container?.clientHeight || 500;
+      myChartRef.current = echarts.init(chartRef.current, null, {
+        width,
+        height
+      });
       const option: EChartsOption = {
         title: {
           text: 'Social Interaction Graph'
@@ -141,21 +148,28 @@ const SocialGraph: React.FC = () => {
     return () => {
       myChartRef.current?.dispose();
     };
-  }, [rawData]);
+  }, [rawData, courseCode]);
 
-  const handleResize = useCallback(() => {
-    if (myChartRef.current) {
-      myChartRef.current.resize();
-    }
-  }, []);
+  const handleResize = useCallback(
+    debounce(() => {
+      if (myChartRef.current) {
+        const container = chartRef.current;
+        const width = container?.clientWidth || window.innerWidth - 300;
+        const height = container?.clientHeight || 500;
 
+        myChartRef.current.resize({ width, height });
+      }
+    }, 300),
+    []
+  );
   useEffect(() => {
     window.addEventListener('resize', handleResize);
 
     return () => {
+      handleResize?.cancel?.();
       window.removeEventListener('resize', handleResize);
     };
-  }, [handleResize]);
+  }, [handleResize, courseCode]);
 
   return (
     <Spin
