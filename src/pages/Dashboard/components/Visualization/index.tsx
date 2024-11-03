@@ -2,12 +2,17 @@ import { Bar, Column, BarConfig, ColumnConfig } from '@ant-design/charts';
 import { useEffect, useState } from 'react';
 import { draw_participants_posts } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
-import { Typography } from 'antd';
+import { Empty } from 'antd';
+import { isEmpty } from 'lodash-es';
 
 const Visualization = () => {
   const courseCode = useUserStore((state) => state.courseCode);
   const [loading, setLoading] = useState(false);
-  const [rawData, setData] = useState({});
+  const [rawData, setData] = useState({
+    serializer_data_participant: [],
+    serializer_data_reply: [],
+    reply_by_week: []
+  });
 
   const getParticipants = async () => {
     try {
@@ -67,28 +72,33 @@ const Visualization = () => {
     interactions: [
       {
         type: 'slider'
-        // cfg: {
-        //   start: 0.4,
-        //   end: 0.45
-        // }
       }
     ]
   };
-
-  return (
+  return !isEmpty(rawData?.['serializer_data_participant']) ||
+    !isEmpty(rawData?.['serializer_data_reply']) ||
+    !isEmpty(rawData?.['reply_by_week']) ? (
     <div className={'overflow-auto flex flex-col gap-4'}>
       <div style={{ display: 'flex', flex: 1, gap: '1rem' }}>
-        <div style={{ flex: 1, minWidth: '300px', maxWidth: '50%' }}>
-          <Bar {...config_part} />
-        </div>
-        <div style={{ flex: 1, minWidth: '300px', maxWidth: '50%' }}>
-          <Bar {...config_reply} />
-        </div>
+        {!isEmpty(rawData?.['serializer_data_participant']) && (
+          <div style={{ flex: 1, minWidth: '300px', maxWidth: '50%' }}>
+            <Bar {...config_part} />
+          </div>
+        )}
+        {!isEmpty(rawData?.['serializer_data_reply']) && (
+          <div style={{ flex: 1, minWidth: '300px', maxWidth: '50%' }}>
+            <Bar {...config_reply} />
+          </div>
+        )}
       </div>
-      <div style={{ flex: 2, minWidth: '300px', maxWidth: '100%' }}>
-        <Column {...config_post_by_week} />
-      </div>
+      {!isEmpty(rawData?.['reply_by_week']) && (
+        <div style={{ flex: 2, minWidth: '300px', maxWidth: '100%' }}>
+          <Column {...config_post_by_week} />
+        </div>
+      )}
     </div>
+  ) : (
+    <Empty className={'mt-10'} />
   );
 };
 

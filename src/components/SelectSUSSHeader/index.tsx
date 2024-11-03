@@ -31,7 +31,7 @@ const SelectSUSSHeader = () => {
   return (
     <div>
       <Select
-        className={'w-36'}
+        className={'w-48'}
         allowClear
         value={courseCode}
         loading={loading}

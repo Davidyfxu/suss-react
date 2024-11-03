@@ -1,73 +1,104 @@
 import { useEffect, useState } from 'react';
-import { Space, Table } from 'antd';
+import { Space, Table, TablePaginationConfig } from 'antd';
 import { get_discussion_participation } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
 import { SelectSUSS } from '../../../../components';
 
+const DEFAULT_PAGINATION = {
+  current: 1,
+  pageSize: 10,
+  total: 0,
+  pageSizeOptions: ['10', '20', '50', '100'],
+  showSizeChanger: true,
+  showQuickJumper: true
+};
+
 const DiscussionData = () => {
   const courseCode = useUserStore((state) => state.courseCode);
-  // get_active_topics
   const [topic, setTopic] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [records, setRecords] = useState([]);
-  const get_participation = async () => {
+  const [pagination, setPagination] =
+    useState<TablePaginationConfig>(DEFAULT_PAGINATION);
+
+  const get_participation = async (
+    paginationConfig: TablePaginationConfig = {}
+  ) => {
     try {
+      const { pageSize = 10, current = 1 } = paginationConfig;
       setLoading(true);
-      const { discussions = [] } = await get_discussion_participation({
+      const res = await get_discussion_participation({
         option_course: courseCode,
-        option_topic: topic
+        option_topic: topic,
+        page: current,
+        limit: pageSize
       });
-      setRecords(discussions);
+      setRecords(res?.discussions || []);
+      setPagination({
+        ...pagination,
+        current: res?.pagination.page || 1,
+        pageSize: pageSize,
+        total: res?.pagination.total || 0
+      });
     } catch (err) {
     } finally {
       setLoading(false);
     }
   };
-
   const columns = [
     {
       title: 'Name',
       dataIndex: 'user_name',
-      key: 'Name'
+      key: 'name',
+      ellipsis: true
     },
     {
       title: 'Posts',
       dataIndex: 'entry_id_posts',
-      key: 'Posts'
+      key: 'posts',
+      sorter: (a: any, b: any) => a.entry_id_posts - b.entry_id_posts
     },
     {
       title: 'Replies received',
       dataIndex: 'entry_replies_received_count',
-      key: 'Replies received',
-      render: (records: any) => (
-        <>{records?.['entry_replies_received_count']?.length || 0}</>
-      )
+      key: 'replies',
+      render: (replies: any) => replies?.length || 0,
+      sorter: (a: any, b: any) =>
+        (a.entry_replies_received_count?.length || 0) -
+        (b.entry_replies_received_count?.length || 0)
     },
     {
       title: 'Users interacted with',
       dataIndex: 'interacted_users_count',
-      key: 'Users interacted with',
-      render: (records: any) => (
-        <>{records?.['interacted_users_count']?.length || 0}</>
-      )
+      key: 'interactions',
+      render: (interactions: any) => interactions?.length || 0,
+      sorter: (a: any, b: any) =>
+        (a.interacted_users_count?.length || 0) -
+        (b.interacted_users_count?.length || 0)
     },
     {
       title: 'Topics participated',
       dataIndex: 'entry_topic_count',
-      key: 'Topics participated'
+      key: 'topics',
+      sorter: (a: any, b: any) => a.entry_topic_count - b.entry_topic_count
     },
     {
       title: 'Reads',
-      dataIndex: 'entry_likes_sum',
-      key: 'Reads'
+      dataIndex: 'entry_read_count',
+      key: 'reads',
+      sorter: (a: any, b: any) => a.entry_read_count - b.entry_read_count
     },
     {
       title: 'Likes',
       dataIndex: 'entry_likes_sum',
-      key: 'Likes'
+      key: 'likes',
+      sorter: (a: any, b: any) => a.entry_likes_sum - b.entry_likes_sum
     }
   ];
 
+  const handleTableChange = (pagination: TablePaginationConfig) => {
+    get_participation(pagination);
+  };
   useEffect(() => {
     topic && get_participation();
   }, [courseCode, topic]);
@@ -79,7 +110,14 @@ const DiscussionData = () => {
         className={'w-full'}
         handleSelect={(v) => setTopic(v)}
       />
-      <Table columns={columns} dataSource={records} loading={loading}></Table>
+      <Table
+        columns={columns}
+        rowKey="user_id"
+        dataSource={records}
+        loading={loading}
+        pagination={pagination}
+        onChange={handleTableChange}
+      />
     </Space>
   );
 };
