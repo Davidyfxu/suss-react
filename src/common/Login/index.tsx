@@ -16,7 +16,6 @@ const Login = () => {
       void loginUser({ username, password });
     });
   }
-
   useEffect(() => {
     if (username) {
       setTimeout(() => {

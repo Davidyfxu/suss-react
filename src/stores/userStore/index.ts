@@ -77,7 +77,8 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
       return { redirect: isEmpty(res) };
     } catch (e) {
       set(() => ({
-        loading: false
+        loading: false,
+        username: ''
       }));
       return { redirect: true };
     }
