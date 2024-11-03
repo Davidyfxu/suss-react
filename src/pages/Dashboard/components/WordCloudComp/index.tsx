@@ -2,13 +2,14 @@ import { useEffect, useState, useCallback } from 'react';
 import { draw_wordcloud } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
 import { Column, WordCloud } from '@ant-design/charts';
-import { Segmented, Table } from 'antd';
+import { Empty, Segmented, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import {
   BarChartOutlined,
   CloudOutlined,
   TableOutlined
 } from '@ant-design/icons';
+import { isEmpty } from 'lodash-es';
 enum DisplayEnum {
   WordCloud = 'wordcloud',
   Bar = 'bar',
@@ -30,10 +31,12 @@ const WordCloudComp = () => {
         option_course: courseCode
       });
       setWords(
-        Object.keys(entry_contents).map((e) => ({
-          text: e,
-          value: (entry_contents?.[e] || 0) as number
-        }))
+        Object.keys(entry_contents)
+          .map((e) => ({
+            text: e,
+            value: (entry_contents?.[e] || 0) as number
+          }))
+          .sort((a, b) => b.value - a.value)
       );
     } catch (e) {
       console.error('getWords', e);
@@ -52,7 +55,8 @@ const WordCloudComp = () => {
     // 监听窗口大小变化
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [courseCode]);
+
   const columns: ColumnsType<{ text: string; value: number }> = [
     {
       title: 'Word',
@@ -69,11 +73,11 @@ const WordCloudComp = () => {
 
   // 柱状图配置
   const barConfig = {
-    data: words.slice(0, 20), // 只显示前20个词
+    data: words.slice(0, 30), // 只显示前30个词
+    title: `Words Frequency Top ${words.slice(0, 20).length}`,
     xField: 'text',
     yField: 'value',
     label: {
-      position: 'middle',
       style: {
         fill: '#FFFFFF',
         opacity: 0.6
@@ -88,7 +92,6 @@ const WordCloudComp = () => {
   // 词云配置
   const wordCloudConfig = {
     width: width - 248,
-    paddingTop: 40,
     data: words,
     layout: { spiral: 'rectangular' },
     colorField: 'text',
@@ -105,6 +108,8 @@ const WordCloudComp = () => {
   };
 
   const renderContent = () => {
+    if (isEmpty(words)) return <Empty className={'mt-5'} />;
+
     switch (displayType) {
       case DisplayEnum.WordCloud:
         return <WordCloud loading={loading} {...wordCloudConfig} />;
@@ -117,7 +122,6 @@ const WordCloudComp = () => {
             columns={columns}
             dataSource={words}
             rowKey="text"
-            pagination={{ pageSize: 10 }}
           />
         );
       default:

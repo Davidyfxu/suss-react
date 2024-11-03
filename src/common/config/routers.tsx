@@ -3,12 +3,12 @@ import { HomeOutlined, UserSwitchOutlined } from '@ant-design/icons';
 export const routers = [
   {
     key: 'dashboard',
-    label: 'dashboard',
+    label: 'Dashboard',
     icon: <HomeOutlined />
   },
   {
     key: 'profile',
-    label: 'update user',
+    label: 'Profile',
     icon: <UserSwitchOutlined />
   }
 ];

@@ -29,7 +29,7 @@ const Overview = () => {
 
   return (
     <>
-      <Title level={2}>Course Overview</Title>
+      <Title level={4}>Course Overview</Title>
       <Row>
         <Col span={4}>
           <Statistic

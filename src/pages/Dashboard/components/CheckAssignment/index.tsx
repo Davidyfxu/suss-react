@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { Form, InputNumber, Button, message, Table, Empty } from 'antd';
+import {
+  Form,
+  InputNumber,
+  Button,
+  message,
+  Table,
+  Empty,
+  Typography
+} from 'antd';
 import { check_assignment } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
 import { SelectSUSS } from '../../../../components';
@@ -32,7 +40,7 @@ const CheckAssignment = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Check Assignment Completion</h1>
+      <Typography.Title level={4}>Check Assignment Completion</Typography.Title>
       <Form
         className="justify-between gap-4"
         form={form}

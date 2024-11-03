@@ -23,7 +23,12 @@ const Home = (): any => {
       }}
       collapsed={collapsed}
     >
-      <img className={'p-4 w-full rounded-3xl'} src={menuLogo} alt={''} />
+      <img
+        className={'p-4 w-full rounded-3xl cursor-pointer'}
+        src={menuLogo}
+        alt={''}
+        onClick={() => window.open('https://www.suss.edu.sg/')}
+      />
       <Menu
         mode="inline"
         selectedKeys={selectItem?.k}
@@ -70,7 +75,7 @@ const Home = (): any => {
     </Header>
   );
   const renderFooter = () => (
-    <Footer className={'flex items-center justify-center bg-white'}>
+    <Footer className={'flex items-center justify-center bg-white h-10'}>
       <span>
         Copyright © {new Date().getFullYear()} SUSS. All Rights Reserved.{' '}
       </span>

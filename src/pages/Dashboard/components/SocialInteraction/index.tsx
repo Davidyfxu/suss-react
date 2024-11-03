@@ -12,8 +12,16 @@ import { GraphChart, GraphSeriesOption } from 'echarts/charts';
 import { CanvasRenderer } from 'echarts/renderers';
 import { useUserStore } from '../../../../stores/userStore';
 import { draw_network } from '../../api.ts';
-import { Spin } from 'antd';
+import { Segmented, Spin } from 'antd';
 import { debounce } from 'lodash-es';
+import SocialTable from './SocialTable.tsx';
+import {
+  AppstoreOutlined,
+  BarsOutlined,
+  InteractionOutlined,
+  NodeIndexOutlined,
+  TableOutlined
+} from '@ant-design/icons';
 
 // Register the components with ECharts
 echarts.use([
@@ -40,6 +48,7 @@ const SocialGraph: React.FC = () => {
   }>({ nodes: [], edges: [] });
   const chartRef = useRef<HTMLDivElement>(null);
   const myChartRef = useRef<echarts.ECharts | null>(null);
+  const [showType, setShowType] = useState<string>('graph');
 
   const getNetwork = async () => {
     try {
@@ -57,10 +66,14 @@ const SocialGraph: React.FC = () => {
     courseCode && getNetwork();
   }, [courseCode]);
 
-  useEffect(() => {
+  const initChart = useCallback(() => {
     if (chartRef.current) {
+      // 如果已经存在实例，先销毁它
+      if (myChartRef.current) {
+        myChartRef.current.dispose();
+      }
       const container = chartRef.current;
-      const width = container?.clientWidth || window.innerWidth - 300;
+      const width = container?.clientWidth || window.innerWidth - 248;
       const height = container?.clientHeight || 500;
       myChartRef.current = echarts.init(chartRef.current, null, {
         width,
@@ -162,9 +175,25 @@ const SocialGraph: React.FC = () => {
     };
   }, [rawData, courseCode]);
 
+  useEffect(() => {
+    if (showType === 'graph') {
+      // 确保在下一个渲染周期初始化图表
+      setTimeout(() => {
+        initChart();
+      }, 0);
+    }
+
+    return () => {
+      if (myChartRef.current) {
+        myChartRef.current.dispose();
+        myChartRef.current = null;
+      }
+    };
+  }, [showType, rawData, initChart]);
+
   const handleResize = useCallback(
     debounce(() => {
-      if (myChartRef.current) {
+      if (myChartRef.current && showType === 'graph') {
         const container = chartRef.current;
         const width = container?.clientWidth || window.innerWidth - 300;
         const height = container?.clientHeight || 500;
@@ -172,7 +201,7 @@ const SocialGraph: React.FC = () => {
         myChartRef.current.resize({ width, height });
       }
     }, 300),
-    []
+    [showType]
   );
   useEffect(() => {
     window.addEventListener('resize', handleResize);
@@ -184,20 +213,44 @@ const SocialGraph: React.FC = () => {
   }, [handleResize, courseCode]);
 
   return (
-    <Spin
-      spinning={loading}
-      className={'flex justify-center items-center w-full h-full'}
-    >
-      <div
-        ref={chartRef}
-        style={{
-          minWidth: 500,
-          width: '100%', // 可以调整宽度
-          height: '500px',
-          margin: '0 auto' // 自动水平居中
-        }}
-      />
-    </Spin>
+    <div>
+      <div style={{ marginBottom: 16, textAlign: 'center' }}>
+        <Segmented
+          options={[
+            {
+              label: 'Graph',
+              value: 'graph',
+              icon: <NodeIndexOutlined />
+            },
+            { label: 'Table', value: 'table', icon: <TableOutlined /> }
+          ]}
+          value={showType}
+          onChange={(value) => {
+            setShowType(value);
+          }}
+        />
+      </div>
+
+      <Spin
+        spinning={loading}
+        className={'flex justify-center items-center w-full h-full'}
+      >
+        {showType === 'graph' ? (
+          <div
+            ref={chartRef}
+            className={'rounded-lg border'}
+            style={{
+              padding: 16,
+              minWidth: 500,
+              width: '100%', // 可以调整宽度
+              height: '750px'
+            }}
+          />
+        ) : (
+          <SocialTable data={rawData} />
+        )}
+      </Spin>
+    </div>
   );
 };
 
