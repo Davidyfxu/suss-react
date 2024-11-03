@@ -87,6 +87,7 @@ const WordCloudComp = () => {
   };
   // 词云配置
   const wordCloudConfig = {
+    width: width - 248,
     paddingTop: 40,
     data: words,
     layout: { spiral: 'rectangular' },
@@ -98,7 +99,7 @@ const WordCloudComp = () => {
       padding: 2 // 设置单词之间的间距
     },
     mask: {
-      width: width * 0.8, // 设置词云的宽度
+      width: width - 248, // 设置词云的宽度
       height: 600 // 设置词云的高度
     }
   };
