@@ -15,13 +15,7 @@ import { draw_network } from '../../api.ts';
 import { Segmented, Spin } from 'antd';
 import { debounce } from 'lodash-es';
 import SocialTable from './SocialTable.tsx';
-import {
-  AppstoreOutlined,
-  BarsOutlined,
-  InteractionOutlined,
-  NodeIndexOutlined,
-  TableOutlined
-} from '@ant-design/icons';
+import { NodeIndexOutlined, TableOutlined } from '@ant-design/icons';
 
 // Register the components with ECharts
 echarts.use([
@@ -96,19 +90,19 @@ const SocialGraph: React.FC = () => {
             type: 'graph',
             layout: 'force',
             force: {
-              repulsion: 2000, // 更大的斥力
+              repulsion: 10, // 更大的斥力
               gravity: 0.05, // 更小的向心力
-              edgeLength: 400 // 更长的边长
+              edgeLength: 50 // 更长的边长
             },
-            symbolSize: 50,
+            symbolSize: 16,
             roam: true,
             label: {
               show: true
             },
             edgeSymbol: ['circle', 'arrow'],
-            edgeSymbolSize: [4, 10],
+            edgeSymbolSize: [2, 5],
             edgeLabel: {
-              fontSize: 20
+              fontSize: 10
             },
             data: rawData.nodes.map((node, index) => ({
               name: node,
@@ -124,6 +118,7 @@ const SocialGraph: React.FC = () => {
             links: rawData.edges.map((edge) => ({
               source: edge.source,
               target: edge.target,
+              value: edge.weight,
               label: {
                 show: false
               },
@@ -159,7 +154,7 @@ const SocialGraph: React.FC = () => {
                 width: 6
               },
               label: {
-                fontSize: 14
+                fontSize: 12
               }
             }
           }

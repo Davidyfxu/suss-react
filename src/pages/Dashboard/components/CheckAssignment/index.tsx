@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Form,
   InputNumber,
@@ -6,16 +6,18 @@ import {
   message,
   Table,
   Empty,
-  Typography
+  Typography,
+  Space
 } from 'antd';
 import { check_assignment } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
 import { SelectSUSS } from '../../../../components';
-
+import { utils, writeFile } from 'xlsx';
+import { DownloadOutlined } from '@ant-design/icons';
 const CheckAssignment = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState<any>({});
   const courseCode = useUserStore((state) => state.courseCode);
   const handleSubmit = async (values: any) => {
     setLoading(true);
@@ -30,6 +32,42 @@ const CheckAssignment = () => {
     }
   };
 
+  const exportToExcel = () => {
+    const workbook = utils.book_new();
+    // 准备数据
+    const completedStudents = (result?.detail?.completed_students || []).map(
+      (student) => student?.user_name
+    );
+
+    const notCompletedStudents = (
+      result?.detail?.not_completed_students || []
+    ).map((student) => student?.user_name);
+
+    // 确定最大行数
+    const maxRows = Math.max(
+      completedStudents.length,
+      notCompletedStudents.length
+    );
+
+    // 创建包含标题和数据的数组
+    const data = [
+      ...Array(maxRows)
+        .fill(null)
+        .map((_, index) => ({
+          'Completed Students': completedStudents[index] || '',
+          'Not Completed Students': notCompletedStudents[index] || ''
+        }))
+    ];
+
+    // 创建工作表
+    const worksheet = utils.json_to_sheet(data);
+
+    // 将工作表添加到工作簿
+    utils.book_append_sheet(workbook, worksheet, 'Check Assignments Status');
+
+    // 导出文件
+    writeFile(workbook, 'students_status.xlsx');
+  };
   const columns = [
     {
       title: 'Student Name',
@@ -86,28 +124,33 @@ const CheckAssignment = () => {
 
       {result ? (
         <div className="mt-8">
-          <h2 className="text-xl font-bold mb-4">Results</h2>
+          <Space className={'mb-4'}>
+            <h2 className="text-xl font-bold">Results</h2>
+            <Button onClick={exportToExcel} icon={<DownloadOutlined />} />
+          </Space>
           {result.result === 1 && (
             <p className="text-green-600">{result.reason}</p>
           )}
           {result.result === 0 && (
-            <div>
-              <h3 className="text-lg font-bold mb-2">Not Completed Students</h3>
-              <Table
-                dataSource={result.detail.not_completed_students}
-                columns={columns}
-                rowKey="user_name"
-                pagination={false}
-              />
-              <h3 className="text-lg font-bold mt-4 mb-2">
-                Completed Students
-              </h3>
-              <Table
-                dataSource={result.detail.completed_students}
-                columns={columns}
-                rowKey="user_name"
-                pagination={false}
-              />
+            <div className={'flex gap-4 justify-between'}>
+              <div className={'flex-1'}>
+                <h3 className="text-lg font-bold mb-2">Completed Students</h3>
+                <Table
+                  dataSource={result?.detail?.completed_students || []}
+                  columns={columns}
+                  rowKey="completed_students"
+                />
+              </div>
+              <div className={'flex-1'}>
+                <h3 className="text-lg font-bold mb-2">
+                  Not Completed Students
+                </h3>
+                <Table
+                  dataSource={result?.detail?.not_completed_students || []}
+                  columns={columns}
+                  rowKey="not_completed_students"
+                />
+              </div>
             </div>
           )}
           {result.result === 2 && (

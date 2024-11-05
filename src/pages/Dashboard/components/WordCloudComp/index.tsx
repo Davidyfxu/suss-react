@@ -19,7 +19,6 @@ const WordCloudComp = () => {
   const courseCode = useUserStore((state) => state.courseCode);
   const [words, setWords] = useState<{ value: number; text: string }[]>([]);
   const [loading, setLoading] = useState(false);
-  const [width, setWidth] = useState(window.innerWidth); // 初始化宽度为窗口宽度
   const [displayType, setDisplayType] = useState<DisplayEnum>(
     DisplayEnum.WordCloud
   );
@@ -48,14 +47,6 @@ const WordCloudComp = () => {
   useEffect(() => {
     courseCode && getWords();
   }, [courseCode, getWords]);
-  const handleResize = () => {
-    setWidth(window.innerWidth);
-  };
-  useEffect(() => {
-    // 监听窗口大小变化
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [courseCode]);
 
   const columns: ColumnsType<{ text: string; value: number }> = [
     {
@@ -91,7 +82,7 @@ const WordCloudComp = () => {
   };
   // 词云配置
   const wordCloudConfig = {
-    width: width - 248,
+    width: 900,
     data: words,
     layout: { spiral: 'rectangular' },
     colorField: 'text',
@@ -102,7 +93,7 @@ const WordCloudComp = () => {
       padding: 2 // 设置单词之间的间距
     },
     mask: {
-      width: width - 248, // 设置词云的宽度
+      width: 900, // 设置词云的宽度
       height: 600 // 设置词云的高度
     }
   };
@@ -130,8 +121,8 @@ const WordCloudComp = () => {
   };
 
   return (
-    <div>
-      <div style={{ marginBottom: 16, textAlign: 'center' }}>
+    <div className={'flex justify-center items-center flex-col gap-4'}>
+      <div style={{ textAlign: 'center' }}>
         <Segmented
           options={[
             {
