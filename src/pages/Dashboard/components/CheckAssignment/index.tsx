@@ -66,7 +66,7 @@ const CheckAssignment = () => {
     utils.book_append_sheet(workbook, worksheet, 'Check Assignments Status');
 
     // 导出文件
-    writeFile(workbook, 'students_status.xlsx');
+    writeFile(workbook, `check_assignment_status_${courseCode}.xlsx`);
   };
   const columns = [
     {

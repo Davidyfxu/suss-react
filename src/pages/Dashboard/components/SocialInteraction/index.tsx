@@ -90,9 +90,9 @@ const SocialGraph: React.FC = () => {
             type: 'graph',
             layout: 'force',
             force: {
-              repulsion: 10, // 更大的斥力
+              repulsion: 30, // 更大的斥力
               gravity: 0.05, // 更小的向心力
-              edgeLength: 50 // 更长的边长
+              edgeLength: 150 // 更长的边长
             },
             symbolSize: 16,
             roam: true,
