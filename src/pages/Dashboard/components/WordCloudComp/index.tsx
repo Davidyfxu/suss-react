@@ -88,7 +88,7 @@ const WordCloudComp = () => {
     colorField: 'text',
     wordStyle: {
       rotation: 0, // 固定旋转角度为0，使词云更紧凑
-      rotationSteps: 2, // 减少旋转步数，使词云更紧凑
+      rotationSteps: 0, // 减少旋转步数，使词云更紧凑
       fontSize: [12, 60], // 设置字体大小范围
       padding: 2 // 设置单词之间的间距
     },

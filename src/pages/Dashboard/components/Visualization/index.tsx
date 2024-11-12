@@ -61,19 +61,21 @@ const Visualization = () => {
     yField: 'entry_count',
     title: 'Number of posts by week',
     loading,
-    scale: {
-      x: { padding: 0.5 }
+    label: {
+      style: {
+        fill: '#FFFFFF',
+        opacity: 0.6
+      }
     },
     forceFit: true,
-
+    xAxis: {
+      label: {
+        autoRotate: true
+      }
+    },
     style: {
       maxWidth: 100
-    },
-    interactions: [
-      {
-        type: 'slider'
-      }
-    ]
+    }
   };
   return !isEmpty(rawData?.['serializer_data_participant']) ||
     !isEmpty(rawData?.['serializer_data_reply']) ||
