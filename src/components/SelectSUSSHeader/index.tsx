@@ -21,12 +21,10 @@ const SelectSUSSHeader = () => {
         {
           value: 'JAN 2023',
           label: 'JAN 2023',
-          children: course_codes
-            .map((value: string) => ({
-              value: value,
-              label: value
-            }))
-            .sort((a, b) => a.value.localeCompare(b.value))
+          children: course_codes.map((value: string) => ({
+            value: value,
+            label: value
+          }))
         }
       ];
 
