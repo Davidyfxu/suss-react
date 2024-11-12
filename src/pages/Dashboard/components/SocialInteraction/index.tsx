@@ -80,15 +80,22 @@ const SocialGraph: React.FC = () => {
             min: 10,
             max: 30,
             label: {
+              enabled: true, // 确保标签启用
               min: 8,
-              max: 30,
-              drawThreshold: 12,
-              maxVisible: 20
+              max: 16,
+              drawThreshold: 1,
+              maxVisible: 30
             }
           },
           font: {
-            size: 12,
-            face: 'Tahoma'
+            size: 10, // 减小默认字体大小
+            face: 'Tahoma',
+            color: '#333333', // 添加字体颜色使其更清晰
+            strokeWidth: 2, // 添加描边宽度使文字更清晰
+            strokeColor: '#ffffff' // 添加白色描边使文字在任何背景下都清晰可见
+          },
+          label: {
+            enabled: true // 确保标签显示
           }
         },
         edges: {
