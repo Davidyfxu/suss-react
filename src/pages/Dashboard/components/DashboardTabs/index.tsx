@@ -20,7 +20,8 @@ const DASHBOARD_TABS = [
   {
     label: 'Social Interaction',
     key: 'social_interaction',
-    children: <SocialInteraction />
+    children: <SocialInteraction />,
+    destroyInactiveTabPane: true // 只对这个标签页设置为true
   },
   {
     label: 'Word Cloud',
@@ -36,7 +37,13 @@ const DASHBOARD_TABS = [
 ];
 
 const DashboardTabs = () => {
-  return <Tabs defaultActiveKey="1" centered items={DASHBOARD_TABS} />;
+  return (
+    <Tabs
+      defaultActiveKey="discussion_visual"
+      centered
+      items={DASHBOARD_TABS}
+    />
+  );
 };
 
 export default DashboardTabs;
