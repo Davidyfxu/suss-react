@@ -2,10 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Network, DataSet } from 'vis-network/standalone';
 import { useUserStore } from '../../../../stores/userStore';
 import { draw_network } from '../../api.ts';
-import { Segmented, Spin } from 'antd';
+import { Spin } from 'antd';
 import { debounce } from 'lodash-es';
-import SocialTable from './SocialTable.tsx';
-import { NodeIndexOutlined, TableOutlined } from '@ant-design/icons';
 
 const SocialGraph: React.FC = () => {
   const courseCode = useUserStore((state) => state.courseCode);
@@ -16,8 +14,6 @@ const SocialGraph: React.FC = () => {
   }>({ nodes: [], edges: [] });
   const networkRef = useRef<HTMLDivElement>(null);
   const network = useRef<Network | null>(null);
-  const [showType, setShowType] = useState<string>('graph');
-
   const getNetwork = async () => {
     try {
       setLoading(true);
@@ -71,7 +67,6 @@ const SocialGraph: React.FC = () => {
       );
 
       const data = { nodes, edges };
-
       // 配置选项
       const options = {
         nodes: {
@@ -96,6 +91,16 @@ const SocialGraph: React.FC = () => {
           },
           label: {
             enabled: true // 确保标签显示
+          },
+          color: {
+            background: '#ffffff', // 节点背景色
+            border: '#848484', // 节点边框色
+            highlight: {
+              border: '#3490de' // 选中时的边框色
+            },
+            hover: {
+              border: '#3490de' // 悬停时的边框色
+            }
           }
         },
         edges: {
@@ -105,8 +110,8 @@ const SocialGraph: React.FC = () => {
           },
           color: {
             color: '#848484',
-            highlight: '#848484',
-            hover: '#848484',
+            highlight: '#3490de', // 选中时的边颜色
+            hover: '#3490de', // 悬停时的边颜色
             opacity: 0.5
           },
           scaling: {
@@ -151,11 +156,9 @@ const SocialGraph: React.FC = () => {
   }, [rawData]);
 
   useEffect(() => {
-    if (showType === 'graph') {
-      setTimeout(() => {
-        initNetwork();
-      }, 0);
-    }
+    setTimeout(() => {
+      initNetwork();
+    }, 0);
 
     return () => {
       if (network.current) {
@@ -163,15 +166,15 @@ const SocialGraph: React.FC = () => {
         network.current = null;
       }
     };
-  }, [showType, rawData, initNetwork]);
+  }, [rawData, initNetwork]);
 
   const handleResize = useCallback(
     debounce(() => {
-      if (network.current && showType === 'graph') {
+      if (network.current) {
         network.current.fit();
       }
     }, 300),
-    [showType]
+    []
   );
 
   useEffect(() => {
@@ -184,44 +187,20 @@ const SocialGraph: React.FC = () => {
   }, [handleResize, courseCode]);
 
   return (
-    <div>
-      <div style={{ marginBottom: 16, textAlign: 'center' }}>
-        <Segmented
-          options={[
-            {
-              label: 'Graph',
-              value: 'graph',
-              icon: <NodeIndexOutlined />
-            },
-            { label: 'Table', value: 'table', icon: <TableOutlined /> }
-          ]}
-          value={showType}
-          onChange={(value) => {
-            setShowType(value);
-          }}
-        />
-      </div>
-
-      <Spin
-        spinning={loading}
-        className={'flex justify-center items-center w-full h-full'}
-      >
-        {showType === 'graph' ? (
-          <div
-            ref={networkRef}
-            className={'rounded-lg border'}
-            style={{
-              padding: 16,
-              minWidth: 500,
-              width: '100%',
-              height: '750px'
-            }}
-          />
-        ) : (
-          <SocialTable data={rawData} />
-        )}
-      </Spin>
-    </div>
+    <Spin
+      spinning={loading}
+      className={'flex justify-center items-center w-full h-full'}
+    >
+      <div
+        ref={networkRef}
+        style={{
+          padding: 16,
+          minWidth: 500,
+          width: '100%',
+          height: 500
+        }}
+      />
+    </Spin>
   );
 };
 

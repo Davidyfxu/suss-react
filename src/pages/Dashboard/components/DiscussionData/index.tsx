@@ -111,6 +111,7 @@ const DiscussionData = () => {
         handleSelect={(v) => setTopic(v)}
       />
       <Table
+        scroll={{ x: '100%', y: 500 }} // 设置滚动范围
         columns={columns}
         rowKey="user_id"
         dataSource={records}

@@ -5,6 +5,21 @@ import { useUserStore } from '../../../../stores/userStore';
 import { Empty } from 'antd';
 import { isEmpty } from 'lodash-es';
 
+const useChartResize = () => {
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return width;
+};
+
 const Visualization = () => {
   const courseCode = useUserStore((state) => state.courseCode);
   const [loading, setLoading] = useState(false);
@@ -13,6 +28,7 @@ const Visualization = () => {
     serializer_data_reply: [],
     reply_by_week: []
   });
+  const width = useChartResize();
 
   const getParticipants = async () => {
     try {
@@ -28,73 +44,76 @@ const Visualization = () => {
   useEffect(() => {
     courseCode && getParticipants();
   }, [courseCode]);
-  const config_part: BarConfig = {
-    data: rawData['serializer_data_participant'] || [],
-    xField: 'topic_title',
-    yField: 'unique_entry_count',
-    title: 'Number of participants by topic',
-    loading,
-    scale: {
-      x: { padding: 0.5 }
-    },
+  // 处理过长的标题
+  const processData = (data = []) => {
+    return data.map((item) => ({
+      ...item,
+      topic_title:
+        item?.topic_title?.length > 30
+          ? item?.topic_title?.substring?.(0, 30) + '...'
+          : item?.topic_title
+    }));
+  };
 
-    style: {
-      maxWidth: 100
-    }
-  };
-  const config_reply: BarConfig = {
-    data: rawData['serializer_data_reply'] || [],
-    xField: 'topic_title',
-    yField: 'unique_entry_count',
-    title: 'Number of posts by topic',
+  const commonConfig = {
     loading,
     scale: {
       x: { padding: 0.5 }
     },
     style: {
       maxWidth: 100
-    }
-  };
-  const config_post_by_week: ColumnConfig = {
-    data: rawData['reply_by_week'] || [],
-    xField: 'week_range',
-    yField: 'entry_count',
-    title: 'Number of posts by week',
-    loading,
-    label: {
-      style: {
-        fill: '#FFFFFF',
-        opacity: 0.6
-      }
     },
-    forceFit: true,
     xAxis: {
       label: {
-        autoRotate: true
+        autoRotate: true,
+        autoHide: true,
+        autoEllipsis: true,
+        maxLength: 30 // 限制标签长度
       }
     },
-    style: {
-      maxWidth: 100
-    }
+    width: width > 768 ? width * 0.8 : width * 0.95
   };
+
+  const config_part: BarConfig = {
+    ...commonConfig,
+    data: processData(rawData['serializer_data_participant']) || [],
+    xField: 'topic_title',
+    yField: 'unique_entry_count',
+    title: 'Number of participants by topic'
+  };
+
+  const config_reply: BarConfig = {
+    ...commonConfig,
+    data: processData(rawData['serializer_data_reply']) || [],
+    xField: 'topic_title',
+    yField: 'unique_entry_count',
+    title: 'Number of posts by topic'
+  };
+
+  const config_post_by_week: ColumnConfig = {
+    ...commonConfig,
+    data: processData(rawData['reply_by_week']) || [],
+    xField: 'week_range',
+    yField: 'entry_count',
+    title: 'Number of posts by week'
+  };
+
   return !isEmpty(rawData?.['serializer_data_participant']) ||
     !isEmpty(rawData?.['serializer_data_reply']) ||
     !isEmpty(rawData?.['reply_by_week']) ? (
-    <div className={'overflow-auto flex flex-col gap-4'}>
-      <div style={{ display: 'flex', flex: 1, gap: '1rem' }}>
-        {!isEmpty(rawData?.['serializer_data_participant']) && (
-          <div style={{ flex: 1, minWidth: '300px', maxWidth: '50%' }}>
-            <Bar {...config_part} />
-          </div>
-        )}
-        {!isEmpty(rawData?.['serializer_data_reply']) && (
-          <div style={{ flex: 1, minWidth: '300px', maxWidth: '50%' }}>
-            <Bar {...config_reply} />
-          </div>
-        )}
-      </div>
+    <div className={'overflow-x-auto w-full'}>
+      {!isEmpty(rawData?.['serializer_data_participant']) && (
+        <div className={'mb-5 w-full min-w-[300px]'}>
+          <Bar {...config_part} />
+        </div>
+      )}
+      {!isEmpty(rawData?.['serializer_data_reply']) && (
+        <div className={'mb-5 w-full min-w-[300px]'}>
+          <Bar {...config_reply} />
+        </div>
+      )}
       {!isEmpty(rawData?.['reply_by_week']) && (
-        <div style={{ flex: 2, minWidth: '300px', maxWidth: '100%' }}>
+        <div className={'mb-5 w-full min-w-[300px]'}>
           <Column {...config_post_by_week} />
         </div>
       )}
