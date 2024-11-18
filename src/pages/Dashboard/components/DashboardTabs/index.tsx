@@ -30,7 +30,7 @@ const DASHBOARD_TABS = [
         >
           <SocialInteraction />
         </Splitter.Panel>
-        <Splitter.Panel collapsible>
+        <Splitter.Panel>
           <WordCloudComp />
         </Splitter.Panel>
       </Splitter>
