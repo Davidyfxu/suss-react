@@ -40,20 +40,24 @@ const WordCloudComp = () => {
         'w-full h-full flex justify-center items-center flex-col gap-4'
       }
     >
-      <ReactWordcloud
-        words={words}
-        options={{
-          enableTooltip: true,
-          deterministic: false,
-          fontSizes: [12, 80],
-          padding: 2,
-          rotations: 2,
-          rotationAngles: [0, 0],
-          scale: 'log',
-          spiral: 'archimedean',
-          transitionDuration: 300
-        }}
-      />
+      {loading ? (
+        <Spin size={'large'} />
+      ) : (
+        <ReactWordcloud
+          words={words}
+          options={{
+            enableTooltip: true,
+            deterministic: false,
+            fontSizes: [12, 80],
+            padding: 2,
+            rotations: 2,
+            rotationAngles: [0, 0],
+            scale: 'log',
+            spiral: 'archimedean',
+            transitionDuration: 300
+          }}
+        />
+      )}
     </div>
   );
 };
