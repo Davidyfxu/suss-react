@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Network, DataSet } from 'vis-network/standalone';
 import { useUserStore } from '../../../../stores/userStore';
 import { draw_network } from '../../api.ts';
-import { Spin } from 'antd';
+import { Alert, Button, Spin, Typography } from 'antd';
 import { debounce } from 'lodash-es';
 
 const SocialGraph: React.FC = () => {
@@ -187,20 +187,72 @@ const SocialGraph: React.FC = () => {
   }, [handleResize, courseCode]);
 
   return (
-    <Spin
-      spinning={loading}
-      className={'flex justify-center items-center w-full h-full'}
-    >
-      <div
-        ref={networkRef}
-        style={{
-          padding: 16,
-          minWidth: 500,
-          width: '100%',
-          height: 500
-        }}
-      />
-    </Spin>
+    <>
+      <div>
+        <Typography.Paragraph
+          ellipsis={{
+            rows: 1,
+            expandable: 'collapsible'
+          }}
+          copyable
+        >
+          Social Network Analysis (SNA) is the study of social structures
+          through the use of networks and graph theory. In our context, it
+          reveals how individuals (or nodes) are connected within a class
+          community, offering insights into learning dynamics, such as
+          identifying highly connected or those who are isolated and may need
+          additional support. Educators can also leverage SNA to design and
+          evaluate teaching interventions.
+        </Typography.Paragraph>
+        <Button
+          type={'default'}
+          onClick={() =>
+            window.open(
+              'https://visiblenetworklabs.com/guides/social-network-analysis-101/'
+            )
+          }
+        >
+          Know more about Social Network Analysis!
+        </Button>
+        <Alert
+          message="Important Tips"
+          description={
+            <ul>
+              <li>Choose a topic title from above selection box.</li>
+              <li>
+                Each node represents a user, and node size represents the
+                importance (in-degree centrality) of the node.
+              </li>
+              <li>
+                Each line with an arrow (called edge) represents the connection.
+                Edge arrow direction means replying to, and edge thickness
+                represents interaction level between two users.
+              </li>
+              <li>
+                Hover over the edge to see the exact edge thickness value.
+              </li>
+            </ul>
+          }
+          type="info"
+          showIcon
+        />
+      </div>
+      <Spin
+        spinning={loading}
+        className={'flex justify-center items-center w-full h-full'}
+      >
+        <div
+          ref={networkRef}
+          className={'bg-gray-50'}
+          style={{
+            padding: 16,
+            minWidth: 500,
+            width: '100%',
+            height: 500
+          }}
+        />
+      </Spin>
+    </>
   );
 };
 

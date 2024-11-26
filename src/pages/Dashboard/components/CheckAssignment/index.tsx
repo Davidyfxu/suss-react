@@ -7,7 +7,8 @@ import {
   Table,
   Empty,
   Typography,
-  Space
+  Space,
+  Alert
 } from 'antd';
 import { check_assignment } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
@@ -77,8 +78,16 @@ const CheckAssignment = () => {
   ];
 
   return (
-    <div className="p-4">
+    <div className="p-4 min-h-[800px]">
       <Typography.Title level={4}>Check Assignment Completion</Typography.Title>
+      <Alert
+        message="Important Tips"
+        description={
+          'If instructors have requirement that students have to post a certain number of posts in one or more than one discussion topics, this is to facilitate instructors to check which students have posted according to the requirements.'
+        }
+        type="info"
+        showIcon
+      />
       <Form
         className="justify-between gap-4"
         form={form}
