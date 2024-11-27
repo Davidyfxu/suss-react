@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Space, Table, TablePaginationConfig } from 'antd';
+import { Alert, Space, Table, TablePaginationConfig } from 'antd';
 import { get_discussion_participation } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
 import { SelectSUSS } from '../../../../components';
@@ -110,6 +110,7 @@ const DiscussionData = () => {
         className={'w-full'}
         handleSelect={(v) => setTopic(v)}
       />
+      <Alert message="Keep clicking the table header to sort the coloumn in ascending or descending order as you need." type="info" showIcon />
       <Table
         scroll={{ x: '100%', y: 500 }} // 设置滚动范围
         columns={columns}
