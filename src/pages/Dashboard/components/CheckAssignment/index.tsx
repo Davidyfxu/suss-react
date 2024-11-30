@@ -79,8 +79,8 @@ const CheckAssignment = () => {
 
   return (
     <div className="p-4 min-h-[800px]">
-      <Typography.Title level={4}>Check Assignment Completion</Typography.Title>
       <Alert
+        className={'my-4'}
         message="Important Tips"
         description={
           'If instructors have requirement that students have to post a certain number of posts in one or more than one discussion topics, this is to facilitate instructors to check which students have posted according to the requirements.'

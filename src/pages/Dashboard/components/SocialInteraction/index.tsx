@@ -187,63 +187,64 @@ const SocialGraph: React.FC = () => {
   }, [handleResize, courseCode]);
 
   return (
-    <>
-      <div>
-        <Typography.Paragraph
-          ellipsis={{
-            rows: 1,
-            expandable: 'collapsible'
-          }}
-          copyable
-        >
-          Social Network Analysis (SNA) is the study of social structures
-          through the use of networks and graph theory. In our context, it
-          reveals how individuals (or nodes) are connected within a class
-          community, offering insights into learning dynamics, such as
-          identifying highly connected or those who are isolated and may need
-          additional support. Educators can also leverage SNA to design and
-          evaluate teaching interventions.
-        </Typography.Paragraph>
-        <Button
-          type={'default'}
-          onClick={() =>
-            window.open(
-              'https://visiblenetworklabs.com/guides/social-network-analysis-101/'
-            )
-          }
-        >
-          Know more about Social Network Analysis!
-        </Button>
-        <Alert
-          message="Important Tips"
-          description={
-            <ul>
-              <li>Choose a topic title from above selection box.</li>
-              <li>
-                Each node represents a user, and node size represents the
-                importance (in-degree centrality) of the node.
-              </li>
-              <li>
-                Each line with an arrow (called edge) represents the connection.
-                Edge arrow direction means replying to, and edge thickness
-                represents interaction level between two users.
-              </li>
-              <li>
-                Hover over the edge to see the exact edge thickness value.
-              </li>
-            </ul>
-          }
-          type="info"
-          showIcon
-        />
-      </div>
+    <div className={'p-4 rounded-lg border'}>
+      <Typography.Title level={5}>
+        Social Network Analysis Graph
+      </Typography.Title>
+      <Typography.Paragraph
+        ellipsis={{
+          rows: 1,
+          expandable: 'collapsible'
+        }}
+        copyable
+      >
+        Social Network Analysis (SNA) is the study of social structures through
+        the use of networks and graph theory. In our context, it reveals how
+        individuals (or nodes) are connected within a class community, offering
+        insights into learning dynamics, such as identifying highly connected or
+        those who are isolated and may need additional support. Educators can
+        also leverage SNA to design and evaluate teaching interventions.
+      </Typography.Paragraph>
+      <Button
+        type={'default'}
+        onClick={() =>
+          window.open(
+            'https://visiblenetworklabs.com/guides/social-network-analysis-101/'
+          )
+        }
+      >
+        Know more about Social Network Analysis!
+      </Button>
+      <Alert
+        className={'my-4'}
+        message="Important Tips"
+        description={
+          <ul>
+            <li>1. Choose a topic title from above selection box.</li>
+            <li>
+              2. Each node represents a user, and node size represents the
+              importance (in-degree centrality) of the node.
+            </li>
+            <li>
+              3. Each line with an arrow (called edge) represents the
+              connection. Edge arrow direction means replying to, and edge
+              thickness represents interaction level between two users.
+            </li>
+            <li>
+              4. Hover over the edge to see the exact edge thickness value.
+            </li>
+          </ul>
+        }
+        type="info"
+        showIcon
+      />
       <Spin
         spinning={loading}
         className={'flex justify-center items-center w-full h-full'}
       >
         <div
           ref={networkRef}
-          className={'bg-gray-50'}
+          className={'bg-gray-50 rounded-lg'}
           style={{
             padding: 16,
             minWidth: 500,
@@ -252,7 +253,7 @@ const SocialGraph: React.FC = () => {
           }}
         />
       </Spin>
-    </>
+    </div>
   );
 };
 

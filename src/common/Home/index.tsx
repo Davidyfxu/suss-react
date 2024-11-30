@@ -93,14 +93,11 @@ const Home = (): any => {
         {renderHeader()}
         <Content
           style={{
-            padding: '8px',
             height: '100%',
             overflow: 'auto'
           }}
         >
-          <div className={'rounded-lg bg-white p-4 h-full'}>
-            <Outlet />
-          </div>
+          <Outlet />
         </Content>
         {renderFooter()}
       </Layout>

@@ -1,8 +1,8 @@
-import { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { draw_wordcloud } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
 import ReactWordcloud from 'react-wordcloud';
-import { Spin } from 'antd';
+import { Spin, Typography } from 'antd';
 
 const WordCloudComp = () => {
   const courseCode = useUserStore((state) => state.courseCode);
@@ -35,29 +35,32 @@ const WordCloudComp = () => {
   }, [courseCode]);
 
   return (
-    <div
-      className={
-        'w-full h-full flex justify-center items-center flex-col gap-4'
-      }
-    >
-      {loading ? (
-        <Spin size={'large'} />
-      ) : (
-        <ReactWordcloud
-          words={words}
-          options={{
-            enableTooltip: true,
-            deterministic: false,
-            fontSizes: [12, 80],
-            padding: 2,
-            rotations: 2,
-            rotationAngles: [0, 0],
-            scale: 'log',
-            spiral: 'archimedean',
-            transitionDuration: 300
-          }}
-        />
-      )}
+    <div className={'p-4 rounded-lg border'}>
+      <Typography.Title level={5}>Word Cloud</Typography.Title>
+      <div
+        className={
+          'w-full h-full flex justify-center items-center flex-col gap-4'
+        }
+      >
+        {loading ? (
+          <Spin size={'large'} />
+        ) : (
+          <ReactWordcloud
+            words={words}
+            options={{
+              enableTooltip: true,
+              deterministic: false,
+              fontSizes: [12, 80],
+              padding: 2,
+              rotations: 2,
+              rotationAngles: [0, 0],
+              scale: 'log',
+              spiral: 'archimedean',
+              transitionDuration: 300
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 };

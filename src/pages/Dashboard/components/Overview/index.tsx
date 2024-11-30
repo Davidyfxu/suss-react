@@ -39,7 +39,7 @@ const Overview = () => {
   };
 
   return (
-    <div className="p-4 border rounded shadow">
+    <div className="p-5 rounded-lg bg-white">
       <div className="flex justify-between items-center">
         <Title level={4} className="m-0">
           Course Overview
