@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { draw_wordcloud } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
 import ReactWordcloud from 'react-wordcloud';
-import { Spin, Typography } from 'antd';
+import { Empty, Spin, Typography } from 'antd';
 
 const WordCloudComp = () => {
   const courseCode = useUserStore((state) => state.courseCode);
@@ -35,29 +35,54 @@ const WordCloudComp = () => {
   }, [courseCode]);
 
   return (
-    <div className={'p-4 rounded-lg border'}>
-      <Typography.Title level={5}>Word Cloud</Typography.Title>
-      <div
-        className={
-          'w-full h-full flex justify-center items-center flex-col gap-4'
-        }
-      >
+    <div className="p-6 flex flex-col lg:flex-row gap-6">
+      <div className="w-full lg:w-96 space-y-4">
+        <Typography.Title
+          level={4}
+          className="!m-0 !text-2xl font-bold text-gray-800"
+        >
+          Word Cloud
+        </Typography.Title>
+        <p className="text-gray-600">
+          Please select the topic title to view the Word Cloud
+        </p>
+      </div>
+
+      <div className="flex-1 relative min-h-[500px] bg-gray-50 rounded-xl p-2 border border-gray-100">
         {loading ? (
-          <Spin size={'large'} />
-        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Spin size="large" />
+          </div>
+        ) : words.length > 0 ? (
           <ReactWordcloud
             words={words}
             options={{
               enableTooltip: true,
               deterministic: false,
-              fontSizes: [12, 80],
-              padding: 2,
+              fontSizes: [14, 80],
+              padding: 3,
               rotations: 2,
               rotationAngles: [0, 0],
               scale: 'log',
               spiral: 'archimedean',
-              transitionDuration: 300
+              transitionDuration: 300,
+              fontFamily: 'Inter, system-ui, sans-serif',
+              colors: [
+                '#1f2937',
+                '#2563eb',
+                '#7c3aed',
+                '#2dd4bf',
+                '#0891b2',
+                '#4f46e5'
+              ]
             }}
+          />
+        ) : (
+          <Empty
+            className={
+              'flex-1 bg-gray-50 flex justify-center items-center flex-col h-full w-full'
+            }
+            description={'No data available. Please select a topic.'}
           />
         )}
       </div>

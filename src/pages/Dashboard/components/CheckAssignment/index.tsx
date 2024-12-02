@@ -15,11 +15,14 @@ import { useUserStore } from '../../../../stores/userStore';
 import { SelectSUSS } from '../../../../components';
 import { utils, writeFile } from 'xlsx';
 import { DownloadOutlined } from '@ant-design/icons';
+import { isEmpty } from 'lodash-es';
+
 const CheckAssignment = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>({});
   const courseCode = useUserStore((state) => state.courseCode);
+
   const handleSubmit = async (values: any) => {
     setLoading(true);
     try {
@@ -69,6 +72,7 @@ const CheckAssignment = () => {
     // 导出文件
     writeFile(workbook, `check_assignment_status_${courseCode}.xlsx`);
   };
+
   const columns = [
     {
       title: 'Student Name',
@@ -77,98 +81,114 @@ const CheckAssignment = () => {
     }
   ];
 
-  return (
-    <div className="p-4 min-h-[800px]">
-      <Alert
-        className={'mb-4'}
-        message="Important Tips"
-        description={
-          'If instructors have requirement that students have to post a certain number of posts in one or more than one discussion topics, this is to facilitate instructors to check which students have posted according to the requirements.'
-        }
-        type="info"
-        showIcon
-      />
-      <Form
-        className="justify-between gap-4"
-        form={form}
-        layout="inline"
-        onFinish={handleSubmit}
-      >
-        <Form.Item
-          className={'min-w-96'}
-          label="Topics"
-          name="option_topics"
-          rules={[
-            { required: true, message: 'Please select at least one topic' }
-          ]}
-        >
-          <SelectSUSS
-            mode="multiple"
-            placeholder="Select topics"
-            handleSelect={() => {}}
-          />
-        </Form.Item>
-        <Form.Item
-          label="Minimum Replies"
-          name="num"
-          rules={[
-            {
-              required: true,
-              message: 'Please enter the minimum number of replies'
-            }
-          ]}
-        >
-          <InputNumber
-            className={'min-w-60'}
-            min={1}
-            placeholder="Enter minimum replies"
-          />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            Check Assignment
-          </Button>
-        </Form.Item>
-      </Form>
+  const renderAssignmentProgress = () => {
+    if (isEmpty(result))
+      return (
+        <Empty
+          className={
+            'flex-1 bg-gray-50 flex justify-center items-center flex-col'
+          }
+          description={'No data available. Please select at least one topic.'}
+        />
+      );
 
-      {result ? (
-        <div className="mt-8">
-          <Space className={'mb-4'}>
-            <h2 className="text-xl font-bold">Results</h2>
-            <Button onClick={exportToExcel} icon={<DownloadOutlined />} />
-          </Space>
-          {result.result === 1 && (
-            <p className="text-green-600">{result.reason}</p>
-          )}
-          {result.result === 0 && (
-            <div className={'flex gap-4 justify-between'}>
-              <div className={'flex-1'}>
-                <h3 className="text-lg font-bold mb-2">Completed Students</h3>
-                <Table
-                  dataSource={result?.detail?.completed_students || []}
-                  columns={columns}
-                  rowKey="completed_students"
-                />
-              </div>
-              <div className={'flex-1'}>
-                <h3 className="text-lg font-bold mb-2">
-                  Not Completed Students
-                </h3>
-                <Table
-                  dataSource={result?.detail?.not_completed_students || []}
-                  columns={columns}
-                  rowKey="not_completed_students"
-                />
-              </div>
+    return (
+      <div className={'flex-1 rounded-xl p-6 border'}>
+        <Space className={'mb-4'}>
+          <h2 className="text-xl font-bold">Results</h2>
+          <Button onClick={exportToExcel} icon={<DownloadOutlined />} />
+        </Space>
+        {result.result === 1 && (
+          <p className="text-green-600">{result.reason}</p>
+        )}
+        {result.result === 0 && (
+          <div className={'w-full flex gap-4 justify-between'}>
+            <div className={'flex-1'}>
+              <h3 className="text-lg font-bold mb-2">Completed Students</h3>
+              <Table
+                dataSource={result?.detail?.completed_students || []}
+                columns={columns}
+                rowKey="completed_students"
+              />
             </div>
-          )}
-          {result.result === 2 && (
-            <p className="text-red-600">{result.reason}</p>
-          )}
+            <div className={'flex-1'}>
+              <h3 className="text-lg font-bold mb-2">Not Completed Students</h3>
+              <Table
+                dataSource={result?.detail?.not_completed_students || []}
+                columns={columns}
+                rowKey="not_completed_students"
+              />
+            </div>
+          </div>
+        )}
+        {result.result === 2 && <p className="text-red-600">{result.reason}</p>}
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-6 py-6 pr-6 bg-white rounded-xl shadow-sm">
+      <div className="flex flex-col lg:flex-row gap-12">
+        <div className="flex flex-col gap-6 w-full lg:w-96 space-y-4">
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleSubmit}
+            className="space-y-4"
+          >
+            <Form.Item
+              label="Please select the topic title to check the assignment completion status"
+              name="option_topics"
+              rules={[
+                { required: true, message: 'Please select at least one topic' }
+              ]}
+            >
+              <SelectSUSS
+                mode="multiple"
+                placeholder="Multiselect"
+                handleSelect={() => {}}
+                className="w-full"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="For selected topic(s), how many replies each student is required to post?"
+              name="num"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter the minimum number of replies'
+                }
+              ]}
+            >
+              <InputNumber
+                className="w-full"
+                min={1}
+                placeholder="Type a number..."
+                size="large"
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button block type="primary" htmlType="submit" loading={loading}>
+                Check Assignment
+              </Button>
+            </Form.Item>
+          </Form>
+
+          <Alert
+            description={
+              <>
+                If instructors have requirement that students have to post a
+                certain number of posts in one or more than one discussion
+                topics, this is to facilitate instructors to check which
+                students have posted according to the requirements.
+              </>
+            }
+          />
         </div>
-      ) : (
-        <Empty className={'p-20'} />
-      )}
+
+        {renderAssignmentProgress()}
+      </div>
     </div>
   );
 };

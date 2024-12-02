@@ -49,7 +49,7 @@ const Home = (): any => {
   const renderHeader = () => (
     <Header
       style={{ width: 'calc(100% - 200px)' }}
-      className={'z-40 bg-white flex justify-between items-center fixed'}
+      className={'z-40 bg-white flex justify-between items-center fixed gap-4'}
     >
       <Anchor
         direction="horizontal"
@@ -58,22 +58,22 @@ const Home = (): any => {
           {
             key: 'overview',
             href: '#overview',
-            title: 'Overview'
+            title: 'Course Overview'
           },
           {
             key: 'discussion',
             href: '#discussion',
-            title: 'Discussion'
+            title: 'Discussion Participation'
           },
           {
             key: 'social',
             href: '#social',
-            title: 'Social'
+            title: 'Social Interaction'
           },
           {
             key: 'assignment',
             href: '#assignment',
-            title: 'Assignment'
+            title: 'Assignment Progress'
           }
         ]}
       />
