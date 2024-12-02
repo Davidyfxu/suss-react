@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Layout, Menu, Avatar, Dropdown, Button } from 'antd';
+import { Layout, Menu, Avatar, Dropdown, Button, Anchor } from 'antd';
 import { routers } from '../config/routers';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../stores/userStore';
@@ -47,7 +47,36 @@ const Home = (): any => {
   );
 
   const renderHeader = () => (
-    <Header className={'bg-white flex justify-end items-center'}>
+    <Header
+      style={{ width: 'calc(100% - 200px)' }}
+      className={'z-40 bg-white flex justify-between items-center fixed gap-4'}
+    >
+      <Anchor
+        direction="horizontal"
+        targetOffset={200}
+        items={[
+          {
+            key: 'overview',
+            href: '#overview',
+            title: 'Course Overview'
+          },
+          {
+            key: 'discussion',
+            href: '#discussion',
+            title: 'Discussion Participation'
+          },
+          {
+            key: 'social',
+            href: '#social',
+            title: 'Social Interaction'
+          },
+          {
+            key: 'assignment',
+            href: '#assignment',
+            title: 'Assignment Progress'
+          }
+        ]}
+      />
       <div className={'flex justify-between items-center gap-4'}>
         <SelectSUSSHeader />
         <Dropdown
@@ -83,24 +112,18 @@ const Home = (): any => {
   );
 
   return (
-    <Layout
-      style={{
-        minHeight: '100vh'
-      }}
-    >
+    <Layout>
       {renderSider()}
       <Layout>
         {renderHeader()}
         <Content
           style={{
-            padding: '8px',
+            marginTop: 64,
             height: '100%',
             overflow: 'auto'
           }}
         >
-          <div className={'rounded-lg bg-white p-4 h-full'}>
-            <Outlet />
-          </div>
+          <Outlet />
         </Content>
         {renderFooter()}
       </Layout>

@@ -48,7 +48,7 @@ const SelectSUSSHeader = () => {
   return (
     <div className={'flex gap-4'}>
       <Cascader
-        className={'w-80'}
+        className={'w-60'}
         allowClear={false}
         value={courseCode ? ['JAN 2023', courseCode] : undefined}
         loading={loading}

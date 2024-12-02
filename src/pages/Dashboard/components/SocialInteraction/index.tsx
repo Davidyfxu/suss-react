@@ -2,22 +2,31 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Network, DataSet } from 'vis-network/standalone';
 import { useUserStore } from '../../../../stores/userStore';
 import { draw_network } from '../../api.ts';
-import { Alert, Button, Spin, Typography } from 'antd';
+import { Alert, Button, Select, Spin, Typography } from 'antd';
 import { debounce } from 'lodash-es';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { SelectSUSS } from '../../../../components';
+
+const { Title, Paragraph } = Typography;
 
 const SocialGraph: React.FC = () => {
   const courseCode = useUserStore((state) => state.courseCode);
   const [loading, setLoading] = useState(false);
+  const [topic, setTopic] = useState<string>('');
   const [rawData, setData] = useState<{
     nodes: string[];
     edges: { source: string; target: string; weight: number }[];
   }>({ nodes: [], edges: [] });
   const networkRef = useRef<HTMLDivElement>(null);
   const network = useRef<Network | null>(null);
+
   const getNetwork = async () => {
     try {
       setLoading(true);
-      const res = await draw_network({ option_course: courseCode });
+      const res = await draw_network({
+        option_course: courseCode,
+        active_topic: topic
+      });
       setData(res);
     } catch (err) {
       console.error(err);
@@ -28,7 +37,7 @@ const SocialGraph: React.FC = () => {
 
   useEffect(() => {
     courseCode && getNetwork();
-  }, [courseCode]);
+  }, [courseCode, topic]);
 
   const initNetwork = useCallback(() => {
     if (networkRef.current) {
@@ -187,11 +196,15 @@ const SocialGraph: React.FC = () => {
   }, [handleResize, courseCode]);
 
   return (
-    <>
-      <div>
-        <Typography.Paragraph
+    <div className="space-y-6 p-6 bg-white rounded-xl shadow-sm">
+      {/* Title and Description Section */}
+      <div className="space-y-4">
+        <Title level={5}>
+          Social Interaction (Social Network Analysis Graph)
+        </Title>
+        <Paragraph
           ellipsis={{
-            rows: 1,
+            rows: 2,
             expandable: 'collapsible'
           }}
           copyable
@@ -203,56 +216,71 @@ const SocialGraph: React.FC = () => {
           identifying highly connected or those who are isolated and may need
           additional support. Educators can also leverage SNA to design and
           evaluate teaching interventions.
-        </Typography.Paragraph>
+        </Paragraph>
         <Button
-          type={'default'}
           onClick={() =>
             window.open(
               'https://visiblenetworklabs.com/guides/social-network-analysis-101/'
             )
           }
+          icon={<InfoCircleOutlined />}
         >
           Know more about Social Network Analysis!
         </Button>
-        <Alert
-          message="Important Tips"
-          description={
-            <ul>
-              <li>Choose a topic title from above selection box.</li>
-              <li>
-                Each node represents a user, and node size represents the
-                importance (in-degree centrality) of the node.
-              </li>
-              <li>
-                Each line with an arrow (called edge) represents the connection.
-                Edge arrow direction means replying to, and edge thickness
-                represents interaction level between two users.
-              </li>
-              <li>
-                Hover over the edge to see the exact edge thickness value.
-              </li>
-            </ul>
-          }
-          type="info"
-          showIcon
-        />
       </div>
-      <Spin
-        spinning={loading}
-        className={'flex justify-center items-center w-full h-full'}
-      >
-        <div
-          ref={networkRef}
-          className={'bg-gray-50'}
-          style={{
-            padding: 16,
-            minWidth: 500,
-            width: '100%',
-            height: 500
-          }}
-        />
-      </Spin>
-    </>
+
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Left Panel - Controls and Instructions */}
+        <div className="w-full lg:w-96 space-y-4">
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-gray-700">
+              Please select the topic title here
+            </label>
+            <SelectSUSS
+              allowClear
+              className="w-full"
+              placeholder="Select topic title"
+              handleSelect={(v) => setTopic(v)}
+            />
+          </div>
+          <Alert
+            showIcon
+            message="Instructions"
+            description={
+              <ol className="list-decimal list-inside space-y-2">
+                <li className="transition-all duration-200 hover:translate-x-1">
+                  Select a topic title from above selection box.
+                </li>
+                <li className="transition-all duration-200 hover:translate-x-1">
+                  Each node represents a user, and node size represents the
+                  importance (in-degree centrality) of the node.
+                </li>
+                <li className="transition-all duration-200 hover:translate-x-1">
+                  Each line with an arrow (called edge) represents the
+                  connection. Edge arrow direction means replying to, and edge
+                  thickness represents interaction level between two users.
+                </li>
+                <li className="transition-all duration-200 hover:translate-x-1">
+                  Hover over the edge to see the exact edge thickness value.
+                </li>
+              </ol>
+            }
+            type="info"
+          />
+        </div>
+
+        {/* Right Panel - Network Graph */}
+        <div className="flex-1 bg-gray-50 rounded-xl shadow-inner p-6 min-h-[600px] border border-gray-100">
+          {loading ? (
+            <div className="h-full flex items-center justify-center">
+              <Spin size="large" />
+            </div>
+          ) : (
+            <div ref={networkRef} className="h-full" />
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 

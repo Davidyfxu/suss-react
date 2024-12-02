@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Alert, Space, Table, TablePaginationConfig } from 'antd';
+import { Alert, Space, Table, TablePaginationConfig, Typography } from 'antd';
 import { get_discussion_participation } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
 import { SelectSUSS } from '../../../../components';
-
+const { Title } = Typography;
 const DEFAULT_PAGINATION = {
   current: 1,
   pageSize: 10,
@@ -100,19 +100,27 @@ const DiscussionData = () => {
     get_participation(pagination);
   };
   useEffect(() => {
-    topic && get_participation();
+    courseCode && get_participation();
   }, [courseCode, topic]);
 
   return (
-    <Space direction={'vertical'} className={'w-full'}>
+    <Space direction={'vertical'} className={'w-full border rounded-lg p-4'}>
+      <Title level={5} className="m-0">
+        Canvas Discussion Participation
+      </Title>
       <SelectSUSS
+        allowClear
         placeholder={'Please select a topic from the course.'}
         className={'w-full'}
         handleSelect={(v) => setTopic(v)}
       />
-      <Alert message="Keep clicking the table header to sort the coloumn in ascending or descending order as you need." type="info" showIcon />
+      <Alert
+        message="Keep clicking the table header to sort the coloumn in ascending or descending order as you need."
+        type="info"
+        showIcon
+      />
       <Table
-        scroll={{ x: '100%', y: 500 }} // 设置滚动范围
+        scroll={{ x: '100%', y: 500 }}
         columns={columns}
         rowKey="user_id"
         dataSource={records}

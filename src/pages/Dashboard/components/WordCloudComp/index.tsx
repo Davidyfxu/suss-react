@@ -1,19 +1,22 @@
-import { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { draw_wordcloud } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
 import ReactWordcloud from 'react-wordcloud';
-import { Spin } from 'antd';
+import { Empty, Spin, Typography } from 'antd';
+import { SelectSUSS } from '../../../../components';
 
 const WordCloudComp = () => {
   const courseCode = useUserStore((state) => state.courseCode);
   const [words, setWords] = useState<{ value: number; text: string }[]>([]);
   const [loading, setLoading] = useState(false);
+  const [topic, setTopic] = useState('');
 
   const getWords = useCallback(async () => {
     try {
       setLoading(true);
       const { entry_contents = {} } = await draw_wordcloud({
-        option_course: courseCode
+        option_course: courseCode,
+        active_topic: topic
       });
       setWords(
         Object.keys(entry_contents)
@@ -28,36 +31,70 @@ const WordCloudComp = () => {
     } finally {
       setLoading(false);
     }
-  }, [courseCode]);
+  }, [courseCode, topic]);
 
   useEffect(() => {
     courseCode && getWords();
-  }, [courseCode]);
+  }, [courseCode, topic]);
 
   return (
-    <div
-      className={
-        'w-full h-full flex justify-center items-center flex-col gap-4'
-      }
-    >
-      {loading ? (
-        <Spin size={'large'} />
-      ) : (
-        <ReactWordcloud
-          words={words}
-          options={{
-            enableTooltip: true,
-            deterministic: false,
-            fontSizes: [12, 80],
-            padding: 2,
-            rotations: 2,
-            rotationAngles: [0, 0],
-            scale: 'log',
-            spiral: 'archimedean',
-            transitionDuration: 300
-          }}
+    <div className="p-6 flex flex-col lg:flex-row gap-6">
+      <div className="w-full lg:w-96 space-y-4">
+        <Typography.Title
+          level={4}
+          className="!m-0 !text-2xl font-bold text-gray-800"
+        >
+          Word Cloud
+        </Typography.Title>
+        <p className="text-gray-600">
+          Please select the topic title to view the Word Cloud
+        </p>
+        <SelectSUSS
+          allowClear
+          placeholder={'Please select a topic from the course.'}
+          className={'w-full'}
+          handleSelect={(v) => setTopic(v)}
         />
-      )}
+      </div>
+
+      <div className="flex-1 relative min-h-[500px] bg-gray-50 rounded-xl p-2 border border-gray-100">
+        {loading ? (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Spin size="large" />
+          </div>
+        ) : words.length > 0 ? (
+          <ReactWordcloud
+            words={words}
+            options={{
+              enableTooltip: true,
+              deterministic: false,
+              fontSizes: [14, 80],
+              padding: 3,
+              rotations: 2,
+              rotationAngles: [0, 0],
+              scale: 'log',
+              spiral: 'archimedean',
+              transitionDuration: 300,
+              fontFamily: 'Inter, system-ui, sans-serif',
+              colors: [
+                '#1f2937',
+                '#2563eb',
+                '#7c3aed',
+                '#2dd4bf',
+                '#0891b2',
+                '#4f46e5'
+              ]
+            }}
+          />
+        ) : (
+          <Empty
+            className={
+              'flex-1 bg-gray-50 flex justify-center items-center flex-col h-full w-full'
+            }
+            description={'No data available. Please select a topic.'}
+          />
+        )}
+      </div>
     </div>
   );
 };
