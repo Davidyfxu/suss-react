@@ -3,17 +3,20 @@ import { draw_wordcloud } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
 import ReactWordcloud from 'react-wordcloud';
 import { Empty, Spin, Typography } from 'antd';
+import { SelectSUSS } from '../../../../components';
 
 const WordCloudComp = () => {
   const courseCode = useUserStore((state) => state.courseCode);
   const [words, setWords] = useState<{ value: number; text: string }[]>([]);
   const [loading, setLoading] = useState(false);
+  const [topic, setTopic] = useState('');
 
   const getWords = useCallback(async () => {
     try {
       setLoading(true);
       const { entry_contents = {} } = await draw_wordcloud({
-        option_course: courseCode
+        option_course: courseCode,
+        active_topic: topic
       });
       setWords(
         Object.keys(entry_contents)
@@ -28,11 +31,11 @@ const WordCloudComp = () => {
     } finally {
       setLoading(false);
     }
-  }, [courseCode]);
+  }, [courseCode, topic]);
 
   useEffect(() => {
     courseCode && getWords();
-  }, [courseCode]);
+  }, [courseCode, topic]);
 
   return (
     <div className="p-6 flex flex-col lg:flex-row gap-6">
@@ -46,6 +49,12 @@ const WordCloudComp = () => {
         <p className="text-gray-600">
           Please select the topic title to view the Word Cloud
         </p>
+        <SelectSUSS
+          allowClear
+          placeholder={'Please select a topic from the course.'}
+          className={'w-full'}
+          handleSelect={(v) => setTopic(v)}
+        />
       </div>
 
       <div className="flex-1 relative min-h-[500px] bg-gray-50 rounded-xl p-2 border border-gray-100">

@@ -4,19 +4,15 @@ import { useUserStore } from '../../../../stores/userStore';
 import { draw_network } from '../../api.ts';
 import { Alert, Button, Select, Spin, Typography } from 'antd';
 import { debounce } from 'lodash-es';
-import {
-  InfoCircleFilled,
-  InfoCircleOutlined,
-  InfoOutlined,
-  QuestionCircleOutlined
-} from '@ant-design/icons';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { SelectSUSS } from '../../../../components';
 
 const { Title, Paragraph } = Typography;
 
 const SocialGraph: React.FC = () => {
   const courseCode = useUserStore((state) => state.courseCode);
   const [loading, setLoading] = useState(false);
-  const [selectedTopic, setSelectedTopic] = useState<string>('');
+  const [topic, setTopic] = useState<string>('');
   const [rawData, setData] = useState<{
     nodes: string[];
     edges: { source: string; target: string; weight: number }[];
@@ -27,7 +23,10 @@ const SocialGraph: React.FC = () => {
   const getNetwork = async () => {
     try {
       setLoading(true);
-      const res = await draw_network({ option_course: courseCode });
+      const res = await draw_network({
+        option_course: courseCode,
+        active_topic: topic
+      });
       setData(res);
     } catch (err) {
       console.error(err);
@@ -38,7 +37,7 @@ const SocialGraph: React.FC = () => {
 
   useEffect(() => {
     courseCode && getNetwork();
-  }, [courseCode]);
+  }, [courseCode, topic]);
 
   const initNetwork = useCallback(() => {
     if (networkRef.current) {
@@ -237,13 +236,11 @@ const SocialGraph: React.FC = () => {
             <label className="block text-sm font-semibold text-gray-700">
               Please select the topic title here
             </label>
-            <Select
+            <SelectSUSS
+              allowClear
               className="w-full"
               placeholder="Select topic title"
-              value={selectedTopic}
-              onChange={setSelectedTopic}
-              options={[]}
-              size="large"
+              handleSelect={(v) => setTopic(v)}
             />
           </div>
           <Alert

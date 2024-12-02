@@ -100,7 +100,7 @@ const DiscussionData = () => {
     get_participation(pagination);
   };
   useEffect(() => {
-    topic && get_participation();
+    courseCode && get_participation();
   }, [courseCode, topic]);
 
   return (
@@ -109,6 +109,7 @@ const DiscussionData = () => {
         Canvas Discussion Participation
       </Title>
       <SelectSUSS
+        allowClear
         placeholder={'Please select a topic from the course.'}
         className={'w-full'}
         handleSelect={(v) => setTopic(v)}
