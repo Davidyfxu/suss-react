@@ -1,5 +1,5 @@
 import { Card, StatisticProps } from 'antd';
-import { Col, Row, Statistic, Typography, Button } from 'antd';
+import { Col, Row, Statistic, Typography } from 'antd';
 import { useEffect, useState, useRef } from 'react';
 import CountUp from 'react-countup';
 import { useUserStore } from '../../../../stores/userStore';
@@ -15,7 +15,6 @@ const Overview = () => {
   const courseCode = useUserStore((state) => state.courseCode);
   const [loading, setLoading] = useState(false);
   const [overview, setOverview] = useState({});
-  const [isOpen, setIsOpen] = useState(true);
   const contentRef = useRef<HTMLDivElement>(null);
 
   const getCourseOverview = async () => {
@@ -33,10 +32,6 @@ const Overview = () => {
   useEffect(() => {
     courseCode && getCourseOverview();
   }, [courseCode]);
-
-  const toggleOpen = () => {
-    setIsOpen((prev) => !prev);
-  };
 
   return (
     <div className="p-5 rounded-lg bg-white">

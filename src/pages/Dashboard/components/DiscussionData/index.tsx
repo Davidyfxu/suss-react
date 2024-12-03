@@ -6,11 +6,11 @@ import { SelectSUSS } from '../../../../components';
 const { Title } = Typography;
 const DEFAULT_PAGINATION = {
   current: 1,
-  pageSize: 10,
+  pageSize: 100,
   total: 0,
-  pageSizeOptions: ['10', '20', '50', '100'],
-  showSizeChanger: true,
-  showQuickJumper: true
+  pageSizeOptions: ['100', '200', '500'],
+  showSizeChanger: false,
+  showQuickJumper: false
 };
 
 const DiscussionData = () => {
@@ -25,7 +25,7 @@ const DiscussionData = () => {
     paginationConfig: TablePaginationConfig = {}
   ) => {
     try {
-      const { pageSize = 10, current = 1 } = paginationConfig;
+      const { pageSize = 100, current = 1 } = paginationConfig;
       setLoading(true);
       const res = await get_discussion_participation({
         option_course: courseCode,

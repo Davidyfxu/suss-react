@@ -22,5 +22,8 @@ export const get_discussion_participation = (p: any = {}) =>
 
 export const get_active_topics = (p: any = {}) =>
   post('/api/discussions/course_active_topics', p);
+
+export const get_student_options = (p: any = {}) =>
+  post('/api/discussions/student_options', p);
 export const check_assignment = (p: any = {}) =>
   post('/api/discussions/check_assignment', p);

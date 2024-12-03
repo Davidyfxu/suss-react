@@ -15,6 +15,8 @@ import { useUserStore } from '../../../../stores/userStore';
 import { Empty, Typography, Select, Space, Spin } from 'antd';
 import { isEmpty } from 'lodash-es';
 import { SelectSUSS } from '../../../../components';
+import SelectStudent from '../../../../components/SelectStudent';
+import { CommonConfig } from '@ant-design/charts';
 
 const { Title } = Typography;
 
@@ -69,7 +71,7 @@ const Visualization = () => {
   const courseCode = useUserStore((state) => state.courseCode);
   const [loading, setLoading] = useState<boolean>(false);
   const [topic, setTopic] = useState<string>('');
-  const [selectedUsername, setSelectedUsername] = useState<string>('');
+  const [selectedUser, setSelectedUser] = useState<number | null>();
   const [rawData, setData] = useState<RawData>({
     serializer_data_participant: [],
     serializer_data_reply: [],
@@ -81,7 +83,8 @@ const Visualization = () => {
       setLoading(true);
       const res = await draw_participants_posts({
         option_course: courseCode,
-        topic_title: topic
+        topic_title: topic,
+        user_id: selectedUser
       });
       setData(res);
     } catch (err) {
@@ -93,7 +96,7 @@ const Visualization = () => {
 
   useEffect(() => {
     courseCode && getParticipants();
-  }, [courseCode, topic]);
+  }, [courseCode, topic, selectedUser]);
 
   const processData = (
     participantData: ChartDataItem[] = []
@@ -176,6 +179,7 @@ const Visualization = () => {
               fill={color}
               radius={[4, 4, 0, 0]}
               name={title}
+              maxBarSize={40}
             />
             {!isProcessData && (
               <Brush
@@ -190,8 +194,6 @@ const Visualization = () => {
       </div>
     </div>
   );
-
-
 
   return (
     <div className="w-full border rounded-lg p-4">
@@ -245,34 +247,32 @@ const Visualization = () => {
               </div>
             </div>
           )}
-          <Space direction="horizontal" size="middle" className="mb-4">
+          <div className={'w-full flex flex-col gap-2'}>
+            <span>Please select the topic title here.</span>
             <SelectSUSS
               placeholder="Select topic title"
               allowClear
+              className={'w-full flex-1'}
               handleSelect={(value) => setTopic(value)}
-            ></SelectSUSS>
-            {/*<Select*/}
-            {/*  style={{ width: 200 }}*/}
-            {/*  placeholder="Select username"*/}
-            {/*  allowClear*/}
-            {/*  value={selectedUsername}*/}
-            {/*  onChange={(value) => setSelectedUsername(value)}*/}
-            {/*>*/}
-            {/*  {usernames.map((username) => (*/}
-            {/*    <Select.Option key={username} value={username}>*/}
-            {/*      {username}*/}
-            {/*    </Select.Option>*/}
-            {/*  ))}*/}
-            {/*</Select>*/}
-          </Space>
-          {!isEmpty(rawData?.['reply_by_week']) &&
-            renderChart(
-              rawData['reply_by_week'],
-              'entry_count',
-              'Number of Posts by Week',
-              CHART_COLORS.tertiary,
-              false
-            )}
+            />
+            <span>Please select the username here.</span>
+            <SelectStudent
+              placeholder="Select topic title"
+              allowClear
+              className={'w-full flex-1'}
+              handleSelect={(value) => setSelectedUser(value)}
+            />
+          </div>
+          <Spin spinning={loading} className={'w-full'}>
+            {!isEmpty(rawData?.['reply_by_week']) &&
+              renderChart(
+                rawData['reply_by_week'],
+                'entry_count',
+                'Number of Posts by Week',
+                CHART_COLORS.tertiary,
+                false
+              )}
+          </Spin>
         </div>
       ) : (
         <Empty className="mt-10" />
