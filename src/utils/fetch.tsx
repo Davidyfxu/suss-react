@@ -44,7 +44,9 @@ class HttpClient {
 
 // Now we can create an instance of HttpClient
 const httpClient = new HttpClient({
-  baseURL: window.location.href ? 'https://suss-django.zeabur.app' : BASE_URL
+  baseURL: window.location.href.includes('https')
+    ? 'https://suss-django.zeabur.app'
+    : BASE_URL
 });
 
 export const post = async (url: string, body: any): Promise<any> => {
