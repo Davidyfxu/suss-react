@@ -14,8 +14,8 @@ const SocialGraph: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [topic, setTopic] = useState<string>('');
   const [rawData, setData] = useState<{
-    nodes: string[];
-    edges: { source: string; target: string; weight: number }[];
+    nodes: Array<{ id: string; user_type: string; centrality: number }>;
+    edges: Array<{ source: string; target: string; weight: number }>;
   }>({ nodes: [], edges: [] });
   const networkRef = useRef<HTMLDivElement>(null);
   const network = useRef<Network | null>(null);
@@ -65,7 +65,8 @@ const SocialGraph: React.FC = () => {
       );
 
       const edges = new DataSet(
-        (rawData?.edges || []).map((edge) => ({
+        (rawData?.edges || []).map((edge, idx) => ({
+          id: idx,
           from: edge.source,
           to: edge.target,
           value: edge.weight,
@@ -98,9 +99,9 @@ const SocialGraph: React.FC = () => {
             strokeWidth: 2, // 添加描边宽度使文字更清晰
             strokeColor: '#ffffff' // 添加白色描边使文字在任何背景下都清晰可见
           },
-          label: {
-            enabled: true // 确保标签显示
-          },
+          // label: {
+          //   enabled: true // 确保标签显示
+          // },
           color: {
             background: '#ffffff', // 节点背景色
             border: '#848484', // 节点边框色
