@@ -13,6 +13,7 @@ const formatter: StatisticProps['formatter'] = (value) => (
 
 const Overview = () => {
   const courseCode = useUserStore((state) => state.courseCode);
+  const dateRange = useUserStore((state) => state.dateRange);
   const [loading, setLoading] = useState(false);
   const [overview, setOverview] = useState({});
   const contentRef = useRef<HTMLDivElement>(null);
@@ -20,7 +21,12 @@ const Overview = () => {
   const getCourseOverview = async () => {
     try {
       setLoading(true);
-      const res = await get_course_overview({ option_course: courseCode });
+      const params = {
+        option_course: courseCode,
+        start_date: dateRange?.[0],
+        end_date: dateRange?.[1]
+      };
+      const res = await get_course_overview(params);
       setOverview(res || {});
     } catch (error) {
       console.error('getCourseOverview', error);
@@ -31,7 +37,7 @@ const Overview = () => {
 
   useEffect(() => {
     courseCode && getCourseOverview();
-  }, [courseCode]);
+  }, [courseCode, dateRange]);
 
   return (
     <div className="p-5 rounded-lg bg-white">

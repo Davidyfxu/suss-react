@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { message } from 'antd';
 import { init, login, register } from '../../common/api';
 import { isEmpty } from 'lodash-es';
+import { Dayjs } from 'dayjs';
 interface IUserStoreState {
   username: string;
   email: string;
@@ -17,6 +18,8 @@ interface IUserStoreState {
   init: () => Promise<any>;
   courseCode?: string;
   setCourseCode?: (code: string) => void;
+  dateRange?: Array<string>;
+  setDateRange?: (range: string[] | null) => void;
 }
 export const useUserStore = create<IUserStoreState>()((set) => ({
   username: '',
@@ -25,6 +28,7 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
   loading: false,
   setUser: (props) => set({ ...props }),
   setCourseCode: (p) => set({ courseCode: p }),
+  setDateRange: (p) => set({ dateRange: p }),
   registerUser: async (props): Promise<any> => {
     try {
       localStorage.removeItem('token');

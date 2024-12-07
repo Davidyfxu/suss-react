@@ -137,7 +137,7 @@ const CheckAssignment = () => {
             className="space-y-4"
           >
             <Form.Item
-              label="Please select the topic title to check the assignment completion status"
+              label="Please select the topic title to check the assignment completion status."
               name="option_topics"
               rules={[
                 { required: true, message: 'Please select at least one topic' }

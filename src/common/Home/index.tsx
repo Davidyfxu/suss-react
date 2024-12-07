@@ -48,7 +48,7 @@ const Home = (): any => {
 
   const renderHeader = () => (
     <Header
-      style={{ width: 'calc(100% - 200px)' }}
+      style={{ width: '-webkit-fill-available' }}
       className={'z-40 bg-white flex justify-between items-center fixed gap-4'}
     >
       <Anchor

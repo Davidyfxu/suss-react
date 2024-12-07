@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Network, DataSet } from 'vis-network/standalone';
 import { useUserStore } from '../../../../stores/userStore';
 import { draw_network } from '../../api.ts';
-import { Alert, Button, Select, Spin, Typography } from 'antd';
+import { Alert, Button, Spin, Typography } from 'antd';
 import { debounce } from 'lodash-es';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { SelectSUSS } from '../../../../components';
@@ -47,9 +47,10 @@ const SocialGraph: React.FC = () => {
       const maxWeight = Math.max(...weights);
 
       // 归一化函数：将权重映射到指定范围（例如 1-8）
-      const normalizeWeight = (weight: number) => {
-        if (maxWeight === minWeight) return 1;
-        return 1 + ((weight - minWeight) / (maxWeight - minWeight)) * 7;
+      const normalizeWidth = (weight: number) => {
+        if (weight === 1) return 1; // 当 weight 为 1 时返回最小宽度
+        if (maxWeight === minWeight) return 2;
+        return 1 + ((weight - minWeight) / (maxWeight - minWeight)) * 5; // 减小最大宽度范围
       };
       // 创建节点和边的数据集
       const nodes = new DataSet(
@@ -70,9 +71,9 @@ const SocialGraph: React.FC = () => {
           from: edge.source,
           to: edge.target,
           value: edge.weight,
-          title: `Weight: ${edge.weight}`,
+          title: `Weight: ${1 + Math.round((edge.weight - 1) / 0.2)}`,
           arrows: 'to',
-          width: normalizeWeight(edge.weight)
+          width: normalizeWidth(edge.weight)
         }))
       );
 
@@ -104,12 +105,12 @@ const SocialGraph: React.FC = () => {
           // },
           color: {
             background: '#ffffff', // 节点背景色
-            border: '#848484', // 节点边框色
+            border: '#ffffff', // 节点边框色
             highlight: {
-              border: '#3490de' // 选中时的边框色
+              border: '#648fc9' // 选中时的边框色
             },
             hover: {
-              border: '#3490de' // 悬停时的边框色
+              border: '#648fc9' // 悬停时的边框色
             }
           }
         },
@@ -119,10 +120,10 @@ const SocialGraph: React.FC = () => {
             forceDirection: 'none'
           },
           color: {
-            color: '#848484',
-            highlight: '#3490de', // 选中时的边颜色
-            hover: '#3490de', // 悬停时的边颜色
-            opacity: 0.5
+            color: '#648fc9',
+            highlight: '#648fc9', // 选中时的边颜色
+            hover: '#648fc9', // 悬停时的边颜色
+            opacity: 0.7
           },
           scaling: {
             min: 1,
@@ -147,9 +148,11 @@ const SocialGraph: React.FC = () => {
           }
         },
         groups: {
-          with_threads: { color: '#5470C6' },
-          only_replied: { color: '#EE6666' },
-          unknown: { color: '#91CC75' }
+          with_threads: { color: '#97c2fc' },
+          only_replied: { color: '#97c2fc' },
+          // only_replied: { color: '#EE6666' },
+          unknown: { color: '#97c2fc' }
+          // unknown: { color: '#91CC75' }
         },
         interaction: {
           hover: true,
