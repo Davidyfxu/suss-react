@@ -8,7 +8,8 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
-  Brush
+  Brush,
+  LabelList
 } from 'recharts';
 import { draw_participants_posts } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
@@ -16,7 +17,6 @@ import { Empty, Typography, Select, Space, Spin } from 'antd';
 import { isEmpty } from 'lodash-es';
 import { SelectSUSS } from '../../../../components';
 import SelectStudent from '../../../../components/SelectStudent';
-import { CommonConfig } from '@ant-design/charts';
 
 const { Title } = Typography;
 
@@ -110,7 +110,7 @@ const Visualization = () => {
 
       topicMap.set(title, {
         ...item,
-        topic_title: title.length > 30 ? title.substring(0, 30) + '...' : title,
+        topic_title: title,
         unique_entry_count: participantCount
       });
     });
@@ -180,7 +180,9 @@ const Visualization = () => {
               radius={[4, 4, 0, 0]}
               name={title}
               maxBarSize={40}
-            />
+            >
+              <LabelList dataKey={dataKey} position="top" />
+            </Bar>
             {!isProcessData && (
               <Brush
                 dataKey="week_range"
@@ -234,14 +236,21 @@ const Visualization = () => {
                       radius={[4, 4, 0, 0]}
                       name="Number of Participants"
                       maxBarSize={40}
-                    />
+                    >
+                      <LabelList
+                        dataKey={'unique_entry_count'}
+                        position="top"
+                      />
+                    </Bar>
                     <Bar
                       dataKey="reply_count"
                       fill={CHART_COLORS.secondary}
                       radius={[4, 4, 0, 0]}
                       name="Number of Posts"
                       maxBarSize={40}
-                    />
+                    >
+                      <LabelList dataKey={'reply_count'} position="top" />
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </div>

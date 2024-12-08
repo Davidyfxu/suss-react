@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useUserStore } from "../../stores/userStore";
-import { useNavigate } from "react-router-dom";
-import { Spin } from "antd";
+import React, { useEffect } from 'react';
+import { useUserStore } from '../../stores/userStore';
+import { useNavigate } from 'react-router-dom';
+import { Spin } from 'antd';
 const ProtectedRoute = ({ children }: { children: React.ReactNode }): any => {
   const navigate = useNavigate();
 
@@ -12,11 +12,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }): any => {
     try {
       const { redirect } = await init();
       if (redirect) {
-        navigate("/login");
+        navigate('/login');
         return;
       }
     } catch (e) {
-      console.error("checkToken", e);
+      console.error('checkToken', e);
     }
   };
 
@@ -24,7 +24,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }): any => {
     void checkToken();
   }, []);
 
-  return loading ? <Spin className={"w-full mt-8"} size={"large"} /> : children;
+  return loading ? <Spin className={'w-full mt-8'} size={'large'} /> : children;
 };
 
 export default ProtectedRoute;

@@ -8,7 +8,7 @@ const DEFAULT_PAGINATION = {
   current: 1,
   pageSize: 100,
   total: 0,
-  pageSizeOptions: ['100', '200', '500'],
+  pageSizeOptions: ['500'],
   showSizeChanger: false,
   showQuickJumper: false
 };
@@ -25,7 +25,7 @@ const DiscussionData = () => {
     paginationConfig: TablePaginationConfig = {}
   ) => {
     try {
-      const { pageSize = 100, current = 1 } = paginationConfig;
+      const { pageSize = 500, current = 1 } = paginationConfig;
       setLoading(true);
       const res = await get_discussion_participation({
         option_course: courseCode,
@@ -53,52 +53,49 @@ const DiscussionData = () => {
       ellipsis: true
     },
     {
-      title: 'Posts',
+      title: '# posts',
       dataIndex: 'entry_id_posts',
       key: 'posts',
       sorter: (a: any, b: any) => a.entry_id_posts - b.entry_id_posts
     },
     {
-      title: 'Replies received',
-      dataIndex: 'entry_replies_received_count',
+      title: '# replies received',
+      dataIndex: 'replies_received_count',
       key: 'replies',
-      render: (replies: any) => replies?.length || 0,
+      render: (replies: any) => replies,
       sorter: (a: any, b: any) =>
-        (a.entry_replies_received_count?.length || 0) -
-        (b.entry_replies_received_count?.length || 0)
+        a.replies_received_count - b.replies_received_count
     },
     {
-      title: 'Users interacted with',
+      title: '# users interacted with',
+      width: 220,
       dataIndex: 'interacted_users_count',
       key: 'interactions',
-      render: (interactions: any) => interactions?.length || 0,
+      render: (interactions: any) => interactions,
       sorter: (a: any, b: any) =>
-        (a.interacted_users_count?.length || 0) -
-        (b.interacted_users_count?.length || 0)
+        a.interacted_users_count - b.interacted_users_count
     },
     {
-      title: 'Topics participated',
+      title: '# topics participated',
+      width: 220,
       dataIndex: 'entry_topic_count',
       key: 'topics',
       sorter: (a: any, b: any) => a.entry_topic_count - b.entry_topic_count
     },
     {
-      title: 'Reads',
+      title: '# reads',
       dataIndex: 'entry_read_count',
       key: 'reads',
       sorter: (a: any, b: any) => a.entry_read_count - b.entry_read_count
     },
     {
-      title: 'Likes',
+      title: '# likes',
       dataIndex: 'entry_likes_sum',
       key: 'likes',
       sorter: (a: any, b: any) => a.entry_likes_sum - b.entry_likes_sum
     }
   ];
 
-  const handleTableChange = (pagination: TablePaginationConfig) => {
-    get_participation(pagination);
-  };
   useEffect(() => {
     courseCode && get_participation();
   }, [courseCode, topic]);
@@ -126,7 +123,7 @@ const DiscussionData = () => {
         dataSource={records}
         loading={loading}
         pagination={pagination}
-        onChange={handleTableChange}
+        // onChange={handleTableChange}
       />
     </Space>
   );
