@@ -120,7 +120,7 @@ const SocialGraph: React.FC = () => {
             forceDirection: 'none'
           },
           color: {
-            color: '#648fc9',
+            color: '#A9A9A9',
             highlight: '#648fc9', // 选中时的边颜色
             hover: '#648fc9', // 悬停时的边颜色
             opacity: 0.7
