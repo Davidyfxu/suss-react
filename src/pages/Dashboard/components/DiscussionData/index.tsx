@@ -1,17 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Alert, Space, Table, TablePaginationConfig, Typography } from 'antd';
+import { Alert, Space, Table, Typography } from 'antd';
 import { get_discussion_participation } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
 import { SelectSUSS } from '../../../../components';
 const { Title } = Typography;
-const DEFAULT_PAGINATION = {
-  current: 1,
-  pageSize: 100,
-  total: 0,
-  pageSizeOptions: ['500'],
-  showSizeChanger: false,
-  showQuickJumper: false
-};
 
 const DiscussionData = () => {
   const courseCode = useUserStore((state) => state.courseCode);
@@ -19,30 +11,17 @@ const DiscussionData = () => {
   const [topic, setTopic] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [records, setRecords] = useState([]);
-  const [pagination, setPagination] =
-    useState<TablePaginationConfig>(DEFAULT_PAGINATION);
 
-  const get_participation = async (
-    paginationConfig: TablePaginationConfig = {}
-  ) => {
+  const get_participation = async () => {
     try {
-      const { pageSize = 500, current = 1 } = paginationConfig;
       setLoading(true);
       const res = await get_discussion_participation({
         option_course: courseCode,
         option_topic: topic,
-        page: current,
-        limit: pageSize,
         start_date: dateRange?.[0],
         end_date: dateRange?.[1]
       });
       setRecords(res?.discussions || []);
-      setPagination({
-        ...pagination,
-        current: res?.pagination.page || 1,
-        pageSize: pageSize,
-        total: res?.pagination.total || 0
-      });
     } catch (err) {
     } finally {
       setLoading(false);
@@ -129,8 +108,6 @@ const DiscussionData = () => {
         rowKey="user_id"
         dataSource={records}
         loading={loading}
-        pagination={pagination}
-        // onChange={handleTableChange}
       />
     </Space>
   );
