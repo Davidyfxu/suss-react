@@ -13,6 +13,7 @@ const SocialGraph: React.FC = () => {
   const courseCode = useUserStore((state) => state.courseCode);
   const [loading, setLoading] = useState(false);
   const [topic, setTopic] = useState<string>('');
+  const [density, setDensity] = useState<number>(0);
   const [rawData, setData] = useState<{
     nodes: Array<{ id: string; user_type: string; centrality: number }>;
     edges: Array<{ source: string; target: string; weight: number }>;
@@ -28,6 +29,7 @@ const SocialGraph: React.FC = () => {
         active_topic: topic
       });
       setData(res);
+      setDensity(res?.density || 0);
     } catch (err) {
       console.error(err);
     } finally {
@@ -38,6 +40,10 @@ const SocialGraph: React.FC = () => {
   useEffect(() => {
     courseCode && getNetwork();
   }, [courseCode, topic]);
+
+  useEffect(() => {
+    setTopic('');
+  }, [courseCode]);
 
   const initNetwork = useCallback(() => {
     if (networkRef.current) {
@@ -280,7 +286,18 @@ const SocialGraph: React.FC = () => {
               <Spin size="large" />
             </div>
           ) : (
-            <div ref={networkRef} className="h-full" />
+            <div className="h-full flex flex-col">
+              {topic && (
+                <div className="text-sm text-gray-600 mb-4">
+                  <span className="font-medium">Network Density:</span>
+                  {density}
+                  <span className="ml-2 text-xs text-gray-500">
+                    (Higher density indicates more interconnected discussion)
+                  </span>
+                </div>
+              )}
+              <div ref={networkRef} className="flex-1 max-h-[500px]" />
+            </div>
           )}
         </div>
       </div>

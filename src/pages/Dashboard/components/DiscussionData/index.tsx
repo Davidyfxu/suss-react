@@ -15,6 +15,7 @@ const DEFAULT_PAGINATION = {
 
 const DiscussionData = () => {
   const courseCode = useUserStore((state) => state.courseCode);
+  const dateRange = useUserStore((state) => state.dateRange);
   const [topic, setTopic] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [records, setRecords] = useState([]);
@@ -31,7 +32,9 @@ const DiscussionData = () => {
         option_course: courseCode,
         option_topic: topic,
         page: current,
-        limit: pageSize
+        limit: pageSize,
+        start_date: dateRange?.[0],
+        end_date: dateRange?.[1]
       });
       setRecords(res?.discussions || []);
       setPagination({
@@ -98,7 +101,11 @@ const DiscussionData = () => {
 
   useEffect(() => {
     courseCode && get_participation();
-  }, [courseCode, topic]);
+  }, [courseCode, topic, dateRange]);
+
+  useEffect(() => {
+    setTopic(undefined);
+  }, [courseCode]);
 
   return (
     <Space direction={'vertical'} className={'w-full border rounded-lg p-4'}>

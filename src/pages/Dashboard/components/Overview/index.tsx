@@ -7,9 +7,9 @@ import { get_course_overview } from '../../api.ts';
 
 const { Title } = Typography;
 
-const formatter: StatisticProps['formatter'] = (value) => (
-  <CountUp end={value as number} separator="," />
-);
+// const formatter: StatisticProps['formatter'] = (value) => (
+//   <CountUp end={value as number} separator="," />
+// );
 
 const Overview = () => {
   const courseCode = useUserStore((state) => state.courseCode);
@@ -62,7 +62,6 @@ const Overview = () => {
                   loading={loading}
                   title="Number of students"
                   value={overview?.number_of_student || 0}
-                  formatter={formatter}
                 />
               </Card>
             </Col>
@@ -72,7 +71,6 @@ const Overview = () => {
                   loading={loading}
                   title="Number of topics"
                   value={overview?.number_topics_posted || 0}
-                  formatter={formatter}
                 />
               </Card>
             </Col>
@@ -82,7 +80,6 @@ const Overview = () => {
                   loading={loading}
                   title="Number of replies"
                   value={overview?.number_entries_posted || 0}
-                  formatter={formatter}
                 />
               </Card>
             </Col>
@@ -92,7 +89,6 @@ const Overview = () => {
                   loading={loading}
                   title="Number of 'Reads'"
                   value={overview?.user_read_number || 0}
-                  formatter={formatter}
                 />
               </Card>
             </Col>
@@ -102,7 +98,6 @@ const Overview = () => {
                   loading={loading}
                   title="Number of 'Likes'"
                   value={overview?.user_like_number || 0}
-                  formatter={formatter}
                 />
               </Card>
             </Col>

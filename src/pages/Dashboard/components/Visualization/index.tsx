@@ -142,7 +142,13 @@ const Visualization = () => {
   const commonChartProps = {
     width: '100%',
     height: 400,
-    margin: { top: 20, right: 30, left: 40, bottom: 100 }
+    margin: { top: 40, right: 30, left: 40, bottom: 100 }
+  };
+
+  const commonLegendProps = {
+    align: 'right' as const,
+    verticalAlign: 'top' as const,
+    iconType: 'circle' as const
   };
 
   const renderChart = (
@@ -173,7 +179,7 @@ const Visualization = () => {
             />
             <YAxis tick={{ fontSize: 12 }} />
             <Tooltip content={<CustomTooltip />} />
-            <Legend />
+            <Legend {...commonLegendProps} />
             <Bar
               dataKey={dataKey}
               fill={color}
@@ -229,7 +235,7 @@ const Visualization = () => {
                     />
                     <YAxis tick={{ fontSize: 12 }} />
                     <Tooltip content={<CustomTooltip />} />
-                    <Legend />
+                    <Legend {...commonLegendProps} />
                     <Bar
                       dataKey="unique_entry_count"
                       fill={CHART_COLORS.primary}
