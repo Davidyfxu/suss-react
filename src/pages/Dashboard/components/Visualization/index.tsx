@@ -69,6 +69,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({
 
 const Visualization = () => {
   const courseCode = useUserStore((state) => state.courseCode);
+  const dateRange = useUserStore((state) => state.dateRange);
   const [loading, setLoading] = useState<boolean>(false);
   const [topic, setTopic] = useState<string>('');
   const [selectedUser, setSelectedUser] = useState<number | null>();
@@ -84,7 +85,9 @@ const Visualization = () => {
       const res = await draw_participants_posts({
         option_course: courseCode,
         topic_title: topic,
-        user_id: selectedUser
+        user_id: selectedUser,
+        start_date: dateRange?.[0],
+        end_date: dateRange?.[1]
       });
       setData(res);
     } catch (err) {
@@ -96,7 +99,7 @@ const Visualization = () => {
 
   useEffect(() => {
     courseCode && getParticipants();
-  }, [courseCode, topic, selectedUser]);
+  }, [courseCode, topic, selectedUser, dateRange]);
 
   const processData = (
     participantData: ChartDataItem[] = []

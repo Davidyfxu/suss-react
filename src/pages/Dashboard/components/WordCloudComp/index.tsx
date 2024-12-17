@@ -5,8 +5,9 @@ import ReactWordcloud from 'react-wordcloud';
 import { Empty, Spin, Typography } from 'antd';
 import { SelectSUSS } from '../../../../components';
 
-const WordCloudComp = () => {
+const WordCloudComp: React.FC = () => {
   const courseCode = useUserStore((state) => state.courseCode);
+  const dateRange = useUserStore((state) => state.dateRange);
   const [words, setWords] = useState<{ value: number; text: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [topic, setTopic] = useState('');
@@ -16,7 +17,9 @@ const WordCloudComp = () => {
       setLoading(true);
       const { entry_contents = {} } = await draw_wordcloud({
         option_course: courseCode,
-        active_topic: topic
+        active_topic: topic,
+        start_date: dateRange?.[0],
+        end_date: dateRange?.[1]
       });
       setWords(
         Object.keys(entry_contents)
@@ -31,11 +34,11 @@ const WordCloudComp = () => {
     } finally {
       setLoading(false);
     }
-  }, [courseCode, topic]);
+  }, [courseCode, topic, dateRange]);
 
   useEffect(() => {
     courseCode && getWords();
-  }, [courseCode, topic]);
+  }, [courseCode, topic, dateRange]);
 
   return (
     <div className="p-6 flex flex-col lg:flex-row gap-6">
