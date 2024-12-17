@@ -192,6 +192,16 @@ const Visualization = () => {
             >
               <LabelList dataKey={dataKey} position="top" />
             </Bar>
+            <text
+              x="50%"
+              y={350}
+              textAnchor="middle"
+              fill="#666"
+              fontSize="16"
+              fontWeight={600}
+            >
+              Drag the slider above to zoom and view specific time ranges
+            </text>
             <Brush
               dataKey="week_range"
               height={30}
