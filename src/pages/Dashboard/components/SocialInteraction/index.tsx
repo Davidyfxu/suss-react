@@ -293,7 +293,7 @@ const SocialGraph: React.FC = () => {
                 <div className="text-sm text-gray-600 mb-4 flex flex-col gap-2">
                   <span className="font-medium">
                     The interactivity (network density) of selected topic is:{' '}
-                    {round(density, 4)}
+                    {round(density, 3)}
                   </span>
                   <span className="text-xs text-gray-500">
                     Higher interactivity score indicates the discussion is more
@@ -302,7 +302,7 @@ const SocialGraph: React.FC = () => {
                   <br />
                   <span className="font-medium">
                     The Clustering Coefficient of selected topic is:{' '}
-                    {round(clustering, 4)}
+                    {round(clustering, 3)}
                   </span>
                   <span className="text-xs text-gray-500">
                     Higher clustering implies more tightly connected discussions
