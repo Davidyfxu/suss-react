@@ -14,7 +14,9 @@ const LPContent = () => {
         }}
       >
         <div className={'flex flex-col items-center justify-center p-8'}>
-          <Title style={{ color: '#eae8e6' }}>Welcome to XXXXXX</Title>
+          <Title style={{ color: '#eae8e6' }}>
+            Welcome to Canvas Discussion Dashboard
+          </Title>
           <Paragraph style={{ color: '#eae8e6' }} className={'max-w-xl'}>
             In the process of internal desktop applications development, many
             different design specs and implementations would be involved, which

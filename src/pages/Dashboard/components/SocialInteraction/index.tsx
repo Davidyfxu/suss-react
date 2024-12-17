@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Network, DataSet } from 'vis-network/standalone';
 import { useUserStore } from '../../../../stores/userStore';
 import { draw_network } from '../../api.ts';
-import { Alert, Button, Spin, Typography } from 'antd';
-import { debounce, round } from 'lodash-es';
+import { Alert, Button, Empty, Spin, Typography } from 'antd';
+import { debounce, isEmpty, round } from 'lodash-es';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { SelectSUSS } from '../../../../components';
 
@@ -11,6 +11,7 @@ const { Title, Paragraph } = Typography;
 
 const SocialGraph: React.FC = () => {
   const courseCode = useUserStore((state) => state.courseCode);
+  const dateRange = useUserStore((state) => state.dateRange);
   const [loading, setLoading] = useState(false);
   const [topic, setTopic] = useState<string>('');
   const [density, setDensity] = useState<number>(0);
@@ -27,7 +28,9 @@ const SocialGraph: React.FC = () => {
       setLoading(true);
       const res = await draw_network({
         option_course: courseCode,
-        active_topic: topic
+        active_topic: topic,
+        start_date: dateRange?.[0],
+        end_date: dateRange?.[1]
       });
       setData(res);
       setDensity(res?.density || 0);
@@ -41,7 +44,7 @@ const SocialGraph: React.FC = () => {
 
   useEffect(() => {
     courseCode && getNetwork();
-  }, [courseCode, topic]);
+  }, [courseCode, topic, dateRange]);
 
   useEffect(() => {
     setTopic('');
@@ -207,6 +210,53 @@ const SocialGraph: React.FC = () => {
     };
   }, [handleResize, courseCode]);
 
+  function renderSocialNetwork() {
+    if (loading)
+      return (
+        <div className="h-full flex items-center justify-center">
+          <Spin size="large" />
+        </div>
+      );
+
+    if (isEmpty(rawData?.edges) && isEmpty(rawData?.edges)) {
+      return (
+        <Empty
+          className={
+            'bg-gray-50 flex justify-center items-center flex-col h-full w-full'
+          }
+          description={'No data available.'}
+        />
+      );
+    }
+
+    return (
+      <div className="h-full flex flex-col">
+        {topic && (
+          <div className="text-sm text-gray-600 mb-4 flex flex-col gap-2">
+            <span className="font-medium">
+              The interactivity (network density) of selected topic is:{' '}
+              {round(density, 3)}
+            </span>
+            <span className="text-xs text-gray-500">
+              Higher interactivity score indicates the discussion is more
+              interactive.
+            </span>
+            <br />
+            <span className="font-medium">
+              The Clustering Coefficient of selected topic is:{' '}
+              {round(clustering, 3)}
+            </span>
+            <span className="text-xs text-gray-500">
+              Higher clustering implies more tightly connected discussions or
+              communities.
+            </span>
+          </div>
+        )}
+        <div ref={networkRef} className="flex-1 max-h-[500px]" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 p-6 bg-white rounded-xl shadow-sm">
       {/* Title and Description Section */}
@@ -249,10 +299,11 @@ const SocialGraph: React.FC = () => {
               Please select the topic title here
             </label>
             <SelectSUSS
+              handleSelect={(v) => setTopic(v)}
               allowClear
+              value={topic}
               className="w-full"
               placeholder="Select topic title"
-              handleSelect={(v) => setTopic(v)}
             />
           </div>
           <Alert
@@ -283,36 +334,7 @@ const SocialGraph: React.FC = () => {
 
         {/* Right Panel - Network Graph */}
         <div className="flex-1 bg-gray-50 rounded-xl shadow-inner p-6 min-h-[600px] border border-gray-100">
-          {loading ? (
-            <div className="h-full flex items-center justify-center">
-              <Spin size="large" />
-            </div>
-          ) : (
-            <div className="h-full flex flex-col">
-              {topic && (
-                <div className="text-sm text-gray-600 mb-4 flex flex-col gap-2">
-                  <span className="font-medium">
-                    The interactivity (network density) of selected topic is:{' '}
-                    {round(density, 3)}
-                  </span>
-                  <span className="text-xs text-gray-500">
-                    Higher interactivity score indicates the discussion is more
-                    interactive.
-                  </span>
-                  <br />
-                  <span className="font-medium">
-                    The Clustering Coefficient of selected topic is:{' '}
-                    {round(clustering, 3)}
-                  </span>
-                  <span className="text-xs text-gray-500">
-                    Higher clustering implies more tightly connected discussions
-                    or communities.
-                  </span>
-                </div>
-              )}
-              <div ref={networkRef} className="flex-1 max-h-[500px]" />
-            </div>
-          )}
+          {renderSocialNetwork()}
         </div>
       </div>
     </div>

@@ -54,6 +54,7 @@ const Home = (): any => {
       <Anchor
         direction="horizontal"
         targetOffset={200}
+        className="px-4 py-2 rounded-lg [&_.ant-anchor-link]:px-3 [&_.ant-anchor-link]:py-1 [&_.ant-anchor-link-title]:text-[#3498db] [&_.ant-anchor-link-title:hover]:text-[#D92D27] [&_.ant-anchor-link-title-active]:text-[#D92D27] [&_.ant-anchor-ink-ball]:border-[#D92D27] [&_.ant-anchor-link]:rounded-md [&_.ant-anchor-link]:transition-all [&_.ant-anchor-link]:duration-300"
         items={[
           {
             key: 'overview',
@@ -106,7 +107,7 @@ const Home = (): any => {
   const renderFooter = () => (
     <Footer className={'flex items-center justify-center bg-white h-10'}>
       <span>
-        Copyright © {new Date().getFullYear()} SUSS. All Rights Reserved.{' '}
+        Copyright {new Date().getFullYear()} SUSS. All Rights Reserved.{' '}
       </span>
     </Footer>
   );

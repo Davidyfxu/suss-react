@@ -1,5 +1,5 @@
 import { Cascader, CascaderProps, DatePicker, GetProp } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { get_course_options } from './api.ts';
 import { useUserStore } from '../../stores/userStore';
@@ -12,6 +12,7 @@ const SelectSUSSHeader = () => {
   const setCourseCode = useUserStore((state) => state.setCourseCode);
   const courseCode = useUserStore((state) => state.courseCode);
   const setDateRange = useUserStore((state) => state.setDateRange);
+  const [semester, setSemester] = useState('JAN23');
   const handleDateChange = (dates: Dayjs[] | null) => {
     if (dates) {
       // 将时间范围转换为当日的最早时间和最晚时间
@@ -23,12 +24,20 @@ const SelectSUSSHeader = () => {
     }
   };
   const { data, isLoading } = useSWR('courseOptions', async () => {
-    const { course_codes = [] } = await get_course_options();
+    const { JAN23 = [], JUL23 = [] } = await get_course_options();
     return [
       {
-        value: 'JAN 2023',
-        label: 'JAN 2023',
-        children: course_codes.map((value: string) => ({
+        value: 'JAN23',
+        label: 'JAN23',
+        children: JAN23.map((value: string) => ({
+          value: value,
+          label: value
+        }))
+      },
+      {
+        value: 'JUL23',
+        label: 'JUL23',
+        children: JUL23.map((value: string) => ({
           value: value,
           label: value
         }))
@@ -54,11 +63,12 @@ const SelectSUSSHeader = () => {
         showSearch={{ filter }}
         className={'w-60'}
         allowClear={false}
-        value={courseCode ? ['JAN 2023', courseCode] : undefined}
+        value={courseCode ? [semester, courseCode] : undefined}
         loading={isLoading}
         placeholder="Select a Course"
         options={data}
         onChange={(v) => {
+          setSemester(v[0]);
           setCourseCode?.(v[1]);
         }}
       />

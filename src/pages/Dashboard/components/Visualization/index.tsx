@@ -69,6 +69,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({
 
 const Visualization = () => {
   const courseCode = useUserStore((state) => state.courseCode);
+  const dateRange = useUserStore((state) => state.dateRange);
   const [loading, setLoading] = useState<boolean>(false);
   const [topic, setTopic] = useState<string>('');
   const [selectedUser, setSelectedUser] = useState<number | null>();
@@ -84,7 +85,9 @@ const Visualization = () => {
       const res = await draw_participants_posts({
         option_course: courseCode,
         topic_title: topic,
-        user_id: selectedUser
+        user_id: selectedUser,
+        start_date: dateRange?.[0],
+        end_date: dateRange?.[1]
       });
       setData(res);
     } catch (err) {
@@ -96,7 +99,7 @@ const Visualization = () => {
 
   useEffect(() => {
     courseCode && getParticipants();
-  }, [courseCode, topic, selectedUser]);
+  }, [courseCode, topic, selectedUser, dateRange]);
 
   const processData = (
     participantData: ChartDataItem[] = []
@@ -179,7 +182,7 @@ const Visualization = () => {
             />
             <YAxis tick={{ fontSize: 12 }} />
             <Tooltip content={<CustomTooltip />} />
-            <Legend {...commonLegendProps} />
+            {/*<Legend {...commonLegendProps} />*/}
             <Bar
               dataKey={dataKey}
               fill={color}
@@ -189,14 +192,23 @@ const Visualization = () => {
             >
               <LabelList dataKey={dataKey} position="top" />
             </Bar>
-            {!isProcessData && (
-              <Brush
-                dataKey="week_range"
-                height={30}
-                stroke={color}
-                fill="#ffffff"
-              />
-            )}
+            <text
+              x="50%"
+              y={350}
+              textAnchor="middle"
+              fill="#666"
+              fontSize="16"
+              fontWeight={600}
+            >
+              Drag the slider above to zoom and view specific time ranges
+            </text>
+            <Brush
+              dataKey="week_range"
+              height={30}
+              stroke={color}
+              fill="#ffffff"
+              y={300}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>

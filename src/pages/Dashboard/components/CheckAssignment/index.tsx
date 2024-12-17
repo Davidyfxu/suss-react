@@ -22,11 +22,14 @@ const CheckAssignment = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>({});
   const courseCode = useUserStore((state) => state.courseCode);
+  const dateRange = useUserStore((state) => state.dateRange);
 
   const handleSubmit = async (values: any) => {
     setLoading(true);
     try {
       const params = { ...values, option_course: courseCode };
+      dateRange?.[0] && (params['end_date'] = dateRange?.[0]);
+      dateRange?.[1] && (params['end_date'] = dateRange?.[1]);
       const response = await check_assignment(params);
       setResult(response);
     } catch (error) {
