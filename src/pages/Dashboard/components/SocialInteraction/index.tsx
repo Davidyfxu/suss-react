@@ -289,7 +289,7 @@ const SocialGraph: React.FC = () => {
             <div className="h-full flex flex-col">
               {topic && (
                 <div className="text-sm text-gray-600 mb-4">
-                  <span className="font-medium">Network Density:</span>
+                  <span className="font-medium mr-2">Network Density:</span>
                   {round(density,4)}
                   <span className="ml-2 text-xs text-gray-500">
                     (Higher density indicates more interconnected discussion)
