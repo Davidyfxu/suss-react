@@ -3,7 +3,7 @@ import { Network, DataSet } from 'vis-network/standalone';
 import { useUserStore } from '../../../../stores/userStore';
 import { draw_network } from '../../api.ts';
 import { Alert, Button, Spin, Typography } from 'antd';
-import { debounce } from 'lodash-es';
+import { debounce,round } from 'lodash-es';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { SelectSUSS } from '../../../../components';
 
@@ -290,7 +290,7 @@ const SocialGraph: React.FC = () => {
               {topic && (
                 <div className="text-sm text-gray-600 mb-4">
                   <span className="font-medium">Network Density:</span>
-                  {density}
+                  {round(density,4)}
                   <span className="ml-2 text-xs text-gray-500">
                     (Higher density indicates more interconnected discussion)
                   </span>
