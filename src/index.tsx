@@ -5,9 +5,9 @@ import {
   Login,
   Register,
   Error,
-  LandingPageNew,
   ForgetPsw,
-  ResetPsw
+  ResetPsw,
+  LandingPage
 } from './common';
 
 const Test = LazyRouter(() => import('./pages/Test'));
@@ -17,7 +17,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LandingPageNew />} />
+        <Route path="/" element={<LandingPage />} />
         <Route
           path={'/dashboard'}
           element={

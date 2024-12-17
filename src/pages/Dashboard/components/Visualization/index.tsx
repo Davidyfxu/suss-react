@@ -179,7 +179,7 @@ const Visualization = () => {
             />
             <YAxis tick={{ fontSize: 12 }} />
             <Tooltip content={<CustomTooltip />} />
-            <Legend {...commonLegendProps} />
+            {/*<Legend {...commonLegendProps} />*/}
             <Bar
               dataKey={dataKey}
               fill={color}
@@ -189,14 +189,13 @@ const Visualization = () => {
             >
               <LabelList dataKey={dataKey} position="top" />
             </Bar>
-            {!isProcessData && (
-              <Brush
-                dataKey="week_range"
-                height={30}
-                stroke={color}
-                fill="#ffffff"
-              />
-            )}
+            <Brush
+              dataKey="week_range"
+              height={30}
+              stroke={color}
+              fill="#ffffff"
+              y={300}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
