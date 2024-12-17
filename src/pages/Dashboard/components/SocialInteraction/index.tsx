@@ -3,7 +3,7 @@ import { Network, DataSet } from 'vis-network/standalone';
 import { useUserStore } from '../../../../stores/userStore';
 import { draw_network } from '../../api.ts';
 import { Alert, Button, Spin, Typography } from 'antd';
-import { debounce,round } from 'lodash-es';
+import { debounce, round } from 'lodash-es';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { SelectSUSS } from '../../../../components';
 
@@ -14,6 +14,7 @@ const SocialGraph: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [topic, setTopic] = useState<string>('');
   const [density, setDensity] = useState<number>(0);
+  const [clustering, setClustering] = useState<number>(0);
   const [rawData, setData] = useState<{
     nodes: Array<{ id: string; user_type: string; centrality: number }>;
     edges: Array<{ source: string; target: string; weight: number }>;
@@ -30,6 +31,7 @@ const SocialGraph: React.FC = () => {
       });
       setData(res);
       setDensity(res?.density || 0);
+      setClustering(res?.clustering || 0);
     } catch (err) {
       console.error(err);
     } finally {
@@ -288,11 +290,23 @@ const SocialGraph: React.FC = () => {
           ) : (
             <div className="h-full flex flex-col">
               {topic && (
-                <div className="text-sm text-gray-600 mb-4">
-                  <span className="font-medium mr-2">Network Density:</span>
-                  {round(density,4)}
-                  <span className="ml-2 text-xs text-gray-500">
-                    (Higher density indicates more interconnected discussion)
+                <div className="text-sm text-gray-600 mb-4 flex flex-col gap-2">
+                  <span className="font-medium">
+                    The interactivity (network density) of selected topic is:{' '}
+                    {round(density, 4)}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    Higher interactivity score indicates the discussion is more
+                    interactive.
+                  </span>
+                  <br />
+                  <span className="font-medium">
+                    The Clustering Coefficient of selected topic is:{' '}
+                    {round(clustering, 4)}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    Higher clustering implies more tightly connected discussions
+                    or communities.
                   </span>
                 </div>
               )}
