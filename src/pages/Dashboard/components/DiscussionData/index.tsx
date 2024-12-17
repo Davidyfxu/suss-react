@@ -108,6 +108,7 @@ const DiscussionData = () => {
         rowKey="user_id"
         dataSource={records}
         loading={loading}
+        pagination={{ pageSize: 500 }}
       />
     </Space>
   );
