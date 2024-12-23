@@ -331,7 +331,6 @@ const SocialGraph: React.FC = () => {
             type="info"
           />
         </div>
-
         {/* Right Panel - Network Graph */}
         <div className="flex-1 bg-gray-50 rounded-xl shadow-inner p-6 min-h-[600px] border border-gray-100">
           {renderSocialNetwork()}
