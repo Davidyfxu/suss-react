@@ -50,7 +50,6 @@ const DiscussionData = () => {
     },
     {
       title: '# users interacted with',
-      width: 220,
       dataIndex: 'interacted_users_count',
       key: 'interactions',
       render: (interactions: any) => interactions,
@@ -59,7 +58,6 @@ const DiscussionData = () => {
     },
     {
       title: '# topics participated',
-      width: 220,
       dataIndex: 'entry_topic_count',
       key: 'topics',
       sorter: (a: any, b: any) => a.entry_topic_count - b.entry_topic_count
@@ -87,7 +85,10 @@ const DiscussionData = () => {
   }, [courseCode]);
 
   return (
-    <Space direction={'vertical'} className={'w-full border rounded-lg p-4'}>
+    <div
+      className={'flex-1 min-w-0 border rounded-lg p-4 h-full'}
+      style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
+    >
       <Title level={5} className="m-0">
         Canvas Discussion Participation
       </Title>
@@ -103,14 +104,14 @@ const DiscussionData = () => {
         showIcon
       />
       <Table
-        scroll={{ x: '100%', y: 500 }}
+        scroll={{ x: 500, y: 720 }}
         columns={columns}
         rowKey="user_id"
         dataSource={records}
         loading={loading}
         pagination={{ pageSize: 500 }}
       />
-    </Space>
+    </div>
   );
 };
 

@@ -12,9 +12,13 @@ const DashboardTabs = () => {
     <div className="flex flex-col gap-4">
       <div id="discussion" className={'p-5 rounded-lg bg-white'}>
         <Title level={4}>Discussion Participation</Title>
-        <div className="flex flex-col gap-4">
-          <DiscussionData />
-          <Visualization />
+        <div className="flex gap-4 flex-wrap lg:flex-nowrap h-full">
+          <div className="w-full lg:w-1/2 h-full">
+            <DiscussionData />
+          </div>
+          <div className="w-full lg:w-1/2 h-full">
+            <Visualization />
+          </div>
         </div>
       </div>
 

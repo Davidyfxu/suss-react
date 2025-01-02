@@ -216,18 +216,15 @@ const Visualization = () => {
   );
 
   return (
-    <div className="w-full border rounded-lg p-4">
-      <Title level={5} className="m-0">
-        Canvas Discussion Charts
-      </Title>
+    <div className="h-full border rounded-lg p-2 min-h-[450px]">
       {!isEmpty(rawData?.['serializer_data_participant']) ||
       !isEmpty(rawData?.['serializer_data_reply']) ||
       !isEmpty(rawData?.['reply_by_week']) ? (
-        <div className="w-full flex flex-col gap-6">
+        <div className="w-full flex flex-col gap-2">
           {(!isEmpty(rawData?.['serializer_data_participant']) ||
             !isEmpty(rawData?.['serializer_data_reply'])) && (
-            <div className="w-full bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-medium mb-4 text-gray-800 text-center">
+            <div className="w-full p-1 rounded-lg shadow-sm">
+              <h3 className="text-lg font-medium my-3 text-gray-800 text-center">
                 Number of Participants and Posts by Topic
               </h3>
               <div style={{ width: '100%', height: 400 }}>
@@ -302,7 +299,7 @@ const Visualization = () => {
           </Spin>
         </div>
       ) : (
-        <Empty className="mt-10" />
+        <Empty className="mt-32" />
       )}
     </div>
   );

@@ -4,6 +4,13 @@ import { useEffect, useState, useRef } from 'react';
 import CountUp from 'react-countup';
 import { useUserStore } from '../../../../stores/userStore';
 import { get_course_overview } from '../../api.ts';
+import {
+  UserOutlined,
+  MessageOutlined,
+  CommentOutlined,
+  EyeOutlined,
+  LikeOutlined
+} from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -11,11 +18,37 @@ const { Title } = Typography;
 //   <CountUp end={value as number} separator="," />
 // );
 
+const CARD_COLORS = {
+  students: '#e8f4ff',
+  topics: '#e6fffb',
+  replies: '#f6ffed',
+  reads: '#fff7e6',
+  likes: '#fff1f0'
+};
+
+// 添加卡片样式
+const cardStyle = {
+  transition: 'all 0.3s ease',
+  cursor: 'pointer',
+  ':hover': {
+    transform: 'translateY(-5px)',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+  }
+};
+
+interface Overview {
+  number_of_student?: number;
+  number_topics_posted?: number;
+  number_entries_posted?: number;
+  user_read_number?: number;
+  user_like_number?: number;
+}
+
 const Overview = () => {
   const courseCode = useUserStore((state) => state.courseCode);
   const dateRange = useUserStore((state) => state.dateRange);
   const [loading, setLoading] = useState(false);
-  const [overview, setOverview] = useState({});
+  const [overview, setOverview] = useState<Overview>({});
   const contentRef = useRef<HTMLDivElement>(null);
 
   const getCourseOverview = async () => {
@@ -57,47 +90,122 @@ const Overview = () => {
         <div>
           <Row gutter={[16, 16]}>
             <Col span={4}>
-              <Card bordered>
+              <Card
+                bordered
+                style={{
+                  backgroundColor: CARD_COLORS.students,
+                  ...cardStyle
+                }}
+                className="hover:shadow-lg"
+              >
                 <Statistic
                   loading={loading}
-                  title="Number of students"
+                  title={
+                    <span style={{ fontSize: '16px' }}>Number of students</span>
+                  }
                   value={overview?.number_of_student || 0}
+                  valueStyle={{
+                    fontSize: '28px',
+                    fontWeight: 'bold',
+                    color: '#1890ff'
+                  }}
+                  prefix={<UserOutlined style={{ fontSize: '20px' }} />}
                 />
               </Card>
             </Col>
             <Col span={5}>
-              <Card bordered>
+              <Card
+                bordered
+                style={{
+                  backgroundColor: CARD_COLORS.topics,
+                  ...cardStyle
+                }}
+                className="hover:shadow-lg"
+              >
                 <Statistic
                   loading={loading}
-                  title="Number of topics"
+                  title={
+                    <span style={{ fontSize: '16px' }}>Number of topics</span>
+                  }
                   value={overview?.number_topics_posted || 0}
+                  valueStyle={{
+                    fontSize: '28px',
+                    fontWeight: 'bold',
+                    color: '#13c2c2'
+                  }}
+                  prefix={<MessageOutlined style={{ fontSize: '20px' }} />}
                 />
               </Card>
             </Col>
             <Col span={5}>
-              <Card bordered>
+              <Card
+                bordered
+                style={{
+                  backgroundColor: CARD_COLORS.replies,
+                  ...cardStyle
+                }}
+                className="hover:shadow-lg"
+              >
                 <Statistic
                   loading={loading}
-                  title="Number of replies"
+                  title={
+                    <span style={{ fontSize: '16px' }}>Number of replies</span>
+                  }
                   value={overview?.number_entries_posted || 0}
+                  valueStyle={{
+                    fontSize: '28px',
+                    fontWeight: 'bold',
+                    color: '#52c41a'
+                  }}
+                  prefix={<CommentOutlined style={{ fontSize: '20px' }} />}
                 />
               </Card>
             </Col>
             <Col span={5}>
-              <Card bordered>
+              <Card
+                bordered
+                style={{
+                  backgroundColor: CARD_COLORS.reads,
+                  ...cardStyle
+                }}
+                className="hover:shadow-lg"
+              >
                 <Statistic
                   loading={loading}
-                  title="Number of 'Reads'"
+                  title={
+                    <span style={{ fontSize: '16px' }}>Number of 'Reads'</span>
+                  }
                   value={overview?.user_read_number || 0}
+                  valueStyle={{
+                    fontSize: '28px',
+                    fontWeight: 'bold',
+                    color: '#fa8c16'
+                  }}
+                  prefix={<EyeOutlined style={{ fontSize: '20px' }} />}
                 />
               </Card>
             </Col>
             <Col span={5}>
-              <Card bordered>
+              <Card
+                bordered
+                style={{
+                  backgroundColor: CARD_COLORS.likes,
+                  ...cardStyle
+                }}
+                className="hover:shadow-lg"
+              >
                 <Statistic
                   loading={loading}
-                  title="Number of 'Likes'"
+                  title={
+                    <span style={{ fontSize: '16px' }}>Number of 'Likes'</span>
+                  }
                   value={overview?.user_like_number || 0}
+                  valueStyle={{
+                    fontSize: '28px',
+                    fontWeight: 'bold',
+                    color: '#f5222d'
+                  }}
+                  prefix={<LikeOutlined style={{ fontSize: '20px' }} />}
                 />
               </Card>
             </Col>
