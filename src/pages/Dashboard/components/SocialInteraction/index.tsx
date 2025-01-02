@@ -241,15 +241,15 @@ const SocialGraph: React.FC = () => {
               Higher interactivity score indicates the discussion is more
               interactive.
             </span>
-            <br />
-            <span className="font-medium">
-              The Clustering Coefficient of selected topic is:{' '}
-              {round(clustering, 3)}
-            </span>
-            <span className="text-xs text-gray-500">
-              Higher clustering implies more tightly connected discussions or
-              communities.
-            </span>
+            {/*<br />*/}
+            {/*<span className="font-medium">*/}
+            {/*  The Clustering Coefficient of selected topic is:{' '}*/}
+            {/*  {round(clustering, 3)}*/}
+            {/*</span>*/}
+            {/*<span className="text-xs text-gray-500">*/}
+            {/*  Higher clustering implies more tightly connected discussions or*/}
+            {/*  communities.*/}
+            {/*</span>*/}
           </div>
         )}
         <div ref={networkRef} className="flex-1 max-h-[500px]" />

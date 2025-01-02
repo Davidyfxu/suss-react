@@ -29,6 +29,7 @@ const Home = (): any => {
         alt={''}
         onClick={() => window.open('https://www.suss.edu.sg/')}
       />
+      <SelectSUSSHeader />
       <Menu
         mode="inline"
         selectedKeys={selectItem?.k}
@@ -51,10 +52,17 @@ const Home = (): any => {
       style={{ width: '-webkit-fill-available' }}
       className={'z-40 bg-white flex justify-between items-center fixed gap-4'}
     >
+      <img
+        width={64}
+        className={'p-4 rounded-3xl cursor-pointer'}
+        src={menuLogo}
+        alt={''}
+        onClick={() => window.open('https://www.suss.edu.sg/')}
+      />
       <Anchor
         direction="horizontal"
         targetOffset={200}
-        className="px-4 py-2 rounded-lg [&_.ant-anchor-link]:px-3 [&_.ant-anchor-link]:py-1 [&_.ant-anchor-link-title]:text-[#3498db] [&_.ant-anchor-link-title:hover]:text-[#D92D27] [&_.ant-anchor-link-title-active]:text-[#D92D27] [&_.ant-anchor-ink-ball]:border-[#D92D27] [&_.ant-anchor-link]:rounded-md [&_.ant-anchor-link]:transition-all [&_.ant-anchor-link]:duration-300"
+        className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 shadow-md [&_.ant-anchor-link]:px-4 [&_.ant-anchor-link]:py-2 [&_.ant-anchor-link]:bg-white/80 [&_.ant-anchor-link]:mx-2 [&_.ant-anchor-link]:shadow-sm [&_.ant-anchor-link-title]:text-[#3498db] [&_.ant-anchor-link-title]:font-medium [&_.ant-anchor-link-title:hover]:text-[#D92D27] [&_.ant-anchor-link-title-active]:text-[#D92D27] [&_.ant-anchor-ink-ball]:border-[#D92D27] [&_.ant-anchor-link]:rounded-md [&_.ant-anchor-link]:transition-all [&_.ant-anchor-link]:duration-300 hover:[&_.ant-anchor-link]:bg-white hover:[&_.ant-anchor-link]:shadow-md"
         items={[
           {
             key: 'overview',
@@ -79,7 +87,6 @@ const Home = (): any => {
         ]}
       />
       <div className={'flex justify-between items-center gap-4'}>
-        <SelectSUSSHeader />
         <Dropdown
           menu={{
             items: [

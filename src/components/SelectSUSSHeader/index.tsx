@@ -58,10 +58,9 @@ const SelectSUSSHeader = () => {
           .indexOf(inputValue.toLowerCase()) > -1
     );
   return (
-    <div className={'flex gap-4'}>
+    <div className={'py-4 flex flex-col gap-4'}>
       <Cascader
         showSearch={{ filter }}
-        className={'w-60'}
         allowClear={false}
         value={courseCode ? [semester, courseCode] : undefined}
         loading={isLoading}
