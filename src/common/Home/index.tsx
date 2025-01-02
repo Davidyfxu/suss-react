@@ -3,9 +3,15 @@ import { Layout, Menu, Avatar, Dropdown, Button, Anchor } from 'antd';
 import { routers } from '../config/routers';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../stores/userStore';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import {
+  LeftOutlined,
+  RightOutlined,
+  LogoutOutlined,
+  UserOutlined
+} from '@ant-design/icons';
 import menuLogo from '../../assets/SUSS_LOGO.jpg';
 import { SelectSUSSHeader } from '../../components';
+import styles from './index.module.scss';
 
 const { Header, Footer, Content, Sider } = Layout;
 const Home = (): any => {
@@ -14,21 +20,38 @@ const Home = (): any => {
   const [selectItem, setSelectItem] = useState({ k: [], label: '' });
   const name = useUserStore((state) => state.username);
   const avatar = useUserStore((state) => state.avatar);
+  const siderStyle: React.CSSProperties = {
+    overflow: 'auto',
+    height: '100vh',
+    position: 'fixed',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    zIndex: 1
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setTimeout(() => window.location.reload(), 300);
+  };
 
   const renderSider = () => (
     <Sider
       style={{
+        ...siderStyle,
         backgroundColor: '#d9e4f5',
         backgroundImage: 'linear-gradient(315deg, #d9e4f5 0%, #f5e3e6 74%)'
       }}
       collapsed={collapsed}
     >
-      <img
-        className={'p-4 w-full rounded-3xl cursor-pointer'}
-        src={menuLogo}
-        alt={''}
-        onClick={() => window.open('https://www.suss.edu.sg/')}
-      />
+      <div className="flex flex-col items-center p-4">
+        <Avatar
+          icon={<UserOutlined />}
+          size={collapsed ? 48 : 64}
+          className="cursor-pointer bg-amber-600"
+        />
+      </div>
+      <SelectSUSSHeader />
       <Menu
         mode="inline"
         selectedKeys={selectItem?.k}
@@ -40,21 +63,47 @@ const Home = (): any => {
           }
         }))}
       />
-      <Button type="text" onClick={() => setCollapsed(!collapsed)} block>
-        {collapsed ? <RightOutlined /> : <LeftOutlined />}
-      </Button>
+      <div className="flex flex-col gap-2 mt-auto p-4">
+        <Button type="text" onClick={() => setCollapsed(!collapsed)} block>
+          {collapsed ? <RightOutlined /> : <LeftOutlined />}
+        </Button>
+        <Button
+          type="primary"
+          danger
+          icon={<LogoutOutlined />}
+          onClick={handleLogout}
+          block
+        >
+          {!collapsed && 'Logout'}
+        </Button>
+      </div>
     </Sider>
   );
 
   const renderHeader = () => (
     <Header
-      style={{ width: '-webkit-fill-available' }}
-      className={'z-40 bg-white flex justify-between items-center fixed gap-4'}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: collapsed ? 80 : 200,
+        right: 0,
+        zIndex: 2,
+        paddingInline: '16px',
+        transition: 'left 0.2s'
+      }}
+      className={'bg-white flex justify-between items-center fixed gap-4'}
     >
+      <img
+        width={64}
+        className={'rounded-xl cursor-pointer hover:shadow'}
+        src={menuLogo}
+        alt={''}
+        onClick={() => window.open('https://www.suss.edu.sg/')}
+      />
       <Anchor
         direction="horizontal"
         targetOffset={200}
-        className="px-4 py-2 rounded-lg [&_.ant-anchor-link]:px-3 [&_.ant-anchor-link]:py-1 [&_.ant-anchor-link-title]:text-[#3498db] [&_.ant-anchor-link-title:hover]:text-[#D92D27] [&_.ant-anchor-link-title-active]:text-[#D92D27] [&_.ant-anchor-ink-ball]:border-[#D92D27] [&_.ant-anchor-link]:rounded-md [&_.ant-anchor-link]:transition-all [&_.ant-anchor-link]:duration-300"
+        className={styles.anchorContainer}
         items={[
           {
             key: 'overview',
@@ -79,7 +128,6 @@ const Home = (): any => {
         ]}
       />
       <div className={'flex justify-between items-center gap-4'}>
-        <SelectSUSSHeader />
         <Dropdown
           menu={{
             items: [
@@ -113,14 +161,19 @@ const Home = (): any => {
   );
 
   return (
-    <Layout>
+    <Layout hasSider>
       {renderSider()}
-      <Layout>
+      <Layout
+        style={{
+          marginLeft: collapsed ? 80 : 200,
+          transition: 'margin-left 0.2s'
+        }}
+      >
         {renderHeader()}
         <Content
           style={{
             marginTop: 64,
-            height: '100%',
+            minHeight: '100vh',
             overflow: 'auto'
           }}
         >

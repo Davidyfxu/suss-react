@@ -4,25 +4,45 @@ import useSWR from 'swr';
 import { get_course_options } from './api.ts';
 import { useUserStore } from '../../stores/userStore';
 import { Dayjs } from 'dayjs';
-type DefaultOptionType = GetProp<CascaderProps, 'options'>[number];
 
-const { RangePicker } = DatePicker;
+type DefaultOptionType = GetProp<CascaderProps, 'options'>[number];
 
 const SelectSUSSHeader = () => {
   const setCourseCode = useUserStore((state) => state.setCourseCode);
   const courseCode = useUserStore((state) => state.courseCode);
   const setDateRange = useUserStore((state) => state.setDateRange);
   const [semester, setSemester] = useState('JAN23');
-  const handleDateChange = (dates: Dayjs[] | null) => {
-    if (dates) {
-      // 将时间范围转换为当日的最早时间和最晚时间
-      const startOfDay = dates[0].format('YYYY-MM-DD');
-      const endOfDay = dates[1].format('YYYY-MM-DD');
-      setDateRange([startOfDay, endOfDay]);
-    } else {
-      setDateRange(null);
-    }
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+
+  const handleStartDateChange = (date: Dayjs | null) => {
+    setStartDate(date);
+    updateDateRange(date, endDate);
   };
+
+  const handleEndDateChange = (date: Dayjs | null) => {
+    setEndDate(date);
+    updateDateRange(startDate, date);
+  };
+
+  // 统一处理日期范围更新
+  const updateDateRange = (start: Dayjs | null, end: Dayjs | null) => {
+    if (!start && !end) {
+      setDateRange(null);
+      return;
+    }
+
+    const range: [string?, string?] = [];
+    if (start) {
+      range[0] = start.format('YYYY-MM-DD');
+    }
+    if (end) {
+      range[1] = end.format('YYYY-MM-DD');
+    }
+
+    setDateRange(range as [string?, string?]);
+  };
+
   const { data, isLoading } = useSWR('courseOptions', async () => {
     const { JAN23 = [], JUL23 = [] } = await get_course_options();
     return [
@@ -45,11 +65,6 @@ const SelectSUSSHeader = () => {
     ];
   });
 
-  useEffect(() => {
-    if (data?.[0]?.children?.[0]?.value) {
-      setCourseCode?.(data[0].children[0].value);
-    }
-  }, [data, setCourseCode]);
   const filter = (inputValue: string, path: DefaultOptionType[]) =>
     path.some(
       (option) =>
@@ -57,11 +72,12 @@ const SelectSUSSHeader = () => {
           .toLowerCase()
           .indexOf(inputValue.toLowerCase()) > -1
     );
+
   return (
-    <div className={'flex gap-4'}>
+    <div className={'py-4 flex flex-col gap-4'}>
       <Cascader
+        className={'w-full'}
         showSearch={{ filter }}
-        className={'w-60'}
         allowClear={false}
         value={courseCode ? [semester, courseCode] : undefined}
         loading={isLoading}
@@ -72,7 +88,25 @@ const SelectSUSSHeader = () => {
           setCourseCode?.(v[1]);
         }}
       />
-      <RangePicker allowClear onChange={handleDateChange} />
+      <div className="flex flex-col gap-2">
+        <DatePicker
+          className="flex-1 w-full"
+          placeholder="Start Date"
+          onChange={handleStartDateChange}
+          value={startDate}
+          allowClear
+          disabledDate={(current) => (endDate ? current > endDate : false)}
+        />
+
+        <DatePicker
+          className="flex-1 w-full"
+          placeholder="End Date"
+          onChange={handleEndDateChange}
+          value={endDate}
+          allowClear
+          disabledDate={(current) => (startDate ? current < startDate : false)}
+        />
+      </div>
     </div>
   );
 };
