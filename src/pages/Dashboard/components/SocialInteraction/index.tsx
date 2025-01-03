@@ -234,7 +234,7 @@ const SocialGraph: React.FC = () => {
         {topic && (
           <div className="text-sm text-gray-600 mb-4 flex flex-col gap-2">
             <span className="font-medium">
-              The interactivity (network density) of selected topic is:{' '}
+              The density of interaction (network density) is:{' '}
               {round(density, 3)}
             </span>
             <span className="text-xs text-gray-500">
