@@ -9,7 +9,7 @@ import {
   LogoutOutlined,
   UserOutlined
 } from '@ant-design/icons';
-import menuLogo from '../../assets/SUSS_LOGO.jpg';
+import menuLogo from '../../assets/suss-logo-with-tagline.jpg';
 import { SelectSUSSHeader } from '../../components';
 import styles from './index.module.scss';
 
@@ -50,6 +50,11 @@ const Home = (): any => {
           size={collapsed ? 48 : 64}
           className="cursor-pointer bg-amber-600"
         />
+        {!collapsed && (
+          <h4 className="text-2xl font-bold bg-gradient-to-r from-[#d92d27] to-[#ff6f61] bg-clip-text text-transparent text-center mt-4">
+            Welcome {name}
+          </h4>
+        )}
       </div>
       <SelectSUSSHeader />
       <Menu
@@ -94,8 +99,7 @@ const Home = (): any => {
       className={'bg-white flex justify-between items-center fixed gap-4'}
     >
       <img
-        width={64}
-        className={'rounded-xl cursor-pointer hover:shadow'}
+        className={'h-14 cursor-pointer hover:shadow'}
         src={menuLogo}
         alt={''}
         onClick={() => window.open('https://www.suss.edu.sg/')}

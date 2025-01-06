@@ -261,9 +261,9 @@ const SocialGraph: React.FC = () => {
     <div className="space-y-6 p-6 bg-white rounded-xl shadow-sm">
       {/* Title and Description Section */}
       <div className="space-y-4">
-        <Title level={5}>
-          Social Interaction (Social Network Analysis Graph)
-        </Title>
+        {/*<Title level={5}>*/}
+        {/*  Social Interaction (Social Network Analysis Graph)*/}
+        {/*</Title>*/}
         <Paragraph
           ellipsis={{
             rows: 2,
