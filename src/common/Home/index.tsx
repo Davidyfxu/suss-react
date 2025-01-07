@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { Layout, Menu, Avatar, Dropdown, Button, Anchor } from 'antd';
+import {
+  Layout,
+  Menu,
+  Avatar,
+  Dropdown,
+  Button,
+  Anchor,
+  MenuProps
+} from 'antd';
 import { routers } from '../config/routers';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../stores/userStore';
@@ -7,7 +15,9 @@ import {
   LeftOutlined,
   RightOutlined,
   LogoutOutlined,
-  UserOutlined
+  UserOutlined,
+  UserSwitchOutlined,
+  HomeOutlined
 } from '@ant-design/icons';
 import menuLogo from '../../assets/suss-logo-with-tagline.jpg';
 import { SelectSUSSHeader } from '../../components';
@@ -17,9 +27,11 @@ const { Header, Footer, Content, Sider } = Layout;
 const Home = (): any => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
-  const [selectItem, setSelectItem] = useState({ k: [], label: '' });
+  const [selectItem, setSelectItem] = useState<{ k: string[]; label: string }>({
+    k: [],
+    label: ''
+  });
   const name = useUserStore((state) => state.username);
-  const avatar = useUserStore((state) => state.avatar);
   const siderStyle: React.CSSProperties = {
     overflow: 'auto',
     height: '100vh',
@@ -30,13 +42,41 @@ const Home = (): any => {
     zIndex: 1
   };
 
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: 'Dashboard',
+      icon: <HomeOutlined />,
+      onClick: () => navClick({ k: 'dashboard', label: 'Dashboard' })
+    },
+    {
+      key: '2',
+      label: 'Profile',
+      icon: <UserSwitchOutlined />,
+      onClick: () => navClick({ k: 'profile', label: 'Profile' })
+    },
+
+    {
+      key: '3',
+      danger: true,
+      label: 'Logout',
+      icon: <LogoutOutlined />,
+      onClick: () => handleLogout()
+    }
+  ];
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     setTimeout(() => window.location.reload(), 300);
   };
-
+  const navClick = (props: { k: string; label: string }) => {
+    const { k, label } = props;
+    navigate(`/dashboard/${k}`);
+    setSelectItem({ k: [k], label: label });
+  };
   const renderSider = () => (
     <Sider
+      className={styles.sider}
       style={{
         ...siderStyle,
         backgroundColor: '#d9e4f5',
@@ -45,11 +85,13 @@ const Home = (): any => {
       collapsed={collapsed}
     >
       <div className="flex flex-col items-center p-4">
-        <Avatar
-          icon={<UserOutlined />}
-          size={collapsed ? 48 : 64}
-          className="cursor-pointer bg-amber-600"
-        />
+        <Dropdown arrow menu={{ items }}>
+          <Avatar
+            icon={<UserOutlined />}
+            size={collapsed ? 48 : 64}
+            className="cursor-pointer bg-amber-600"
+          />
+        </Dropdown>
         {!collapsed && (
           <h4 className="text-2xl font-bold bg-gradient-to-r from-[#d92d27] to-[#ff6f61] bg-clip-text text-transparent text-center mt-4">
             Welcome {name}
@@ -62,10 +104,7 @@ const Home = (): any => {
         selectedKeys={selectItem?.k}
         items={routers.map((router: any) => ({
           ...router,
-          onClick: () => {
-            navigate(`/dashboard/${router?.key}`);
-            setSelectItem({ k: [router?.key], label: router?.label });
-          }
+          onClick: () => navClick({ k: router?.key, label: router?.label })
         }))}
       />
       <div className="flex flex-col gap-2 mt-auto p-4">
@@ -131,29 +170,7 @@ const Home = (): any => {
           }
         ]}
       />
-      <div className={'flex justify-between items-center gap-4'}>
-        <Dropdown
-          menu={{
-            items: [
-              {
-                key: '1',
-                label: (
-                  <a
-                    onClick={() => {
-                      localStorage.removeItem('token');
-                      setTimeout(() => window.location.reload(), 300);
-                    }}
-                  >
-                    Logout
-                  </a>
-                )
-              }
-            ]
-          }}
-        >
-          <Avatar src={avatar}>{name.slice(0, 2)}</Avatar>
-        </Dropdown>
-      </div>
+      <div> </div>
     </Header>
   );
   const renderFooter = () => (
