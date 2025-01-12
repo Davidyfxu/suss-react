@@ -1,14 +1,28 @@
 import Overview from './components/Overview';
 import DashboardTabs from './components/DashboardTabs';
+import { ConfigProvider } from 'antd';
 
 const Dashboard = () => {
   return (
-    <div className="flex flex-col w-full p-2 bg-gray-100 gap-2">
-      <div id="overview">
-        <Overview />
+    <ConfigProvider
+      theme={{
+        components: {
+          Table: {
+            fontSize: 12, // 设置表格字体大小
+            padding: 8, // 设置单元格内边距
+            cellPaddingBlock: 4, // 设置单元格上下内边距
+            cellPaddingInline: 8 // 设置单元格左右内边距
+          }
+        }
+      }}
+    >
+      <div className="flex flex-col w-full p-2 bg-gray-100">
+        <div id="overview">
+          <Overview />
+        </div>
+        <DashboardTabs />
       </div>
-      <DashboardTabs />
-    </div>
+    </ConfigProvider>
   );
 };
 

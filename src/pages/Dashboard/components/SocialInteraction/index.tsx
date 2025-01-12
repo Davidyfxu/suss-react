@@ -258,9 +258,9 @@ const SocialGraph: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6 p-6 bg-white rounded-xl shadow-sm">
+    <div className="space-y-6 bg-white rounded-xl shadow-sm">
       {/* Title and Description Section */}
-      <div className="space-y-4">
+      <div>
         {/*<Title level={5}>*/}
         {/*  Social Interaction (Social Network Analysis Graph)*/}
         {/*</Title>*/}
@@ -332,7 +332,7 @@ const SocialGraph: React.FC = () => {
           />
         </div>
         {/* Right Panel - Network Graph */}
-        <div className="flex-1 bg-gray-50 rounded-xl shadow-inner p-6 min-h-[600px] border border-gray-100">
+        <div className="flex-1 bg-gray-50 rounded-xl shadow-inner p-6 min-h-[500px] border border-gray-100">
           {renderSocialNetwork()}
         </div>
       </div>

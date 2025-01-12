@@ -130,8 +130,8 @@ const CheckAssignment = () => {
   };
 
   return (
-    <div className="space-y-6 py-6 pr-6 bg-white rounded-xl shadow-sm">
-      <div className="flex flex-col lg:flex-row gap-12">
+    <div className="space-y-6 bg-white rounded-xl shadow-sm">
+      <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex flex-col gap-6 w-full lg:w-96 space-y-4">
           <Form
             form={form}

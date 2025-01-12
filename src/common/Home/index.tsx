@@ -138,14 +138,14 @@ const Home = (): any => {
       className={'bg-white flex justify-between items-center fixed gap-4'}
     >
       <img
-        className={'h-14 cursor-pointer hover:shadow'}
+        className={'h-10 cursor-pointer hover:shadow'}
         src={menuLogo}
         alt={''}
         onClick={() => window.open('https://www.suss.edu.sg/')}
       />
       <Anchor
         direction="horizontal"
-        targetOffset={200}
+        targetOffset={60}
         className={styles.anchorContainer}
         items={[
           {

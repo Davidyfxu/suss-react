@@ -145,7 +145,7 @@ const Visualization = () => {
   const commonChartProps = {
     width: '100%',
     height: 400,
-    margin: { top: 40, right: 30, left: 40, bottom: 100 }
+    margin: { top: 10, right: 16, left: 16, bottom: 10 }
   };
 
   const commonLegendProps = {
@@ -162,9 +162,7 @@ const Visualization = () => {
     isProcessData: boolean = true
   ) => (
     <div className="w-full bg-white p-2 rounded-lg shadow-sm">
-      <h3 className="text-lg font-medium mb-4 text-gray-800 text-center">
-        {title}
-      </h3>
+      <h3 className="text-lg font-medium text-gray-800 text-center">{title}</h3>
       <div style={{ width: '100%', height: 400 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
@@ -192,23 +190,6 @@ const Visualization = () => {
             >
               <LabelList dataKey={dataKey} position="top" />
             </Bar>
-            <text
-              x="50%"
-              y={350}
-              textAnchor="middle"
-              fill="#666"
-              fontSize="16"
-              fontWeight={600}
-            >
-              Drag the slider above to zoom and view specific time ranges
-            </text>
-            <Brush
-              dataKey="week_range"
-              height={30}
-              stroke={color}
-              fill="#ffffff"
-              y={300}
-            />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -224,9 +205,10 @@ const Visualization = () => {
           {(!isEmpty(rawData?.['serializer_data_participant']) ||
             !isEmpty(rawData?.['serializer_data_reply'])) && (
             <div className="w-full p-1 rounded-lg shadow-sm">
-              <h3 className="text-lg font-medium my-3 text-gray-800 text-center">
-                Number of Participants and Posts by Topic
-              </h3>
+              <div className="text-lg font-medium text-gray-800 text-center">
+                Number of Posts by Topic
+                {/*Number of Participants and Posts by Topic*/}
+              </div>
               <div style={{ width: '100%', height: 400 }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
@@ -245,21 +227,21 @@ const Visualization = () => {
                     <YAxis tick={{ fontSize: 12 }} />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend {...commonLegendProps} />
-                    <Bar
-                      dataKey="unique_entry_count"
-                      fill={CHART_COLORS.primary}
-                      radius={[4, 4, 0, 0]}
-                      name="Number of Participants"
-                      maxBarSize={40}
-                    >
-                      <LabelList
-                        dataKey={'unique_entry_count'}
-                        position="top"
-                      />
-                    </Bar>
+                    {/*<Bar*/}
+                    {/*  dataKey="unique_entry_count"*/}
+                    {/*  fill={CHART_COLORS.secondary}*/}
+                    {/*  radius={[4, 4, 0, 0]}*/}
+                    {/*  name="Number of Participants"*/}
+                    {/*  maxBarSize={40}*/}
+                    {/*>*/}
+                    {/*  <LabelList*/}
+                    {/*    dataKey={'unique_entry_count'}*/}
+                    {/*    position="top"*/}
+                    {/*  />*/}
+                    {/*</Bar>*/}
                     <Bar
                       dataKey="reply_count"
-                      fill={CHART_COLORS.secondary}
+                      fill={CHART_COLORS.tertiary}
                       radius={[4, 4, 0, 0]}
                       name="Number of Posts"
                       maxBarSize={40}

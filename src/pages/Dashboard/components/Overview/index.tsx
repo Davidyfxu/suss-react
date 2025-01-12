@@ -1,7 +1,6 @@
-import { Card, StatisticProps } from 'antd';
+import { Card } from 'antd';
 import { Col, Row, Statistic, Typography } from 'antd';
 import { useEffect, useState, useRef } from 'react';
-import CountUp from 'react-countup';
 import { useUserStore } from '../../../../stores/userStore';
 import { get_course_overview } from '../../api.ts';
 import {
@@ -14,16 +13,13 @@ import {
 
 const { Title } = Typography;
 
-// const formatter: StatisticProps['formatter'] = (value) => (
-//   <CountUp end={value as number} separator="," />
-// );
-
 const CARD_COLORS = {
   students: '#e8f4ff',
   topics: '#e6fffb',
   replies: '#f6ffed',
   reads: '#fff7e6',
-  likes: '#fff1f0'
+  likes: '#fff1f0',
+  likesNew: '#ffd6e7' // 新增的颜色
 };
 
 // 添加卡片样式
@@ -87,129 +83,119 @@ const Overview = () => {
         }}
         className="transition-height"
       >
-        <div>
-          <Row gutter={[16, 16]}>
-            <Col span={4}>
-              <Card
-                bordered
-                style={{
-                  backgroundColor: CARD_COLORS.students,
-                  ...cardStyle
-                }}
-                className="hover:shadow-lg"
-              >
-                <Statistic
-                  loading={loading}
-                  title={
-                    <span style={{ fontSize: '16px' }}>Number of students</span>
-                  }
-                  value={overview?.number_of_student || 0}
-                  valueStyle={{
-                    fontSize: '28px',
-                    fontWeight: 'bold',
-                    color: '#1890ff'
-                  }}
-                  prefix={<UserOutlined style={{ fontSize: '20px' }} />}
-                />
-              </Card>
-            </Col>
-            <Col span={5}>
-              <Card
-                bordered
-                style={{
-                  backgroundColor: CARD_COLORS.topics,
-                  ...cardStyle
-                }}
-                className="hover:shadow-lg"
-              >
-                <Statistic
-                  loading={loading}
-                  title={
-                    <span style={{ fontSize: '16px' }}>Number of topics</span>
-                  }
-                  value={overview?.number_topics_posted || 0}
-                  valueStyle={{
-                    fontSize: '28px',
-                    fontWeight: 'bold',
-                    color: '#13c2c2'
-                  }}
-                  prefix={<MessageOutlined style={{ fontSize: '20px' }} />}
-                />
-              </Card>
-            </Col>
-            <Col span={5}>
-              <Card
-                bordered
-                style={{
-                  backgroundColor: CARD_COLORS.replies,
-                  ...cardStyle
-                }}
-                className="hover:shadow-lg"
-              >
-                <Statistic
-                  loading={loading}
-                  title={
-                    <span style={{ fontSize: '16px' }}>Number of replies</span>
-                  }
-                  value={overview?.number_entries_posted || 0}
-                  valueStyle={{
-                    fontSize: '28px',
-                    fontWeight: 'bold',
-                    color: '#52c41a'
-                  }}
-                  prefix={<CommentOutlined style={{ fontSize: '20px' }} />}
-                />
-              </Card>
-            </Col>
-            <Col span={5}>
-              <Card
-                bordered
-                style={{
-                  backgroundColor: CARD_COLORS.reads,
-                  ...cardStyle
-                }}
-                className="hover:shadow-lg"
-              >
-                <Statistic
-                  loading={loading}
-                  title={
-                    <span style={{ fontSize: '16px' }}>Number of 'Reads'</span>
-                  }
-                  value={overview?.user_read_number || 0}
-                  valueStyle={{
-                    fontSize: '28px',
-                    fontWeight: 'bold',
-                    color: '#fa8c16'
-                  }}
-                  prefix={<EyeOutlined style={{ fontSize: '20px' }} />}
-                />
-              </Card>
-            </Col>
-            <Col span={5}>
-              <Card
-                bordered
-                style={{
-                  backgroundColor: CARD_COLORS.likes,
-                  ...cardStyle
-                }}
-                className="hover:shadow-lg"
-              >
-                <Statistic
-                  loading={loading}
-                  title={
-                    <span style={{ fontSize: '16px' }}>Number of 'Likes'</span>
-                  }
-                  value={overview?.user_like_number || 0}
-                  valueStyle={{
-                    fontSize: '28px',
-                    fontWeight: 'bold',
-                    color: '#f5222d'
-                  }}
-                  prefix={<LikeOutlined style={{ fontSize: '20px' }} />}
-                />
-              </Card>
-            </Col>
-          </Row>
+        <div className={'flex gap-2 flex-wrap'}>
+          <Card
+            bodyStyle={{ padding: '8px 24px' }}
+            style={{
+              backgroundColor: CARD_COLORS.students,
+              ...cardStyle
+            }}
+            className="hover:shadow-lg"
+          >
+            <Statistic
+              loading={loading}
+              title={
+                <span style={{ fontSize: '16px' }}>Number of students</span>
+              }
+              value={overview?.number_of_student || 0}
+              valueStyle={{
+                fontSize: '28px',
+                fontWeight: 'bold',
+                color: '#1890ff'
+              }}
+              prefix={<UserOutlined style={{ fontSize: '20px' }} />}
+            />
+          </Card>
+
+          <Card
+            bodyStyle={{ padding: '8px 24px' }}
+            style={{
+              backgroundColor: CARD_COLORS.topics,
+              ...cardStyle
+            }}
+            className="hover:shadow-lg"
+          >
+            <Statistic
+              loading={loading}
+              title={<span style={{ fontSize: '16px' }}>Number of topics</span>}
+              value={overview?.number_topics_posted || 0}
+              valueStyle={{
+                fontSize: '28px',
+                fontWeight: 'bold',
+                color: '#13c2c2'
+              }}
+              prefix={<MessageOutlined style={{ fontSize: '20px' }} />}
+            />
+          </Card>
+
+          <Card
+            bodyStyle={{ padding: '8px 24px' }}
+            style={{
+              backgroundColor: CARD_COLORS.replies,
+              ...cardStyle
+            }}
+            className="hover:shadow-lg"
+          >
+            <Statistic
+              loading={loading}
+              title={
+                <span style={{ fontSize: '16px' }}>Number of replies</span>
+              }
+              value={overview?.number_entries_posted || 0}
+              valueStyle={{
+                fontSize: '28px',
+                fontWeight: 'bold',
+                color: '#52c41a'
+              }}
+              prefix={<CommentOutlined style={{ fontSize: '20px' }} />}
+            />
+          </Card>
+
+          <Card
+            bodyStyle={{ padding: '8px 24px' }}
+            style={{
+              backgroundColor: CARD_COLORS.reads,
+              ...cardStyle
+            }}
+            className="hover:shadow-lg"
+          >
+            <Statistic
+              loading={loading}
+              title={
+                <span style={{ fontSize: '16px' }}>Number of 'Reads'</span>
+              }
+              value={overview?.user_read_number || 0}
+              valueStyle={{
+                fontSize: '28px',
+                fontWeight: 'bold',
+                color: '#fa8c16'
+              }}
+              prefix={<EyeOutlined style={{ fontSize: '20px' }} />}
+            />
+          </Card>
+
+          <Card
+            bodyStyle={{ padding: '8px 24px' }}
+            style={{
+              backgroundColor: CARD_COLORS.likes,
+              ...cardStyle
+            }}
+            className="hover:shadow-lg"
+          >
+            <Statistic
+              loading={loading}
+              title={
+                <span style={{ fontSize: '16px' }}>Number of 'Likes'</span>
+              }
+              value={overview?.user_like_number || 0}
+              valueStyle={{
+                fontSize: '28px',
+                fontWeight: 'bold',
+                color: '#f5222d'
+              }}
+              prefix={<LikeOutlined style={{ fontSize: '20px' }} />}
+            />
+          </Card>
         </div>
       </div>
     </div>

@@ -99,7 +99,7 @@ const DiscussionData = () => {
         handleSelect={(v) => setTopic(v)}
       />
       <Alert
-        message="Keep clicking the table header to sort the coloumn in ascending or descending order as you need."
+        message="Click the table header to sort the column (ascending/descending)."
         type="info"
         showIcon
       />
