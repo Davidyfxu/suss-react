@@ -109,17 +109,21 @@ const CheckAssignment = () => {
             <div className={'flex-1'}>
               <h3 className="text-lg font-bold mb-2">Completed Students</h3>
               <Table
+                scroll={{ y: 'calc(100vh - 400px)', x: 300 }}
                 dataSource={result?.detail?.completed_students || []}
                 columns={columns}
                 rowKey="completed_students"
+                pagination={{ pageSize: 500 }}
               />
             </div>
             <div className={'flex-1'}>
               <h3 className="text-lg font-bold mb-2">Not Completed Students</h3>
               <Table
+                scroll={{ y: 'calc(100vh - 400px)', x: 300 }}
                 dataSource={result?.detail?.not_completed_students || []}
                 columns={columns}
                 rowKey="not_completed_students"
+                pagination={{ pageSize: 500 }}
               />
             </div>
           </div>

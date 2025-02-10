@@ -163,7 +163,7 @@ const Visualization = () => {
   ) => (
     <div className="w-full bg-white p-2 rounded-lg shadow-sm">
       <h3 className="text-lg font-medium text-gray-800 text-center">{title}</h3>
-      <div style={{ width: '100%', height: 400 }}>
+      <div style={{ width: '100%', height: 200 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={isProcessData ? processData(data) : data}
@@ -207,9 +207,8 @@ const Visualization = () => {
             <div className="w-full p-1 rounded-lg shadow-sm">
               <div className="text-lg font-medium text-gray-800 text-center">
                 Number of Posts by Topic
-                {/*Number of Participants and Posts by Topic*/}
               </div>
-              <div style={{ width: '100%', height: 400 }}>
+              <div style={{ width: '100%', height: '200px' }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={processData(rawData['serializer_data_participant'])}
@@ -227,18 +226,6 @@ const Visualization = () => {
                     <YAxis tick={{ fontSize: 12 }} />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend {...commonLegendProps} />
-                    {/*<Bar*/}
-                    {/*  dataKey="unique_entry_count"*/}
-                    {/*  fill={CHART_COLORS.secondary}*/}
-                    {/*  radius={[4, 4, 0, 0]}*/}
-                    {/*  name="Number of Participants"*/}
-                    {/*  maxBarSize={40}*/}
-                    {/*>*/}
-                    {/*  <LabelList*/}
-                    {/*    dataKey={'unique_entry_count'}*/}
-                    {/*    position="top"*/}
-                    {/*  />*/}
-                    {/*</Bar>*/}
                     <Bar
                       dataKey="reply_count"
                       fill={CHART_COLORS.tertiary}

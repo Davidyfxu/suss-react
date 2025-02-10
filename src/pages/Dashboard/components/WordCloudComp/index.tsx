@@ -60,35 +60,35 @@ const WordCloudComp: React.FC = () => {
         />
       </div>
 
-      <div className="flex-1 min-h-[500px] bg-gray-50 rounded-xl p-2 border border-gray-100 overflow-hidden">
+      <div className="flex-1 min-h-[500px] bg-gray-50 rounded-xl p-2 border border-gray-100 overflow-hidden flex justify-center items-center">
         {loading ? (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <Spin size="large" />
-          </div>
+          <Spin size="large" />
         ) : words.length > 0 ? (
-          <ReactWordcloud
-            words={words}
-            options={{
-              enableTooltip: true,
-              deterministic: false,
-              fontSizes: [14, 80],
-              padding: 3,
-              rotations: 2,
-              rotationAngles: [0, 0],
-              scale: 'log',
-              spiral: 'archimedean',
-              transitionDuration: 300,
-              fontFamily: 'Inter, system-ui, sans-serif',
-              colors: [
-                '#1f2937',
-                '#2563eb',
-                '#7c3aed',
-                '#2dd4bf',
-                '#0891b2',
-                '#4f46e5'
-              ]
-            }}
-          />
+          <div className={'w-3/5 h-3/5'}>
+            <ReactWordcloud
+              words={words}
+              options={{
+                enableTooltip: true,
+                deterministic: false,
+                fontSizes: [14, 80],
+                padding: 3,
+                rotations: 2,
+                rotationAngles: [0, 0],
+                scale: 'log',
+                spiral: 'archimedean',
+                transitionDuration: 300,
+                fontFamily: 'Inter, system-ui, sans-serif',
+                colors: [
+                  '#1f2937',
+                  '#2563eb',
+                  '#7c3aed',
+                  '#2dd4bf',
+                  '#0891b2',
+                  '#4f46e5'
+                ]
+              }}
+            />
+          </div>
         ) : (
           <Empty
             className={

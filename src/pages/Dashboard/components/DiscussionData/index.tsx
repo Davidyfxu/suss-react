@@ -42,6 +42,7 @@ const DiscussionData = () => {
     },
     {
       title: '# replies received',
+      width: 150,
       dataIndex: 'replies_received_count',
       key: 'replies',
       render: (replies: any) => replies,
@@ -51,6 +52,7 @@ const DiscussionData = () => {
     {
       title: '# users interacted with',
       dataIndex: 'interacted_users_count',
+      width: 180,
       key: 'interactions',
       render: (interactions: any) => interactions,
       sorter: (a: any, b: any) =>
@@ -58,6 +60,7 @@ const DiscussionData = () => {
     },
     {
       title: '# topics participated',
+      width: 180,
       dataIndex: 'entry_topic_count',
       key: 'topics',
       sorter: (a: any, b: any) => a.entry_topic_count - b.entry_topic_count
@@ -89,9 +92,6 @@ const DiscussionData = () => {
       className={'flex-1 min-w-0 border rounded-lg p-4 h-full'}
       style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
     >
-      <Title level={5} className="m-0">
-        Canvas Discussion Participation
-      </Title>
       <SelectSUSS
         allowClear
         placeholder={'Please select a topic from the course.'}
@@ -104,7 +104,7 @@ const DiscussionData = () => {
         showIcon
       />
       <Table
-        scroll={{ x: 500, y: 720 }}
+        scroll={{ x: 900, y: 'calc(100vh - 320px)' }}
         columns={columns}
         rowKey="user_id"
         dataSource={records}

@@ -18,7 +18,7 @@ const CARD_COLORS = {
   topics: '#e6fffb',
   replies: '#f6ffed',
   reads: '#fff7e6',
-  likes: '#fff1f0',
+  likes: '#e6e6fa',
   likesNew: '#ffd6e7' // 新增的颜色
 };
 
@@ -69,7 +69,7 @@ const Overview = () => {
   }, [courseCode, dateRange]);
 
   return (
-    <div className="p-5 rounded-lg bg-white">
+    <div className="py-1 px-5 bg-white">
       <div className="flex justify-between items-center">
         <Title level={4} className="m-0">
           Course Overview
@@ -191,7 +191,7 @@ const Overview = () => {
               valueStyle={{
                 fontSize: '28px',
                 fontWeight: 'bold',
-                color: '#f5222d'
+                color: '#8a2be2'
               }}
               prefix={<LikeOutlined style={{ fontSize: '20px' }} />}
             />

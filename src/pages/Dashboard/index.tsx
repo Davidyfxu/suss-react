@@ -16,7 +16,7 @@ const Dashboard = () => {
         }
       }}
     >
-      <div className="flex flex-col w-full p-2 bg-gray-100">
+      <div className="flex flex-col w-full bg-gray-100">
         <div id="overview">
           <Overview />
         </div>

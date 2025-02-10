@@ -4,25 +4,27 @@ import WordCloudComp from '../WordCloudComp';
 import SocialInteraction from '../SocialInteraction';
 import CheckAssignment from '../CheckAssignment';
 import { Typography } from 'antd';
-
+import styles from './index.module.scss';
 const { Title } = Typography;
 
 const DashboardTabs = () => {
   return (
     <div className="flex flex-col">
-      <div id="discussion" className={'p-5 rounded-lg bg-white'}>
+      <div id="discussion" className={'py-1 px-5 bg-white'}>
         <Title level={4}>Discussion Participation</Title>
-        <div className="flex gap-4 flex-wrap lg:flex-nowrap h-full">
-          <div className="w-full h-auto lg:w-1/2">
+        <div
+          className={`flex gap-4 flex-wrap lg:flex-nowrap ${styles.discussion}`}
+        >
+          <div className="w-full lg:w-1/2">
             <DiscussionData />
           </div>
-          <div className="w-full lg:w-1/2 h-full">
+          <div className="w-full lg:w-1/2">
             <Visualization />
           </div>
         </div>
       </div>
 
-      <div id="social" className={'p-5 rounded-lg bg-white'}>
+      <div id="social" className={'py-1 px-5 bg-white'}>
         <Title level={4}>Social Interaction</Title>
         <div className="flex flex-col gap-4">
           <SocialInteraction />
@@ -30,7 +32,10 @@ const DashboardTabs = () => {
         </div>
       </div>
 
-      <div id="assignment" className={'p-5 rounded-lg bg-white'}>
+      <div
+        id="assignment"
+        className={`py-1 px-5 bg-white ${styles.discussion}`}
+      >
         <Title level={4}>Check Assignment Progress</Title>
         <CheckAssignment />
       </div>
