@@ -41,8 +41,8 @@ const WordCloudComp: React.FC = () => {
   }, [courseCode, topic, dateRange]);
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6">
-      <div className="w-full lg:w-96 space-y-4">
+    <div className="flex gap-6">
+      <div className="w-96 space-y-4">
         <Typography.Title
           level={4}
           className="!m-0 !text-2xl font-bold text-gray-800"
@@ -60,11 +60,11 @@ const WordCloudComp: React.FC = () => {
         />
       </div>
 
-      <div className="flex-1 min-h-[500px] bg-gray-50 rounded-xl p-2 border border-gray-100 overflow-hidden flex justify-center items-center">
+      <div className="flex-1 min-h-[500px] bg-gray-50 rounded-xl p-2 border border-gray-100 overflow-hidden">
         {loading ? (
           <Spin size="large" />
         ) : words.length > 0 ? (
-          <div className={'w-3/5 h-3/5'}>
+          <div className="w-full h-[500px]">
             <ReactWordcloud
               words={words}
               options={{

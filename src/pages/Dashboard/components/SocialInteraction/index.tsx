@@ -291,7 +291,7 @@ const SocialGraph: React.FC = () => {
         </Button>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex gap-6">
         {/* Left Panel - Controls and Instructions */}
         <div className="w-full lg:w-96 space-y-4">
           <div className="space-y-2">

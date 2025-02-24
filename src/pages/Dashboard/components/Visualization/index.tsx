@@ -8,17 +8,14 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
-  Brush,
   LabelList
 } from 'recharts';
 import { draw_participants_posts } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
-import { Empty, Typography, Select, Space, Spin } from 'antd';
+import { Empty, Spin } from 'antd';
 import { isEmpty } from 'lodash-es';
 import { SelectSUSS } from '../../../../components';
 import SelectStudent from '../../../../components/SelectStudent';
-
-const { Title } = Typography;
 
 interface ChartDataItem {
   topic_title?: string;
@@ -154,61 +151,19 @@ const Visualization = () => {
     iconType: 'circle' as const
   };
 
-  const renderChart = (
-    data: ChartDataItem[],
-    dataKey: 'unique_entry_count' | 'entry_count',
-    title: string,
-    color: string = CHART_COLORS.primary,
-    isProcessData: boolean = true
-  ) => (
-    <div className="w-full bg-white p-2 rounded-lg shadow-sm">
-      <h3 className="text-lg font-medium text-gray-800 text-center">{title}</h3>
-      <div style={{ width: '100%', height: 200 }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={isProcessData ? processData(data) : data}
-            {...commonChartProps}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis
-              dataKey={isProcessData ? 'topic_title' : 'week_range'}
-              angle={-45}
-              textAnchor="end"
-              interval={0}
-              height={100}
-              tick={{ fontSize: 12 }}
-            />
-            <YAxis tick={{ fontSize: 12 }} />
-            <Tooltip content={<CustomTooltip />} />
-            {/*<Legend {...commonLegendProps} />*/}
-            <Bar
-              dataKey={dataKey}
-              fill={color}
-              radius={[4, 4, 0, 0]}
-              name={title}
-              maxBarSize={40}
-            >
-              <LabelList dataKey={dataKey} position="top" />
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  );
-
   return (
-    <div className="h-full border rounded-lg p-2 min-h-[450px]">
+    <div className="h-full border rounded-lg p-2 min-h-[450px] flex flex-col overflow-hidden">
       {!isEmpty(rawData?.['serializer_data_participant']) ||
       !isEmpty(rawData?.['serializer_data_reply']) ||
       !isEmpty(rawData?.['reply_by_week']) ? (
-        <div className="w-full flex flex-col gap-2">
+        <div className="w-full flex flex-col gap-2 h-full overflow-auto">
           {(!isEmpty(rawData?.['serializer_data_participant']) ||
             !isEmpty(rawData?.['serializer_data_reply'])) && (
-            <div className="w-full p-1 rounded-lg shadow-sm">
+            <div className="w-full p-1 rounded-lg shadow-sm flex-1">
               <div className="text-lg font-medium text-gray-800 text-center">
                 Number of Posts by Topic
               </div>
-              <div style={{ width: '100%', height: '200px' }}>
+              <div className="h-[calc(100%-40px)]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={processData(rawData['serializer_data_participant'])}
@@ -221,7 +176,7 @@ const Visualization = () => {
                       textAnchor="end"
                       interval={0}
                       height={100}
-                      tick={{ fontSize: 12 }}
+                      tick={{ fontSize: 10 }}
                     />
                     <YAxis tick={{ fontSize: 12 }} />
                     <Tooltip content={<CustomTooltip />} />
@@ -240,7 +195,7 @@ const Visualization = () => {
               </div>
             </div>
           )}
-          <div className={'w-full flex flex-col gap-2'}>
+          <div className={'w-full flex flex-col gap-2 flex-shrink-0'}>
             <span>Please select the topic title here.</span>
             <SelectSUSS
               placeholder="Select topic title"
@@ -256,16 +211,42 @@ const Visualization = () => {
               handleSelect={(value) => setSelectedUser(value)}
             />
           </div>
-          <Spin spinning={loading} className={'w-full'}>
-            {!isEmpty(rawData?.['reply_by_week']) &&
-              renderChart(
-                rawData['reply_by_week'],
-                'entry_count',
-                'Number of Posts by Week',
-                CHART_COLORS.tertiary,
-                false
-              )}
-          </Spin>
+          {!isEmpty(rawData?.['reply_by_week']) && (
+            <div className="w-full p-1 rounded-lg shadow-sm flex-1">
+              <h3 className="text-lg font-medium text-gray-800 text-center">
+                Number of Posts by Week
+              </h3>
+              <div className="h-[calc(100%-40px)]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={rawData['reply_by_week']}
+                    {...commonChartProps}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis
+                      dataKey={'week_range'}
+                      angle={-45}
+                      textAnchor="end"
+                      interval={0}
+                      height={100}
+                      tick={{ fontSize: 10 }}
+                    />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Bar
+                      dataKey={'entry_count'}
+                      fill={CHART_COLORS.tertiary}
+                      radius={[4, 4, 0, 0]}
+                      name={'Number of Posts by Week'}
+                      maxBarSize={40}
+                    >
+                      <LabelList dataKey={'entry_count'} position="top" />
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <Empty className="mt-32" />

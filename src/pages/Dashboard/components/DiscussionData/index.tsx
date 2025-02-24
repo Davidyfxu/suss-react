@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Alert, Space, Table, Typography } from 'antd';
+import { Alert, Table } from 'antd';
 import { get_discussion_participation } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
 import { SelectSUSS } from '../../../../components';
-const { Title } = Typography;
 
 const DiscussionData = () => {
   const courseCode = useUserStore((state) => state.courseCode);
@@ -109,7 +108,7 @@ const DiscussionData = () => {
         rowKey="user_id"
         dataSource={records}
         loading={loading}
-        pagination={{ pageSize: 500 }}
+        pagination={false}
       />
     </div>
   );

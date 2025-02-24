@@ -105,26 +105,57 @@ const CheckAssignment = () => {
           <p className="text-green-600">{result.reason}</p>
         )}
         {result.result === 0 && (
-          <div className={'w-full flex gap-4 justify-between'}>
-            <div className={'flex-1'}>
-              <h3 className="text-lg font-bold mb-2">Completed Students</h3>
-              <Table
-                scroll={{ y: 'calc(100vh - 400px)', x: 300 }}
-                dataSource={result?.detail?.completed_students || []}
-                columns={columns}
-                rowKey="completed_students"
-                pagination={{ pageSize: 500 }}
-              />
+          <div>
+            <div className={'mb-2 text-lg'}>
+              Based on inputs,{' '}
+              <span className="text-green-600 font-bold bg-amber-200 p-1 rounded">
+                {result?.detail?.completed_students?.length || 0}
+              </span>{' '}
+              out of{' '}
+              <span className="text-red-600 font-bold">
+                {(result?.detail?.completed_students?.length || 0) +
+                  (result?.detail?.not_completed_students?.length || 0)}
+              </span>{' '}
+              students have posted replies according to requirements.
             </div>
-            <div className={'flex-1'}>
-              <h3 className="text-lg font-bold mb-2">Not Completed Students</h3>
-              <Table
-                scroll={{ y: 'calc(100vh - 400px)', x: 300 }}
-                dataSource={result?.detail?.not_completed_students || []}
-                columns={columns}
-                rowKey="not_completed_students"
-                pagination={{ pageSize: 500 }}
-              />
+
+            <div className={'w-full flex gap-4 justify-between'}>
+              <div className={'flex-1'}>
+                <h3 className="text-lg font-bold mb-2">Completed Students</h3>
+                <div>
+                  Below table shows the{' '}
+                  <span className="text-green-600 font-bold">
+                    {result?.detail?.completed_students?.length}
+                  </span>{' '}
+                  students who have completed.
+                </div>
+                <Table
+                  scroll={{ y: 'calc(100vh - 400px)', x: 300 }}
+                  dataSource={result?.detail?.completed_students || []}
+                  columns={columns}
+                  rowKey="completed_students"
+                  pagination={false}
+                />
+              </div>
+              <div className={'flex-1'}>
+                <h3 className="text-lg font-bold mb-2">
+                  Not Completed Students
+                </h3>
+                <div>
+                  Below table shows the{' '}
+                  <span className="text-red-600 font-bold">
+                    {result?.detail?.not_completed_students?.length}
+                  </span>{' '}
+                  students who have not completed.
+                </div>
+                <Table
+                  scroll={{ y: 'calc(100vh - 400px)', x: 300 }}
+                  dataSource={result?.detail?.not_completed_students || []}
+                  columns={columns}
+                  rowKey="not_completed_students"
+                  pagination={false}
+                />
+              </div>
             </div>
           </div>
         )}
