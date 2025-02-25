@@ -57,11 +57,11 @@ const WordCloudComp: React.FC = () => {
         />
       </div>
 
-      <div className="min-h-[855px] bg-gray-50 rounded-xl p-2 border border-gray-100 overflow-hidden">
+      <div className="flex-1 bg-gray-50 rounded-xl p-2 border border-gray-100 overflow-hidden">
         {loading ? (
           <Spin size="large" />
         ) : words.length > 0 ? (
-          <div className="w-full h-[855px]">
+          <div className="w-full h-full">
             <ReactWordcloud
               words={words}
               options={{

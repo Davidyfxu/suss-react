@@ -230,7 +230,7 @@ const SocialGraph: React.FC = () => {
     }
 
     return (
-      <div className="min-h-[580px]">
+      <div className="flex-1 h-full min-h-[580px]">
         {topic && (
           <div className="text-sm text-gray-600 mb-4 flex flex-col gap-2">
             <span className="font-medium">
@@ -252,13 +252,13 @@ const SocialGraph: React.FC = () => {
             {/*</span>*/}
           </div>
         )}
-        <div ref={networkRef} className={topic ? 'h-[516px]' : 'h-[580px]'} />
+        <div ref={networkRef} className={'h-[580px]'} />
       </div>
     );
   }
 
   return (
-    <div className="flex-1 space-y-2 bg-white rounded-xl shadow-sm">
+    <div className="flex-1 space-y-2 bg-white rounded-xl shadow-sm flex flex-col">
       <div>
         <Paragraph
           ellipsis={{
@@ -330,7 +330,7 @@ const SocialGraph: React.FC = () => {
           />
         </div>
         {/* Right Panel - Network Graph */}
-        <div className="bg-gray-50 rounded-xl shadow-inner p-2 min-h-[600px] border border-gray-100">
+        <div className="flex-1 bg-gray-50 rounded-xl shadow-inner p-2 border border-gray-100">
           {renderSocialNetwork()}
         </div>
       </div>
