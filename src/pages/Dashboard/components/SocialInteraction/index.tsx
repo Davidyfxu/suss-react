@@ -213,7 +213,7 @@ const SocialGraph: React.FC = () => {
   function renderSocialNetwork() {
     if (loading)
       return (
-        <div className="h-full flex items-center justify-center">
+        <div className="flex-1 h-full flex items-center justify-center">
           <Spin size="large" />
         </div>
       );
@@ -222,7 +222,7 @@ const SocialGraph: React.FC = () => {
       return (
         <Empty
           className={
-            'bg-gray-50 flex justify-center items-center flex-col h-full w-full'
+            'flex-1 bg-gray-50 flex justify-center items-center flex-col h-full w-full'
           }
           description={'No data available.'}
         />
@@ -230,7 +230,7 @@ const SocialGraph: React.FC = () => {
     }
 
     return (
-      <div className="h-full flex flex-col">
+      <div className="min-h-[580px]">
         {topic && (
           <div className="text-sm text-gray-600 mb-4 flex flex-col gap-2">
             <span className="font-medium">
@@ -252,24 +252,21 @@ const SocialGraph: React.FC = () => {
             {/*</span>*/}
           </div>
         )}
-        <div ref={networkRef} className="flex-1 max-h-[500px]" />
+        <div ref={networkRef} className={topic ? 'h-[516px]' : 'h-[580px]'} />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 bg-white rounded-xl shadow-sm">
-      {/* Title and Description Section */}
+    <div className="flex-1 space-y-2 bg-white rounded-xl shadow-sm">
       <div>
-        {/*<Title level={5}>*/}
-        {/*  Social Interaction (Social Network Analysis Graph)*/}
-        {/*</Title>*/}
         <Paragraph
           ellipsis={{
             rows: 2,
             expandable: 'collapsible'
           }}
           copyable
+          className={'!mb-0'}
         >
           Social Network Analysis (SNA) is the study of social structures
           through the use of networks and graph theory. In our context, it
@@ -291,10 +288,10 @@ const SocialGraph: React.FC = () => {
         </Button>
       </div>
 
-      <div className="flex gap-6">
+      <div className="flex flex-col gap-2">
         {/* Left Panel - Controls and Instructions */}
-        <div className="w-full lg:w-96 space-y-4">
-          <div className="space-y-2">
+        <div className="w-full space-y-1">
+          <div className="space-y-1">
             <label className="block text-sm font-semibold text-gray-700">
               Please select the topic title here
             </label>
@@ -310,20 +307,21 @@ const SocialGraph: React.FC = () => {
             showIcon
             message="Instructions"
             description={
-              <ol className="list-decimal list-inside space-y-2">
-                <li className="transition-all duration-200 hover:translate-x-1">
+              <ol className="list-decimal list-inside space-y-1">
+                <li className="transition-all duration-200 hover:translate-x-1 pl-2">
+                  {/* 添加 pl-2 来缩小 padding */}
                   Select a topic title from above selection box.
                 </li>
-                <li className="transition-all duration-200 hover:translate-x-1">
+                <li className="transition-all duration-200 hover:translate-x-1 pl-2">
                   Each node represents a user, and node size represents the
                   importance (in-degree centrality) of the node.
                 </li>
-                <li className="transition-all duration-200 hover:translate-x-1">
+                <li className="transition-all duration-200 hover:translate-x-1 pl-2">
                   Each line with an arrow (called edge) represents the
                   connection. Edge arrow direction means replying to, and edge
                   thickness represents interaction level between two users.
                 </li>
-                <li className="transition-all duration-200 hover:translate-x-1">
+                <li className="transition-all duration-200 hover:translate-x-1 pl-2">
                   Hover over the edge to see the exact edge thickness value.
                 </li>
               </ol>
@@ -332,7 +330,7 @@ const SocialGraph: React.FC = () => {
           />
         </div>
         {/* Right Panel - Network Graph */}
-        <div className="flex-1 bg-gray-50 rounded-xl shadow-inner p-6 min-h-[500px] border border-gray-100">
+        <div className="bg-gray-50 rounded-xl shadow-inner p-2 min-h-[600px] border border-gray-100">
           {renderSocialNetwork()}
         </div>
       </div>

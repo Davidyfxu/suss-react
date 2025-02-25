@@ -24,7 +24,7 @@ const DashboardTabs = () => {
 
       <div id="social" className={'py-1 px-5 bg-white'}>
         <Title level={4}>Social Interaction</Title>
-        <div className="flex flex-col gap-4">
+        <div className="flex gap-4">
           <SocialInteraction />
           <WordCloudComp />
         </div>
@@ -32,7 +32,7 @@ const DashboardTabs = () => {
 
       <div
         id="assignment"
-        className={`py-1 px-5 bg-white ${styles.discussion}`}
+        className={`py-2 px-5 bg-white ${styles.discussion}`}
       >
         <Title level={4}>Check Assignment Progress</Title>
         <CheckAssignment />
