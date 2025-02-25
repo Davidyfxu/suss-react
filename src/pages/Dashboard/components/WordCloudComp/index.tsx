@@ -57,13 +57,14 @@ const WordCloudComp: React.FC = () => {
         />
       </div>
 
-      <div className="flex-1 bg-gray-50 rounded-xl p-2 border border-gray-100 overflow-hidden">
+      <div className="flex-1 bg-gray-50 rounded-xl p-2 border border-gray-100 overflow-hidden flex justify-center items-center">
         {loading ? (
           <Spin size="large" />
         ) : words.length > 0 ? (
-          <div className="w-full h-full">
+          <div>
             <ReactWordcloud
               words={words}
+              size={[600, 600]}
               options={{
                 enableTooltip: true,
                 deterministic: false,
