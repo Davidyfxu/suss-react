@@ -200,7 +200,7 @@ const Visualization = () => {
                     />
                     <YAxis tick={{ fontSize: FONT_SIZE }} />
                     <Tooltip content={<CustomTooltip />} />
-                    <Legend {...commonLegendProps} />
+                    {/*<Legend {...commonLegendProps} />*/}
                     <Bar
                       dataKey="reply_count"
                       fill={CHART_COLORS.tertiary}
