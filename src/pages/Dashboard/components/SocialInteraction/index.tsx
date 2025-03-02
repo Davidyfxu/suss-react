@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Network, DataSet } from 'vis-network/standalone';
 import { useUserStore } from '../../../../stores/userStore';
 import { draw_network } from '../../api.ts';
-import { Alert, Button, Empty, Spin, Typography } from 'antd';
+import { Button, Empty, Spin, Typography, Tooltip } from 'antd';
 import { debounce, isEmpty, round } from 'lodash-es';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { SelectSUSS } from '../../../../components';
 
-const { Title, Paragraph } = Typography;
+const { Paragraph } = Typography;
 
 const SocialGraph: React.FC = () => {
   const courseCode = useUserStore((state) => state.courseCode);
@@ -262,7 +262,7 @@ const SocialGraph: React.FC = () => {
       <div>
         <Paragraph
           ellipsis={{
-            rows: 2,
+            rows: 1,
             expandable: 'collapsible'
           }}
           copyable
@@ -277,6 +277,7 @@ const SocialGraph: React.FC = () => {
           evaluate teaching interventions.
         </Paragraph>
         <Button
+          className={'mr-2'}
           onClick={() =>
             window.open(
               'https://visiblenetworklabs.com/guides/social-network-analysis-101/'
@@ -286,49 +287,41 @@ const SocialGraph: React.FC = () => {
         >
           Know more about Social Network Analysis!
         </Button>
+        <Tooltip
+          placement="topLeft"
+          title={
+            <ol className="list-decimal list-inside space-y-1">
+              <li className="transition-all duration-200 hover:translate-x-1 pl-2">
+                {/* 添加 pl-2 来缩小 padding */}
+                Select a topic title from above selection box.
+              </li>
+              <li className="transition-all duration-200 hover:translate-x-1 pl-2">
+                Each node represents a user, and node size represents the
+                importance (in-degree centrality) of the node.
+              </li>
+              <li className="transition-all duration-200 hover:translate-x-1 pl-2">
+                Each line with an arrow (called edge) represents the connection.
+                Edge arrow direction means replying to, and edge thickness
+                represents interaction level between two users.
+              </li>
+              <li className="transition-all duration-200 hover:translate-x-1 pl-2">
+                Hover over the edge to see the exact edge thickness value.
+              </li>
+            </ol>
+          }
+        >
+          <Button icon={<QuestionCircleOutlined />}>Instructions</Button>
+        </Tooltip>
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex-1 flex flex-col gap-2">
         {/* Left Panel - Controls and Instructions */}
-        <div className="w-full space-y-1">
-          <div className="space-y-1">
-            <label className="block text-sm font-semibold text-gray-700">
-              Please select the topic title here
-            </label>
-            <SelectSUSS
-              handleSelect={(v) => setTopic(v)}
-              allowClear
-              value={topic}
-              className="w-full"
-              placeholder="Select topic title"
-            />
-          </div>
-          <Alert
-            showIcon
-            message="Instructions"
-            description={
-              <ol className="list-decimal list-inside space-y-1">
-                <li className="transition-all duration-200 hover:translate-x-1 pl-2">
-                  {/* 添加 pl-2 来缩小 padding */}
-                  Select a topic title from above selection box.
-                </li>
-                <li className="transition-all duration-200 hover:translate-x-1 pl-2">
-                  Each node represents a user, and node size represents the
-                  importance (in-degree centrality) of the node.
-                </li>
-                <li className="transition-all duration-200 hover:translate-x-1 pl-2">
-                  Each line with an arrow (called edge) represents the
-                  connection. Edge arrow direction means replying to, and edge
-                  thickness represents interaction level between two users.
-                </li>
-                <li className="transition-all duration-200 hover:translate-x-1 pl-2">
-                  Hover over the edge to see the exact edge thickness value.
-                </li>
-              </ol>
-            }
-            type="info"
-          />
-        </div>
+        <SelectSUSS
+          handleSelect={(v) => setTopic(v)}
+          allowClear
+          className="w-full"
+          placeholder="Please select the topic title here"
+        />
         {/* Right Panel - Network Graph */}
         <div className="flex-1 bg-gray-50 rounded-xl shadow-inner p-2 border border-gray-100">
           {renderSocialNetwork()}

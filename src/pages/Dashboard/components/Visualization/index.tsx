@@ -12,10 +12,29 @@ import {
 } from 'recharts';
 import { draw_participants_posts } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
-import { Empty, Spin } from 'antd';
+import { Empty } from 'antd';
 import { isEmpty } from 'lodash-es';
 import { SelectSUSS } from '../../../../components';
 import SelectStudent from '../../../../components/SelectStudent';
+const truncateTitle = (title: string, maxLength: number = 25): string => {
+  return title.length > maxLength
+    ? title.substring(0, maxLength) + '...'
+    : title;
+};
+const FONT_SIZE = 10;
+// 添加日期格式化函数
+const formatDateRange = (dateRange: string): string => {
+  if (!dateRange || !dateRange.includes(' - ')) return dateRange;
+
+  const dates = dateRange.split(' - ').map((d) => d.trim());
+  const transform = (date: string) => {
+    const [year = '', month = '', day = ''] = date.split('-');
+    return `${day}/${month}/${year.slice(2)}`;
+  };
+
+  // 返回格式化后的日期范围
+  return `${transform(dates[0])}-${transform(dates[1])}`;
+};
 
 interface ChartDataItem {
   topic_title?: string;
@@ -175,10 +194,11 @@ const Visualization = () => {
                       angle={-45}
                       textAnchor="end"
                       interval={0}
-                      height={100}
-                      tick={{ fontSize: 10 }}
+                      height={50}
+                      tick={{ fontSize: FONT_SIZE }}
+                      tickFormatter={(value) => truncateTitle(value, 10)}
                     />
-                    <YAxis tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: FONT_SIZE }} />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend {...commonLegendProps} />
                     <Bar
@@ -228,10 +248,11 @@ const Visualization = () => {
                       angle={-45}
                       textAnchor="end"
                       interval={0}
-                      height={100}
-                      tick={{ fontSize: 10 }}
+                      height={68}
+                      tick={{ fontSize: FONT_SIZE }}
+                      tickFormatter={(value) => formatDateRange(value)}
                     />
-                    <YAxis tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: FONT_SIZE }} />
                     <Tooltip content={<CustomTooltip />} />
                     <Bar
                       dataKey={'entry_count'}

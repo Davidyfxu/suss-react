@@ -41,18 +41,16 @@ const WordCloudComp: React.FC = () => {
   }, [courseCode, topic, dateRange]);
 
   return (
-    <div className="flex flex-col gap-6 flex-1">
+    <div className="flex flex-col gap-2 flex-1">
       <div>
-        <Typography.Title level={5} className="!m-0">
-          Word Cloud
-        </Typography.Title>
+        <Typography.Title level={5}>Word Cloud</Typography.Title>
         <span className="text-gray-600">
           Please select the topic title to view the Word Cloud
         </span>
         <SelectSUSS
           allowClear
           placeholder={'Please select a topic from the course.'}
-          className={'w-full'}
+          className={'w-full mt-2'}
           handleSelect={(v) => setTopic(v)}
         />
       </div>

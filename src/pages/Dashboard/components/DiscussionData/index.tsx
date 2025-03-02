@@ -103,7 +103,7 @@ const DiscussionData = () => {
         showIcon
       />
       <Table
-        scroll={{ x: 900, y: 'calc(100vh - 320px)' }}
+        scroll={{ x: 900, y: 'max(450px, calc(100vh - 320px))' }}
         columns={columns}
         rowKey="user_id"
         dataSource={records}
