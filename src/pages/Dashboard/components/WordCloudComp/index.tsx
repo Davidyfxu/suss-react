@@ -55,18 +55,18 @@ const WordCloudComp: React.FC = () => {
         />
       </div>
 
-      <div className="flex-1 bg-gray-50 rounded-xl p-2 border border-gray-100 overflow-hidden flex justify-center items-center">
+      <div className="flex-1 bg-white rounded-xl p-2 border border-gray-100 overflow-hidden flex justify-center items-center">
         {loading ? (
           <Spin size="large" />
         ) : words.length > 0 ? (
           <div>
             <ReactWordcloud
               words={words}
-              size={[600, 600]}
+              size={[500, 450]}
               options={{
                 enableTooltip: true,
                 deterministic: false,
-                fontSizes: [14, 80],
+                fontSizes: [12, 80],
                 padding: 3,
                 rotations: 2,
                 rotationAngles: [0, 0],
@@ -88,7 +88,7 @@ const WordCloudComp: React.FC = () => {
         ) : (
           <Empty
             className={
-              'flex-1 bg-gray-50 flex justify-center items-center flex-col h-full w-full'
+              'flex-1 flex justify-center items-center flex-col h-full w-full'
             }
             description={'No data available. Please select a topic.'}
           />

@@ -17,7 +17,7 @@ interface IUserStoreState {
   loginUser: (props: { username: string; password: string }) => Promise<any>;
   init: () => Promise<any>;
   courseCode?: string;
-  setCourseCode?: (code: string) => void;
+  setCourseCode?: (code: string | null) => void;
   dateRange?: Array<string>;
   setDateRange?: (range: string[] | null) => void;
 }

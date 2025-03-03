@@ -89,7 +89,7 @@ const CheckAssignment = () => {
       return (
         <Empty
           className={
-            'flex-1 bg-gray-50 flex justify-center items-center flex-col'
+            'flex-1 bg-white border border-gray-100 rounded-xl flex justify-center items-center flex-col'
           }
           description={'No data available. Please select at least one topic.'}
         />

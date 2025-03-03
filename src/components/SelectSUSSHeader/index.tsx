@@ -1,17 +1,15 @@
-import { Cascader, CascaderProps, DatePicker, GetProp } from 'antd';
+import { DatePicker, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { get_course_options } from './api.ts';
 import { useUserStore } from '../../stores/userStore';
 import { Dayjs } from 'dayjs';
 
-type DefaultOptionType = GetProp<CascaderProps, 'options'>[number];
-
 const SelectSUSSHeader = () => {
   const setCourseCode = useUserStore((state) => state.setCourseCode);
   const courseCode = useUserStore((state) => state.courseCode);
   const setDateRange = useUserStore((state) => state.setDateRange);
-  const [semester, setSemester] = useState('JAN23');
+  const [semester, setSemester] = useState();
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
@@ -65,48 +63,58 @@ const SelectSUSSHeader = () => {
     ];
   });
 
-  const filter = (inputValue: string, path: DefaultOptionType[]) =>
-    path.some(
-      (option) =>
-        (option.label as string)
-          .toLowerCase()
-          .indexOf(inputValue.toLowerCase()) > -1
-    );
+  const semesterOptions = [
+    { value: 'JAN23', label: 'JAN23' },
+    { value: 'JUL23', label: 'JUL23' }
+  ];
+
+  const courseOptions =
+    data?.find?.((v) => v?.value === semester)?.children || [];
+
+  useEffect(() => {
+    setCourseCode?.(null);
+  }, [semester]);
 
   return (
-    <div className={'py-4 flex flex-col gap-4'}>
-      <Cascader
-        className={'w-full'}
-        showSearch={{ filter }}
-        allowClear={false}
-        value={courseCode ? [semester, courseCode] : undefined}
+    <div className={'py-2 flex flex-col gap-2'}>
+      <Select
+        className={'flex-1'}
+        value={semester}
         loading={isLoading}
-        placeholder="Select a Course"
-        options={data}
-        onChange={(v) => {
-          setSemester(v[0]);
-          setCourseCode?.(v[1]);
-        }}
+        allowClear
+        placeholder="Select a Semester"
+        options={semesterOptions}
+        onChange={(value) => setSemester(value)}
       />
-      <div className="flex flex-col gap-2">
-        <DatePicker
-          className="flex-1 w-full"
-          placeholder="Start Date"
-          onChange={handleStartDateChange}
-          value={startDate}
-          allowClear
-          disabledDate={(current) => (endDate ? current > endDate : false)}
+      {semester && (
+        <Select
+          showSearch
+          className={'flex-1'}
+          value={courseCode}
+          loading={isLoading}
+          placeholder="Select a Course"
+          options={courseOptions}
+          onChange={(value) => setCourseCode?.(value)}
         />
+      )}
 
-        <DatePicker
-          className="flex-1 w-full"
-          placeholder="End Date"
-          onChange={handleEndDateChange}
-          value={endDate}
-          allowClear
-          disabledDate={(current) => (startDate ? current < startDate : false)}
-        />
-      </div>
+      <DatePicker
+        className="flex-1 w-full"
+        placeholder="Start Date"
+        onChange={handleStartDateChange}
+        value={startDate}
+        allowClear
+        disabledDate={(current) => (endDate ? current > endDate : false)}
+      />
+
+      <DatePicker
+        className="flex-1 w-full"
+        placeholder="End Date"
+        onChange={handleEndDateChange}
+        value={endDate}
+        allowClear
+        disabledDate={(current) => (startDate ? current < startDate : false)}
+      />
     </div>
   );
 };

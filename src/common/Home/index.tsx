@@ -94,24 +94,11 @@ const Home = (): any => {
         </Dropdown>
         {!collapsed && (
           <h4 className="text-2xl font-bold bg-gradient-to-r from-[#d92d27] to-[#ff6f61] bg-clip-text text-transparent text-center mt-4">
-            Welcome {name}
+            {name}
           </h4>
         )}
-      </div>
-      <SelectSUSSHeader />
-      <Menu
-        mode="inline"
-        selectedKeys={selectItem?.k}
-        items={routers.map((router: any) => ({
-          ...router,
-          onClick: () => navClick({ k: router?.key, label: router?.label })
-        }))}
-      />
-      <div className="flex flex-col gap-2 mt-auto p-4">
-        <Button type="text" onClick={() => setCollapsed(!collapsed)} block>
-          {collapsed ? <RightOutlined /> : <LeftOutlined />}
-        </Button>
         <Button
+          className={'mt-2'}
           type="primary"
           danger
           icon={<LogoutOutlined />}
@@ -119,6 +106,20 @@ const Home = (): any => {
           block
         >
           {!collapsed && 'Logout'}
+        </Button>
+      </div>
+      <SelectSUSSHeader />
+      {/*<Menu*/}
+      {/*  mode="inline"*/}
+      {/*  selectedKeys={selectItem?.k}*/}
+      {/*  items={routers.map((router: any) => ({*/}
+      {/*    ...router,*/}
+      {/*    onClick: () => navClick({ k: router?.key, label: router?.label })*/}
+      {/*  }))}*/}
+      {/*/>*/}
+      <div className="flex flex-col gap-2 mt-auto p-4">
+        <Button type="text" onClick={() => setCollapsed(!collapsed)} block>
+          {collapsed ? <RightOutlined /> : <LeftOutlined />}
         </Button>
       </div>
     </Sider>
@@ -194,8 +195,8 @@ const Home = (): any => {
         <Content
           style={{
             marginTop: 64,
-            minHeight: '100vh',
-            overflow: 'auto'
+            minHeight: '100vh'
+            // overflow: 'auto'
           }}
         >
           <Outlet />

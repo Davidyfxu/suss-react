@@ -230,7 +230,7 @@ const SocialGraph: React.FC = () => {
     }
 
     return (
-      <div className="flex-1 h-full min-h-[580px]">
+      <div className="flex-1 h-full min-h-[400px]">
         {topic && (
           <div className="text-sm text-gray-600 mb-4 flex flex-col gap-2">
             <span className="font-medium">
@@ -252,7 +252,7 @@ const SocialGraph: React.FC = () => {
             {/*</span>*/}
           </div>
         )}
-        <div ref={networkRef} className={'h-[580px]'} />
+        <div ref={networkRef} className={'h-[450px]'} />
       </div>
     );
   }
@@ -323,7 +323,7 @@ const SocialGraph: React.FC = () => {
           placeholder="Please select the topic title here"
         />
         {/* Right Panel - Network Graph */}
-        <div className="flex-1 bg-gray-50 rounded-xl shadow-inner p-2 border border-gray-100">
+        <div className="flex-1 bg-white rounded-xl p-2 border border-gray-100">
           {renderSocialNetwork()}
         </div>
       </div>

@@ -23,7 +23,9 @@ const DashboardTabs = () => {
       </div>
 
       <div id="social" className={'py-1 px-5 bg-white'}>
-        <Title level={4}>Social Interaction</Title>
+        <Title level={4} className={'!mb-1'}>
+          Social Interaction
+        </Title>
         <div className="flex gap-4">
           <SocialInteraction />
           <WordCloudComp />
