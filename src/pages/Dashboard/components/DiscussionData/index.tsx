@@ -3,7 +3,7 @@ import { Alert, Table } from 'antd';
 import { get_discussion_participation } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
 import { SelectSUSS } from '../../../../components';
-
+import './index.css';
 const DiscussionData = () => {
   const courseCode = useUserStore((state) => state.courseCode);
   const dateRange = useUserStore((state) => state.dateRange);
@@ -29,19 +29,21 @@ const DiscussionData = () => {
   const columns = [
     {
       title: 'Name',
+      width: 50,
       dataIndex: 'user_name',
       key: 'name',
       ellipsis: true
     },
     {
       title: '# posts',
+      width: 80,
       dataIndex: 'entry_id_posts',
       key: 'posts',
       sorter: (a: any, b: any) => a.entry_id_posts - b.entry_id_posts
     },
     {
       title: '# replies received',
-      width: 150,
+      ellipsis: true,
       dataIndex: 'replies_received_count',
       key: 'replies',
       render: (replies: any) => replies,
@@ -51,7 +53,7 @@ const DiscussionData = () => {
     {
       title: '# users interacted with',
       dataIndex: 'interacted_users_count',
-      width: 180,
+      ellipsis: true,
       key: 'interactions',
       render: (interactions: any) => interactions,
       sorter: (a: any, b: any) =>
@@ -59,19 +61,21 @@ const DiscussionData = () => {
     },
     {
       title: '# topics participated',
-      width: 180,
+      ellipsis: true,
       dataIndex: 'entry_topic_count',
       key: 'topics',
       sorter: (a: any, b: any) => a.entry_topic_count - b.entry_topic_count
     },
     {
       title: '# reads',
+      width: 75,
       dataIndex: 'entry_read_count',
       key: 'reads',
       sorter: (a: any, b: any) => a.entry_read_count - b.entry_read_count
     },
     {
       title: '# likes',
+      width: 75,
       dataIndex: 'entry_likes_sum',
       key: 'likes',
       sorter: (a: any, b: any) => a.entry_likes_sum - b.entry_likes_sum
@@ -88,7 +92,7 @@ const DiscussionData = () => {
 
   return (
     <div
-      className={'flex-1 min-w-0 border rounded-lg p-4 h-full'}
+      className={'flex-1 min-w-0 border rounded-lg p-2 h-full'}
       style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
     >
       <SelectSUSS
@@ -103,7 +107,7 @@ const DiscussionData = () => {
         showIcon
       />
       <Table
-        scroll={{ x: 900, y: 'max(450px, calc(100vh - 320px))' }}
+        scroll={{ x: 600, y: 'max(450px, calc(100vh - 320px))' }}
         columns={columns}
         rowKey="user_id"
         dataSource={records}
