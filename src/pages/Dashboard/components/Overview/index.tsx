@@ -1,5 +1,5 @@
 import { Card } from 'antd';
-import { Col, Row, Statistic, Typography } from 'antd';
+import { Statistic, Typography } from 'antd';
 import { useEffect, useState, useRef } from 'react';
 import { useUserStore } from '../../../../stores/userStore';
 import { get_course_overview } from '../../api.ts';
@@ -70,11 +70,6 @@ const Overview = () => {
 
   return (
     <div className="py-1 px-5 bg-white">
-      <div className="flex justify-between items-center">
-        <Title level={4} className="m-0">
-          Course Overview
-        </Title>
-      </div>
       <div
         ref={contentRef}
         style={{

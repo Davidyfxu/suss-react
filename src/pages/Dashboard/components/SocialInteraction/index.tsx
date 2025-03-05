@@ -222,7 +222,7 @@ const SocialGraph: React.FC = () => {
       return (
         <Empty
           className={
-            'flex-1 bg-gray-50 flex justify-center items-center flex-col h-full w-full'
+            'flex-1 flex justify-center items-center flex-col h-full w-full'
           }
           description={'No data available.'}
         />
@@ -231,27 +231,16 @@ const SocialGraph: React.FC = () => {
 
     return (
       <div className="flex-1 h-full min-h-[400px]">
-        {topic && (
-          <div className="text-sm text-gray-600 mb-4 flex flex-col gap-2">
-            <span className="font-medium">
-              The density of interaction (network density) is:{' '}
-              {round(density, 3)}
-            </span>
-            <span className="text-xs text-gray-500">
-              Higher interactivity score indicates the discussion is more
-              interactive.
-            </span>
-            {/*<br />*/}
-            {/*<span className="font-medium">*/}
-            {/*  The Clustering Coefficient of selected topic is:{' '}*/}
-            {/*  {round(clustering, 3)}*/}
-            {/*</span>*/}
-            {/*<span className="text-xs text-gray-500">*/}
-            {/*  Higher clustering implies more tightly connected discussions or*/}
-            {/*  communities.*/}
-            {/*</span>*/}
-          </div>
-        )}
+        <Tooltip
+          placement="topRight"
+          title={
+            'Higher interaction density indicates more interactions, vise versa.'
+          }
+        >
+          <span className="font-medium">
+            Interaction density: {round(density, 3)} <QuestionCircleOutlined />
+          </span>
+        </Tooltip>
         <div ref={networkRef} className={'h-[450px]'} />
       </div>
     );

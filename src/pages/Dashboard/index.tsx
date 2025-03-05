@@ -17,7 +17,7 @@ const Dashboard = () => {
       }}
     >
       <div className="flex flex-col w-full bg-gray-100">
-        <div id="overview">
+        <div id="discussion">
           <Overview />
         </div>
         <DashboardTabs />

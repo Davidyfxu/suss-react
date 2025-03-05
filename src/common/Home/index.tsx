@@ -144,33 +144,30 @@ const Home = (): any => {
         alt={''}
         onClick={() => window.open('https://www.suss.edu.sg/')}
       />
-      <Anchor
-        direction="horizontal"
-        targetOffset={60}
-        className={styles.anchorContainer}
-        items={[
-          {
-            key: 'overview',
-            href: '#overview',
-            title: 'Course Overview'
-          },
-          {
-            key: 'discussion',
-            href: '#discussion',
-            title: 'Discussion Participation'
-          },
-          {
-            key: 'social',
-            href: '#social',
-            title: 'Social Interaction'
-          },
-          {
-            key: 'assignment',
-            href: '#assignment',
-            title: 'Assignment Progress'
-          }
-        ]}
-      />
+      {window.location.pathname === '/dashboard/dashboard' && (
+        <Anchor
+          direction="horizontal"
+          targetOffset={60}
+          className={styles.anchorContainer}
+          items={[
+            {
+              key: 'discussion',
+              href: '#discussion',
+              title: 'Discussion Participation'
+            },
+            {
+              key: 'social',
+              href: '#social',
+              title: 'Social Interaction'
+            },
+            {
+              key: 'assignment',
+              href: '#assignment',
+              title: 'Assignment Progress'
+            }
+          ]}
+        />
+      )}
       <div> </div>
     </Header>
   );

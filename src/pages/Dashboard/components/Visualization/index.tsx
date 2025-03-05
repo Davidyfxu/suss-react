@@ -7,7 +7,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend,
   LabelList
 } from 'recharts';
 import { draw_participants_posts } from '../../api.ts';
@@ -208,7 +207,11 @@ const Visualization = () => {
                       name="Number of Posts"
                       maxBarSize={40}
                     >
-                      <LabelList dataKey={'reply_count'} position="top" />
+                      <LabelList
+                        style={{ fill: '#FFF' }}
+                        dataKey={'reply_count'}
+                        position="insideBottom"
+                      />
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
@@ -261,7 +264,11 @@ const Visualization = () => {
                       name={'Number of Posts by Week'}
                       maxBarSize={40}
                     >
-                      <LabelList dataKey={'entry_count'} position="top" />
+                      <LabelList
+                        style={{ fill: '#FFF' }}
+                        dataKey={'entry_count'}
+                        position="insideBottom"
+                      />
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>

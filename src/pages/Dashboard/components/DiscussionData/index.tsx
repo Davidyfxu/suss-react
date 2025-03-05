@@ -43,7 +43,7 @@ const DiscussionData = () => {
     },
     {
       title: '# replies received',
-      ellipsis: true,
+
       dataIndex: 'replies_received_count',
       key: 'replies',
       render: (replies: any) => replies,
@@ -53,7 +53,6 @@ const DiscussionData = () => {
     {
       title: '# users interacted with',
       dataIndex: 'interacted_users_count',
-      ellipsis: true,
       key: 'interactions',
       render: (interactions: any) => interactions,
       sorter: (a: any, b: any) =>
@@ -61,7 +60,6 @@ const DiscussionData = () => {
     },
     {
       title: '# topics participated',
-      ellipsis: true,
       dataIndex: 'entry_topic_count',
       key: 'topics',
       sorter: (a: any, b: any) => a.entry_topic_count - b.entry_topic_count

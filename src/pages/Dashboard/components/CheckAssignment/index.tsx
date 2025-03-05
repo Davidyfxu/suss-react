@@ -165,68 +165,66 @@ const CheckAssignment = () => {
   };
 
   return (
-    <div className="space-y-6 bg-white rounded-xl shadow-sm">
-      <div className="flex flex-col lg:flex-row gap-6">
-        <div className="flex flex-col gap-6 w-full lg:w-96 space-y-4">
-          <Form
-            form={form}
-            layout="vertical"
-            onFinish={handleSubmit}
-            className="space-y-4"
+    <div className="flex flex-row gap-6">
+      <div className="flex flex-col gap-6 max-w-md space-y-4">
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+          className="space-y-4"
+        >
+          <Form.Item
+            label="Please select the topic title to check the assignment completion status."
+            name="option_topics"
+            rules={[
+              { required: true, message: 'Please select at least one topic' }
+            ]}
           >
-            <Form.Item
-              label="Please select the topic title to check the assignment completion status."
-              name="option_topics"
-              rules={[
-                { required: true, message: 'Please select at least one topic' }
-              ]}
-            >
-              <SelectSUSS
-                mode="multiple"
-                placeholder="Multiselect"
-                handleSelect={() => {}}
-                className="w-full"
-              />
-            </Form.Item>
+            <SelectSUSS
+              mode="multiple"
+              placeholder="Multiselect"
+              handleSelect={() => {}}
+              className="w-full"
+            />
+          </Form.Item>
 
-            <Form.Item
-              label="For selected topic(s), how many replies each student is required to post?"
-              name="num"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please enter the minimum number of replies'
-                }
-              ]}
-            >
-              <InputNumber
-                className="w-full"
-                min={1}
-                placeholder="Type a number..."
-                size="large"
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button block type="primary" htmlType="submit" loading={loading}>
-                Check Assignment
-              </Button>
-            </Form.Item>
-          </Form>
+          <Form.Item
+            label="For selected topic(s), how many replies each student is required to post?"
+            name="num"
+            rules={[
+              {
+                required: true,
+                message: 'Please enter the minimum number of replies'
+              }
+            ]}
+          >
+            <InputNumber
+              className="w-full"
+              min={1}
+              placeholder="Type a number..."
+              size="large"
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button block type="primary" htmlType="submit" loading={loading}>
+              Check Assignment
+            </Button>
+          </Form.Item>
+        </Form>
 
-          <Alert
-            description={
-              <>
-                If instructors have requirement that students have to post a
-                certain number of posts in one or more than one discussion
-                topics, this is to facilitate instructors to check which
-                students have posted according to the requirements.
-              </>
-            }
-          />
-        </div>
-
-        {renderAssignmentProgress()}
+        <Alert
+          description={
+            <>
+              If instructors have requirement that students have to post a
+              certain number of posts in one or more than one discussion topics,
+              this is to facilitate instructors to check which students have
+              posted according to the requirements.
+            </>
+          }
+        />
       </div>
+
+      {renderAssignmentProgress()}
     </div>
   );
 };
