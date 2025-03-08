@@ -1,14 +1,5 @@
-import { useEffect, useState } from 'react';
-import {
-  Layout,
-  Menu,
-  Avatar,
-  Dropdown,
-  Button,
-  Anchor,
-  MenuProps
-} from 'antd';
-import { routers } from '../config/routers';
+import { useState } from 'react';
+import { Layout, Avatar, Dropdown, Button, Anchor, MenuProps } from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../stores/userStore';
 import {
@@ -20,7 +11,7 @@ import {
   HomeOutlined
 } from '@ant-design/icons';
 import menuLogo from '../../assets/suss-logo-with-tagline.jpg';
-import { SelectSUSSHeader } from '../../components';
+import { SelectSUSSHeader, VersionSelect } from '../../components';
 import styles from './index.module.scss';
 
 const { Header, Footer, Content, Sider } = Layout;
@@ -54,15 +45,15 @@ const Home = (): any => {
       label: 'Profile',
       icon: <UserSwitchOutlined />,
       onClick: () => navClick({ k: 'profile', label: 'Profile' })
-    },
-
-    {
-      key: '3',
-      danger: true,
-      label: 'Logout',
-      icon: <LogoutOutlined />,
-      onClick: () => handleLogout()
     }
+    //
+    // {
+    //   key: '3',
+    //   danger: true,
+    //   label: 'Logout',
+    //   icon: <LogoutOutlined />,
+    //   onClick: () => handleLogout()
+    // }
   ];
 
   const handleLogout = () => {
@@ -169,7 +160,8 @@ const Home = (): any => {
           ]}
         />
       )}
-      <div> </div>
+      <div></div>
+      {/*<VersionSelect defaultValue={'teacher'} />*/}
     </Header>
   );
   const renderFooter = () => (
@@ -193,7 +185,7 @@ const Home = (): any => {
         <Content
           style={{
             marginTop: 64,
-            minHeight: '100vh'
+            minHeight: '80vh'
             // overflow: 'auto'
           }}
         >

@@ -84,95 +84,13 @@ const CheckAssignment = () => {
     }
   ];
 
-  const renderAssignmentProgress = () => {
-    if (isEmpty(result))
-      return (
-        <Empty
-          className={
-            'flex-1 bg-white border border-gray-100 rounded-xl flex justify-center items-center flex-col'
-          }
-          description={'No data available. Please select at least one topic.'}
-        />
-      );
-
-    return (
-      <div className={'flex-1 rounded-xl p-6 border'}>
-        <Space className={'mb-4'}>
-          <h2 className="text-xl font-bold">Results</h2>
-          <Button onClick={exportToExcel} icon={<DownloadOutlined />} />
-        </Space>
-        {result.result === 1 && (
-          <p className="text-green-600">{result.reason}</p>
-        )}
-        {result.result === 0 && (
-          <div>
-            <div className={'mb-2 text-lg'}>
-              Based on inputs,{' '}
-              <span className="text-green-600 font-bold bg-amber-200 p-1 rounded">
-                {result?.detail?.completed_students?.length || 0}
-              </span>{' '}
-              out of{' '}
-              <span className="text-red-600 font-bold">
-                {(result?.detail?.completed_students?.length || 0) +
-                  (result?.detail?.not_completed_students?.length || 0)}
-              </span>{' '}
-              students have posted replies according to requirements.
-            </div>
-
-            <div className={'w-full flex gap-4 justify-between'}>
-              <div className={'flex-1'}>
-                <h3 className="text-lg font-bold mb-2">Completed Students</h3>
-                <div>
-                  Below table shows the{' '}
-                  <span className="text-green-600 font-bold">
-                    {result?.detail?.completed_students?.length}
-                  </span>{' '}
-                  students who have completed.
-                </div>
-                <Table
-                  scroll={{ y: 'calc(100vh - 400px)', x: 300 }}
-                  dataSource={result?.detail?.completed_students || []}
-                  columns={columns}
-                  rowKey="completed_students"
-                  pagination={false}
-                />
-              </div>
-              <div className={'flex-1'}>
-                <h3 className="text-lg font-bold mb-2">
-                  Not Completed Students
-                </h3>
-                <div>
-                  Below table shows the{' '}
-                  <span className="text-red-600 font-bold">
-                    {result?.detail?.not_completed_students?.length}
-                  </span>{' '}
-                  students who have not completed.
-                </div>
-                <Table
-                  scroll={{ y: 'calc(100vh - 400px)', x: 300 }}
-                  dataSource={result?.detail?.not_completed_students || []}
-                  columns={columns}
-                  rowKey="not_completed_students"
-                  pagination={false}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-        {result.result === 2 && <p className="text-red-600">{result.reason}</p>}
-      </div>
-    );
-  };
-
   return (
-    <div className="flex flex-row gap-6">
-      <div className="flex flex-col gap-6 max-w-md space-y-4">
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleSubmit}
-          className="space-y-4"
-        >
+    <div
+      className="flex flex-row gap-6"
+      style={{ minHeight: 'calc(100vh - 160px)' }}
+    >
+      <div className="w-80 flex flex-col gap-6">
+        <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item
             label="Please select the topic title to check the assignment completion status."
             name="option_topics"
@@ -224,7 +142,82 @@ const CheckAssignment = () => {
         />
       </div>
 
-      {renderAssignmentProgress()}
+      {isEmpty(result) ? (
+        <Empty
+          className={
+            'flex-1 bg-white border border-gray-100 rounded-xl flex justify-center items-center flex-col'
+          }
+          description={'No data available. Please select at least one topic.'}
+        />
+      ) : (
+        <div className={'flex-1 rounded-xl p-6 border'}>
+          <Space className={'mb-4'}>
+            <h2 className="text-xl font-bold">Results</h2>
+            <Button onClick={exportToExcel} icon={<DownloadOutlined />} />
+          </Space>
+          {result.result === 1 && (
+            <p className="text-green-600">{result.reason}</p>
+          )}
+          {result.result === 0 && (
+            <div>
+              <div className={'mb-2 text-lg'}>
+                Based on inputs,{' '}
+                <span className="text-green-600 font-bold bg-amber-200 p-1 rounded">
+                  {result?.detail?.completed_students?.length || 0}
+                </span>{' '}
+                out of{' '}
+                <span className="text-red-600 font-bold">
+                  {(result?.detail?.completed_students?.length || 0) +
+                    (result?.detail?.not_completed_students?.length || 0)}
+                </span>{' '}
+                students have posted replies according to requirements.
+              </div>
+
+              <div className={'w-full flex gap-4 justify-between'}>
+                <div className={'flex-1'}>
+                  <h3 className="text-lg font-bold mb-2">Completed Students</h3>
+                  <div>
+                    Below table shows the{' '}
+                    <span className="text-green-600 font-bold">
+                      {result?.detail?.completed_students?.length}
+                    </span>{' '}
+                    students who have completed.
+                  </div>
+                  <Table
+                    scroll={{ y: 'calc(100vh - 400px)', x: 300 }}
+                    dataSource={result?.detail?.completed_students || []}
+                    columns={columns}
+                    rowKey="completed_students"
+                    pagination={false}
+                  />
+                </div>
+                <div className={'flex-1'}>
+                  <h3 className="text-lg font-bold mb-2">
+                    Not Completed Students
+                  </h3>
+                  <div>
+                    Below table shows the{' '}
+                    <span className="text-red-600 font-bold">
+                      {result?.detail?.not_completed_students?.length}
+                    </span>{' '}
+                    students who have not completed.
+                  </div>
+                  <Table
+                    scroll={{ y: 'calc(100vh - 400px)', x: 300 }}
+                    dataSource={result?.detail?.not_completed_students || []}
+                    columns={columns}
+                    rowKey="not_completed_students"
+                    pagination={false}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+          {result.result === 2 && (
+            <p className="text-red-600">{result.reason}</p>
+          )}
+        </div>
+      )}
     </div>
   );
 };

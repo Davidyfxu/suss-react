@@ -27,7 +27,10 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100">
+    <div
+      className="flex items-center justify-center bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100"
+      style={{ height: 'calc(100vh - 120px)' }}
+    >
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
           Update User
