@@ -2,13 +2,13 @@ import { create } from 'zustand';
 import { message } from 'antd';
 import { init, login, register } from '../../common/api';
 import { isEmpty } from 'lodash-es';
-import { Dayjs } from 'dayjs';
 interface IUserStoreState {
   username: string;
   email: string;
   avatar: string;
   // setUser: (props: { name: string; email: string }) => void;
   loading: boolean;
+  setLoading: (p: boolean) => void;
   registerUser: (props: {
     username: string;
     email: string;
@@ -27,25 +27,19 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
   avatar: '',
   loading: false,
   setUser: (props) => set({ ...props }),
+  setLoading: (p: boolean) => set({ loading: p }),
   setCourseCode: (p) => set({ courseCode: p }),
   setDateRange: (p) => set({ dateRange: p }),
   registerUser: async (props): Promise<any> => {
-    try {
-      localStorage.removeItem('token');
-      set(() => ({ loading: true }));
-      await register({
-        ...props
-      });
-      set(() => ({
-        loading: false
-      }));
-      message.success('register success');
-    } catch (e) {
-      set(() => ({
-        loading: false
-      }));
-      message.error('register error');
-    }
+    localStorage.removeItem('token');
+    set(() => ({ loading: true }));
+    await register({
+      ...props
+    });
+    set(() => ({
+      loading: false
+    }));
+    message.success('register success');
   },
   loginUser: async (props): Promise<any> => {
     try {

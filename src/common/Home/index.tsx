@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Layout,
   Menu,
@@ -69,6 +69,7 @@ const Home = (): any => {
     localStorage.removeItem('token');
     setTimeout(() => window.location.reload(), 300);
   };
+
   const navClick = (props: { k: string; label: string }) => {
     const { k, label } = props;
     navigate(`/dashboard/${k}`);

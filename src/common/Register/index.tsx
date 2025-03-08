@@ -1,29 +1,101 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Checkbox, Form, Input, Spin } from 'antd';
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  Spin,
+  Image,
+  message,
+  Row,
+  Col
+} from 'antd';
+import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useUserStore } from '../../stores/userStore';
 import { useNavigate } from 'react-router-dom';
 import styles from '../Login/index.module.scss';
+import { get_captcha, verify_captcha, refresh_captcha } from '../api.ts';
+
+interface ICaptcha {
+  captcha_key: string;
+  captcha_image: string;
+}
 const Register = () => {
   const [form] = Form.useForm();
   const registerUser = useUserStore((state) => state.registerUser);
   const username = useUserStore((state) => state.username);
   const loading = useUserStore((state) => state.loading);
+  const setLoading = useUserStore((state) => state.setLoading);
   const navigate = useNavigate();
+  const [captcha, setCaptcha] = useState<ICaptcha>({} as ICaptcha);
+
+  const getCaptcha = async (isReset = false) => {
+    try {
+      if (isReset && captcha?.captcha_key) {
+        const res = await refresh_captcha(captcha);
+        setCaptcha(res);
+      } else {
+        const res = await get_captcha({});
+        setCaptcha(res);
+      }
+    } catch (e) {
+      console.error(e);
+      message.error('Failed to load captcha, please refresh the page');
+    }
+  };
+
+  useEffect(() => {
+    void getCaptcha();
+  }, []);
 
   function handleSubmit(): void {
     form
       .validateFields()
-      .then((value) => {
-        const { username, email, password, confirmPwd } = value;
-        if (password !== confirmPwd) return;
-        void registerUser({ username, email, password });
+      .then(async (value) => {
+        const { username, email, password, confirmPwd, captchaInput } = value;
+
+        if (password !== confirmPwd) {
+          message.error('Passwords do not match');
+          return;
+        }
+
+        // Verify captcha before registration
+        try {
+          setLoading(true);
+          if (captcha?.captcha_key) {
+            // First verify the captcha
+            await verify_captcha({
+              captcha_key: captcha.captcha_key,
+              captcha_value: captchaInput
+            });
+            // Only proceed with registration if captcha verification was successful
+            await registerUser({
+              username,
+              email,
+              password
+            });
+            // Navigate to login page after successful registration
+            setTimeout(() => {
+              navigate('/login');
+            }, 500);
+          } else {
+            message.error('Captcha not loaded properly');
+            await getCaptcha(true);
+          }
+        } catch (error) {
+          console.error('Registration error:', error);
+          message.error(
+            `Registration failed. Reason: ${error?.response?.data?.message || error?.message}`
+          );
+          await getCaptcha(true);
+        } finally {
+          setLoading(false);
+        }
       })
-      .then(() =>
-        setTimeout(() => {
-          navigate('/login');
-        }, 500)
-      );
+      .catch((err) => {
+        console.error('Form validation error:', err);
+      });
   }
 
   useEffect(() => {
@@ -97,6 +169,47 @@ const Register = () => {
                   allowClear
                   placeholder="Confirm your password"
                 />
+              </Form.Item>
+              <Form.Item
+                label="Captcha"
+                name="captchaInput"
+                rules={[
+                  { required: true, message: 'Please input the captcha' }
+                ]}
+                extra={
+                  <Row gutter={16} align="middle" style={{ marginTop: 8 }}>
+                    <Col>
+                      {captcha?.captcha_image ? (
+                        <Image
+                          className={'rounded'}
+                          width={160}
+                          height={64}
+                          src={captcha.captcha_image}
+                          preview={false}
+                        />
+                      ) : (
+                        <div
+                          className={
+                            'w-40 h-16 flex justify-center rounded items-center border mb-1'
+                          }
+                        >
+                          <LoadingOutlined />
+                        </div>
+                      )}
+                    </Col>
+                    <Col>
+                      <Button
+                        icon={<ReloadOutlined />}
+                        onClick={() => getCaptcha(true)}
+                        title="Refresh captcha"
+                      >
+                        Can't see clearly? Refresh
+                      </Button>
+                    </Col>
+                  </Row>
+                }
+              >
+                <Input.OTP length={4} />
               </Form.Item>
               <Form.Item
                 wrapperCol={{ offset: 3, span: 21 }}
