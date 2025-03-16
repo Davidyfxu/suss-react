@@ -1,8 +1,12 @@
 import Overview from './components/Overview';
 import DashboardTabs from './components/DashboardTabs';
 import { ConfigProvider } from 'antd';
+import { useUserStore } from '../../stores/userStore';
+import StudentModule from './components/StudentModule';
 
 const Dashboard = () => {
+  const version = useUserStore((state) => state.version);
+
   return (
     <ConfigProvider
       theme={{
@@ -16,12 +20,16 @@ const Dashboard = () => {
         }
       }}
     >
-      <div className="flex flex-col w-full bg-gray-100">
-        <div id="discussion">
-          <Overview />
+      {version === 'Teacher' ? (
+        <div className="flex flex-col w-full bg-gray-100">
+          <div id="discussion">
+            <Overview />
+          </div>
+          <DashboardTabs />
         </div>
-        <DashboardTabs />
-      </div>
+      ) : (
+        <StudentModule></StudentModule>
+      )}
     </ConfigProvider>
   );
 };

@@ -125,7 +125,7 @@ const Home = (): any => {
         left: collapsed ? 80 : 200,
         right: 0,
         zIndex: 2,
-        paddingInline: '16px',
+        paddingInline: '20px',
         transition: 'left 0.2s'
       }}
       className={'bg-white flex justify-between items-center fixed gap-4'}
@@ -160,8 +160,8 @@ const Home = (): any => {
           ]}
         />
       )}
-      <div></div>
-      {/*<VersionSelect defaultValue={'teacher'} />*/}
+      {/*<div></div>*/}
+      <VersionSelect />
     </Header>
   );
   const renderFooter = () => (

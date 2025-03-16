@@ -1,13 +1,14 @@
 import React from 'react';
-import { Radio } from 'antd';
+import { Button, Radio } from 'antd';
+import { useUserStore } from '../../stores/userStore';
 
 interface Option {
   value: string;
   label: string;
 }
 const OPTIONS = [
-  { value: 'teacher', label: 'Teacher' },
-  { value: 'student', label: 'Student' }
+  { value: 'Teacher', label: 'Teacher' },
+  { value: 'Student', label: 'Student' }
 ];
 interface VersionSelectProps {
   options?: Option[];
@@ -17,10 +18,13 @@ interface VersionSelectProps {
 
 const VersionSelect: React.FC<VersionSelectProps> = (props) => {
   const { options = OPTIONS, defaultValue, onChange } = props;
-  return (
+  const version = useUserStore((state) => state.version);
+
+  return version === 'Teacher' ? (
     <Radio.Group
-      defaultValue={defaultValue}
+      defaultValue={defaultValue || version}
       buttonStyle="solid"
+      size={'large'}
       onChange={(e) => onChange && onChange(e.target.value)}
     >
       {options.map((option) => (
@@ -33,6 +37,10 @@ const VersionSelect: React.FC<VersionSelectProps> = (props) => {
         </Radio.Button>
       ))}
     </Radio.Group>
+  ) : (
+    <Button type="primary" size={'large'}>
+      Student
+    </Button>
   );
 };
 
