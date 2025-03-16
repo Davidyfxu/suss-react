@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Radio } from 'antd';
+import { Radio } from 'antd';
 import { useUserStore } from '../../stores/userStore';
 
 interface Option {
@@ -17,30 +17,27 @@ interface VersionSelectProps {
 }
 
 const VersionSelect: React.FC<VersionSelectProps> = (props) => {
-  const { options = OPTIONS, defaultValue, onChange } = props;
-  const version = useUserStore((state) => state.version);
+  const { options = OPTIONS, defaultValue } = props;
+  const initVer = useUserStore((state) => state.initVer);
+  const handleVer = useUserStore((state) => state.handleVer);
 
-  return version === 'Teacher' ? (
+  return (
     <Radio.Group
-      defaultValue={defaultValue || version}
+      defaultValue={defaultValue || initVer}
       buttonStyle="solid"
       size={'large'}
-      onChange={(e) => onChange && onChange(e.target.value)}
+      onChange={(e) => e.target.value && handleVer(e.target.value)}
     >
       {options.map((option) => (
         <Radio.Button
           key={option.value}
           value={option.value}
-          disabled={option?.disabled}
+          disabled={initVer !== 'Teacher' && option.value === 'Teacher'}
         >
           {option.label}
         </Radio.Button>
       ))}
     </Radio.Group>
-  ) : (
-    <Button type="primary" size={'large'}>
-      Student
-    </Button>
   );
 };
 

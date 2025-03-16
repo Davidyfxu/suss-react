@@ -8,7 +8,9 @@ interface IUserStoreState {
   avatar: string;
   // setUser: (props: { name: string; email: string }) => void;
   loading: boolean;
+  initVer: 'Student' | 'Teacher';
   version: 'Student' | 'Teacher';
+  handleVer: (v: 'Student' | 'Teacher') => void;
   setLoading: (p: boolean) => void;
   registerUser: (props: {
     username: string;
@@ -27,6 +29,7 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
   email: '',
   avatar: '',
   loading: false,
+  initVer: 'Teacher',
   version: 'Teacher',
   setUser: (props) => set({ ...props }),
   setLoading: (p: boolean) => set({ loading: p }),
@@ -73,6 +76,7 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
       set(() => ({
         ...res,
         version: res['enrollment_type'].replace(/Enrollment$/, ''),
+        initVer: res['enrollment_type'].replace(/Enrollment$/, ''),
         loading: false
       }));
       return { redirect: isEmpty(res) };
@@ -83,5 +87,6 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
       }));
       return { redirect: true };
     }
-  }
+  },
+  handleVer: (v: 'Teacher' | 'Student') => set({ version: v })
 }));

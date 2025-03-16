@@ -23,6 +23,7 @@ const Home = (): any => {
     label: ''
   });
   const name = useUserStore((state) => state.username);
+  const version = useUserStore((state) => state.version);
   const siderStyle: React.CSSProperties = {
     overflow: 'auto',
     height: '100vh',
@@ -136,30 +137,31 @@ const Home = (): any => {
         alt={''}
         onClick={() => window.open('https://www.suss.edu.sg/')}
       />
-      {window.location.pathname === '/dashboard/dashboard' && (
-        <Anchor
-          direction="horizontal"
-          targetOffset={60}
-          className={styles.anchorContainer}
-          items={[
-            {
-              key: 'discussion',
-              href: '#discussion',
-              title: 'Discussion Participation'
-            },
-            {
-              key: 'social',
-              href: '#social',
-              title: 'Social Interaction'
-            },
-            {
-              key: 'assignment',
-              href: '#assignment',
-              title: 'Assignment Progress'
-            }
-          ]}
-        />
-      )}
+      {window.location.pathname === '/dashboard/dashboard' &&
+        version === 'Teacher' && (
+          <Anchor
+            direction="horizontal"
+            targetOffset={60}
+            className={styles.anchorContainer}
+            items={[
+              {
+                key: 'discussion',
+                href: '#discussion',
+                title: 'Discussion Participation'
+              },
+              {
+                key: 'social',
+                href: '#social',
+                title: 'Social Interaction'
+              },
+              {
+                key: 'assignment',
+                href: '#assignment',
+                title: 'Assignment Progress'
+              }
+            ]}
+          />
+        )}
       {/*<div></div>*/}
       <VersionSelect />
     </Header>
@@ -185,7 +187,8 @@ const Home = (): any => {
         <Content
           style={{
             marginTop: 64,
-            minHeight: '80vh'
+            minHeight: '80vh',
+            backgroundColor: 'white'
             // overflow: 'auto'
           }}
         >
