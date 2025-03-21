@@ -155,9 +155,6 @@ const CheckAssignment = () => {
             <h2 className="text-xl font-bold">Results</h2>
             <Button onClick={exportToExcel} icon={<DownloadOutlined />} />
           </Space>
-          {result.result === 1 && (
-            <p className="text-green-600">{result.reason}</p>
-          )}
           {result.result === 0 && (
             <div>
               <div className={'mb-2 text-lg'}>
@@ -213,7 +210,7 @@ const CheckAssignment = () => {
               </div>
             </div>
           )}
-          {result.result === 2 && (
+          {[1, 2].includes(result.result) && (
             <p className="text-red-600">{result.reason}</p>
           )}
         </div>
