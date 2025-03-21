@@ -211,7 +211,7 @@ const CheckAssignment = () => {
             </div>
           )}
           {[1, 2].includes(result.result) && (
-            <p className="text-red-600">{result.reason}</p>
+            <p className="text-red-600 text-xl">{result.reason}</p>
           )}
         </div>
       )}
