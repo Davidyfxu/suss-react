@@ -27,6 +27,7 @@ const CheckAssignment = () => {
   const handleSubmit = async (values: any) => {
     setLoading(true);
     try {
+      console.log('values', values);
       const params = { ...values, option_course: courseCode };
       dateRange?.[0] && (params['end_date'] = dateRange?.[0]);
       dateRange?.[1] && (params['end_date'] = dateRange?.[1]);
