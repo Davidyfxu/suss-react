@@ -9,6 +9,7 @@ class HttpClient {
   public constructor(config: AxiosRequestConfig) {
     this.api = axios.create({
       ...config,
+      timeout: 10000,
       headers: {
         // Authorization: localStorage.getItem('token'),
         ...config.headers
