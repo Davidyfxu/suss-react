@@ -8,7 +8,9 @@ const storage = localforage.createInstance({
 
 // 创建持久化 provider
 export const localStorageProvider = () => {
-  const map = new Map(JSON.parse(localStorage.getItem('suss-app-cache') || '[]'));
+  const map = new Map(
+    JSON.parse(localStorage.getItem('suss-app-cache') || '[]')
+  );
 
   // 在组件卸载前将数据同步到 localStorage
   window.addEventListener('beforeunload', () => {
@@ -22,6 +24,18 @@ export const localStorageProvider = () => {
   });
 
   return map as Cache;
+};
+
+// 添加清理函数
+export const clearSWRCache = async (): Promise<void> => {
+  // 清空 localStorage 中的缓存
+  localStorage.removeItem('suss-app-cache');
+
+  // 清空 localforage 中的缓存
+  await storage.clear();
+
+  // 如果你需要立即清空内存中的 SWR 缓存，可以调用 mutate 来清除
+  // 需要在使用时传入 mutate 函数
 };
 
 // SWR 全局配置

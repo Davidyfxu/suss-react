@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Form,
   InputNumber,
@@ -27,7 +27,6 @@ const CheckAssignment = () => {
   const handleSubmit = async (values: any) => {
     setLoading(true);
     try {
-      console.log('values', values);
       const params = { ...values, option_course: courseCode };
       dateRange?.[0] && (params['end_date'] = dateRange?.[0]);
       dateRange?.[1] && (params['end_date'] = dateRange?.[1]);
@@ -84,6 +83,13 @@ const CheckAssignment = () => {
       key: 'user_name'
     }
   ];
+
+  useEffect(() => {
+    // Reset form fields
+    form.resetFields();
+    // Clear result data
+    setResult({});
+  }, [courseCode]);
 
   return (
     <div

@@ -13,6 +13,7 @@ import {
 import menuLogo from '../../assets/suss-logo-with-tagline.jpg';
 import { SelectSUSSHeader, VersionSelect } from '../../components';
 import styles from './index.module.scss';
+import { clearSWRCache } from '../../config/swr.ts';
 
 const { Header, Footer, Content, Sider } = Layout;
 const Home = (): any => {
@@ -58,7 +59,8 @@ const Home = (): any => {
   ];
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.clear();
+    clearSWRCache();
     setTimeout(() => window.location.reload(), 300);
   };
 
