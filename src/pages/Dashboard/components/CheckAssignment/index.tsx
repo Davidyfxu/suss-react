@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Form,
   InputNumber,
@@ -6,7 +6,6 @@ import {
   message,
   Table,
   Empty,
-  Typography,
   Space,
   Alert
 } from 'antd';
@@ -43,12 +42,12 @@ const CheckAssignment = () => {
     const workbook = utils.book_new();
     // 准备数据
     const completedStudents = (result?.detail?.completed_students || []).map(
-      (student) => student?.user_name
+      (student: any) => student?.user_name
     );
 
     const notCompletedStudents = (
       result?.detail?.not_completed_students || []
-    ).map((student) => student?.user_name);
+    ).map((student: any) => student?.user_name);
 
     // 确定最大行数
     const maxRows = Math.max(

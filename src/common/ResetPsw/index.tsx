@@ -48,7 +48,11 @@ const ResetPsw = () => {
                   label="Password"
                   name="password"
                   rules={[
-                    { required: true, message: 'Please fill your password' }
+                    { required: true, message: 'Please fill your password' },
+                    {
+                      pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/,
+                      message: 'Password must be at least 8 characters long and contain uppercase, lowercase, numbers, and symbols'
+                    }
                   ]}
                 >
                   <Input.Password
@@ -59,8 +63,17 @@ const ResetPsw = () => {
                 <Form.Item
                   label="Confirm Password"
                   name="confirmPwd"
+                  dependencies={['password']}
                   rules={[
-                    { required: true, message: 'Please confirm your password' }
+                    { required: true, message: 'Please confirm your password' },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(new Error('The two passwords do not match!'));
+                      }
+                    })
                   ]}
                 >
                   <Input.Password

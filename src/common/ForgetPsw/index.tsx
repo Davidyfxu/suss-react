@@ -61,7 +61,7 @@ const ForgetPsw = () => {
           // First verify the captcha
           await verify_captcha({
             captcha_key: captcha.captcha_key,
-            captcha_value: captchaInput
+            captcha_value: captchaInput.toUpperCase()
           });
 
           // Only proceed with password reset request if captcha verification was successful

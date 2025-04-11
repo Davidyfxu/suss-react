@@ -1,6 +1,7 @@
 import { Typography } from 'antd';
 import SocialInteraction from '../SocialInteraction';
 import WordCloudComp from '../WordCloudComp';
+import IdeaTrajectory from '../IdeaTrajectory';
 const { Title } = Typography;
 
 const StudentModule = () => {
@@ -13,6 +14,7 @@ const StudentModule = () => {
         <SocialInteraction />
         <WordCloudComp />
       </div>
+      <IdeaTrajectory></IdeaTrajectory>
     </div>
   );
 };

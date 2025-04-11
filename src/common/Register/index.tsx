@@ -15,6 +15,7 @@ import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useUserStore } from '../../stores/userStore';
 import { useNavigate } from 'react-router-dom';
 import styles from '../Login/index.module.scss';
+import { get } from 'lodash-es';
 import { get_captcha, verify_captcha, refresh_captcha } from '../api.ts';
 
 interface ICaptcha {
@@ -67,7 +68,7 @@ const Register = () => {
             // First verify the captcha
             await verify_captcha({
               captcha_key: captcha.captcha_key,
-              captcha_value: captchaInput
+              captcha_value: captchaInput.toUpperCase()
             });
             // Only proceed with registration if captcha verification was successful
             await registerUser({
@@ -86,7 +87,7 @@ const Register = () => {
         } catch (error) {
           console.error('Registration error:', error);
           message.error(
-            `Registration failed. Reason: ${error?.response?.data?.message || error?.message}`
+            `Registration failed. Reason: ${get(error, 'response.data.message') || get(error, 'message')}`
           );
           await getCaptcha(true);
         } finally {
@@ -150,7 +151,13 @@ const Register = () => {
                 label="Password"
                 name="password"
                 rules={[
-                  { required: true, message: 'Please fill your password' }
+                  { required: true, message: 'Please fill your password' },
+                  {
+                    pattern:
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/,
+                    message:
+                      'Password must be at least 8 characters long and contain uppercase, lowercase, numbers, and symbols'
+                  }
                 ]}
               >
                 <Input.Password
@@ -161,8 +168,19 @@ const Register = () => {
               <Form.Item
                 label="Confirm Password"
                 name="confirmPwd"
+                dependencies={['password']}
                 rules={[
-                  { required: true, message: 'Please confirm your password' }
+                  { required: true, message: 'Please confirm your password' },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('password') === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error('The two passwords do not match!')
+                      );
+                    }
+                  })
                 ]}
               >
                 <Input.Password
