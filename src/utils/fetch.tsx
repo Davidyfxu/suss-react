@@ -18,7 +18,7 @@ class HttpClient {
 
     this.api.interceptors.response.use(
       (response: AxiosResponse) => response.data,
-      (error) => {
+      (error: any) => {
         // Add more error handling logic here.
         throw error;
       }

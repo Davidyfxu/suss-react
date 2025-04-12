@@ -12,10 +12,11 @@ const Profile = () => {
   const handleSubmit = async () => {
     try {
       await form.validateFields();
-      const { username, email, password, confirmPwd } = form.getFieldsValue();
+      const { username, email, password, confirmPwd, last_name } =
+        form.getFieldsValue();
       setLoading(true);
       if (password !== confirmPwd) return;
-      await updateUser({ username, email, password });
+      await updateUser({ username, email, password, last_name });
       setLoading(false);
       message.success('Update user successfully');
       setTimeout(() => window.location.reload(), 1000);
@@ -37,11 +38,11 @@ const Profile = () => {
         </h2>
         <Form name="basic" form={form} layout="vertical" className="space-y-4">
           <Spin spinning={loading}>
-            <Form.Item label="Username" name="username" initialValue={username}>
+            <Form.Item label="UserID" name="username" initialValue={username}>
               <Input
                 prefix={<UserOutlined className="text-gray-400" />}
                 disabled
-                placeholder="Please fill your username"
+                placeholder="Please fill your userId"
                 className="rounded-md"
               />
             </Form.Item>
@@ -54,6 +55,14 @@ const Profile = () => {
                 prefix={<MailOutlined className="text-gray-400" />}
                 allowClear
                 placeholder="Please fill your email"
+                className="rounded-md"
+              />
+            </Form.Item>
+            <Form.Item label="Name" name="last_name">
+              <Input
+                prefix={<UserOutlined className="text-gray-400" />}
+                allowClear
+                placeholder="Please fill your last name"
                 className="rounded-md"
               />
             </Form.Item>

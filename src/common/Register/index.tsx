@@ -54,7 +54,14 @@ const Register = () => {
     form
       .validateFields()
       .then(async (value) => {
-        const { username, email, password, confirmPwd, captchaInput } = value;
+        const {
+          username,
+          email,
+          password,
+          confirmPwd,
+          captchaInput,
+          last_name
+        } = value;
 
         if (password !== confirmPwd) {
           message.error('Passwords do not match');
@@ -74,7 +81,8 @@ const Register = () => {
             await registerUser({
               username,
               email,
-              password
+              password,
+              last_name
             });
             // Navigate to login page after successful registration
             setTimeout(() => {
@@ -125,13 +133,11 @@ const Register = () => {
           >
             <Spin spinning={loading}>
               <Form.Item
-                label="Username"
+                label="UserID"
                 name="username"
-                rules={[
-                  { required: true, message: 'Please fill your username' }
-                ]}
+                rules={[{ required: true, message: 'Please fill your userId' }]}
               >
-                <Input placeholder="Please fill your username" />
+                <Input placeholder="Please fill your userId" />
               </Form.Item>
               <Form.Item
                 label="Email"
@@ -146,7 +152,13 @@ const Register = () => {
               >
                 <Input allowClear placeholder="Please fill your email" />
               </Form.Item>
-
+              <Form.Item
+                label="Name"
+                name="last_name"
+                rules={[{ required: true, message: 'Please fill your name' }]}
+              >
+                <Input placeholder="Please fill your name" />
+              </Form.Item>
               <Form.Item
                 label="Password"
                 name="password"
