@@ -53,7 +53,14 @@ const Login = () => {
                     { required: true, message: 'Please fill your password' }
                   ]}
                 >
-                  <Input.Password placeholder="Please fill your password" />
+                  <Input.Password
+                    placeholder="Please fill your password"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleSubmit();
+                      }
+                    }}
+                  />
                 </Form.Item>
                 <div className={'flex justify-between items-center'}>
                   <Link to={'/forgetPsw'}>

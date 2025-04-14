@@ -7,8 +7,8 @@ interface Option {
   label: string;
 }
 const OPTIONS = [
-  { value: 'Teacher', label: 'Teacher' },
-  { value: 'Student', label: 'Student' }
+  { value: 'Teacher', label: 'Teacher View' },
+  { value: 'Student', label: 'Student View' }
 ];
 interface VersionSelectProps {
   options?: Option[];
