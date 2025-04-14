@@ -1,10 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Network, Edge, Node } from 'vis-network';
 import { DataSet } from 'vis-network/standalone';
 import { Empty, Spin, Typography, Button, Tooltip } from 'antd';
 import { isEmpty } from 'lodash-es';
 import { InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import clsx from 'clsx';
+import { draw_idea_trajectory } from '../../api';
+import { useUserStore } from '../../../../stores/userStore';
 
 const { Paragraph } = Typography;
 
@@ -12,14 +14,13 @@ interface IdeaNode extends Node {
   id: number;
   label: string;
   title?: string;
-  group?: string;
+  type?: string;
+  shape?: string;
 }
 
 interface IdeaEdge extends Edge {
   from: number;
   to: number;
-  arrows?: string;
-  title?: string;
 }
 
 interface IdeaTrajectoryProps {
@@ -29,20 +30,6 @@ interface IdeaTrajectoryProps {
     edges: IdeaEdge[];
   };
 }
-
-const mockData = {
-  nodes: [
-    { id: 1, label: 'Initial Idea', group: 'concept' },
-    { id: 2, label: 'Development', group: 'process' },
-    { id: 3, label: 'Refinement', group: 'process' },
-    { id: 4, label: 'Final Concept', group: 'concept' }
-  ],
-  edges: [
-    { from: 1, to: 2, arrows: 'to', title: 'Develops into' },
-    { from: 2, to: 3, arrows: 'to', title: 'Refines to' },
-    { from: 3, to: 4, arrows: 'to', title: 'Finalizes as' }
-  ]
-};
 
 const options = {
   nodes: {
@@ -55,14 +42,15 @@ const options = {
       strokeColor: '#ffffff'
     },
     color: {
-      background: '#ffffff',
-      border: '#ffffff',
+      background: '#97c2fc', // 节点背景色
+      border: '#648fc9', // 节点边框色
       highlight: {
-        border: '#648fc9',
-        background: '#ffffff'
+        border: '#648fc9', // 选中时的边框色
+        background: '#97c2fc'
       },
       hover: {
-        border: '#648fc9'
+        border: '#648fc9', // 悬停时的边框色
+        background: '#b3d4fc' // 悬停时的背景色
       }
     },
     shape: 'dot',
@@ -76,14 +64,22 @@ const options = {
         drawThreshold: 1,
         maxVisible: 30
       }
+    },
+    size: 20, // 默认节点大小
+    shadow: {
+      enabled: true,
+      color: 'rgba(0,0,0,0.1)',
+      size: 10,
+      x: 0,
+      y: 0
     }
   },
   edges: {
     selectionWidth: 2,
     color: {
       color: '#A9A9A9',
-      highlight: '#648fc9',
-      hover: '#648fc9',
+      highlight: '#648fc9', // 选中时的边颜色
+      hover: '#648fc9', // 悬停时的边颜色
       opacity: 0.7
     },
     smooth: {
@@ -99,7 +95,19 @@ const options = {
   },
   interaction: {
     hover: true,
-    tooltipDelay: 200
+    tooltipDelay: 200,
+    tooltipStyle: {
+      backgroundColor: 'white',
+      border: '1px solid #d9d9d9',
+      borderRadius: '4px',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+      padding: '12px',
+      maxWidth: '300px'
+    },
+    hoverConnectedEdges: true, // 悬停时高亮相连的边
+    multiselect: true, // 允许多选
+    zoomView: true, // 允许缩放
+    dragView: true // 允许拖动
   },
   physics: {
     enabled: true,
@@ -118,18 +126,34 @@ const options = {
   }
 };
 
-const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = ({
-  loading = false,
-  data = mockData
-}) => {
+const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = ({ loading = false }) => {
   const networkRef = useRef<HTMLDivElement>(null);
   const networkInstanceRef = useRef<Network | null>(null);
+  const courseCode = useUserStore((state) => state.courseCode);
+  const [apiData, setApiData] = useState<{
+    nodes: IdeaNode[];
+    edges: IdeaEdge[];
+  } | null>(null);
+  const fetchData = async () => {
+    try {
+      const params = {
+        option_course: courseCode
+      };
+      const response = await draw_idea_trajectory(params);
+      setApiData(response);
+    } catch (error) {
+      console.error('Error fetching idea trajectory data:', error);
+    }
+  };
+  useEffect(() => {
+    courseCode && fetchData();
+  }, [courseCode]);
 
   useEffect(() => {
     if (!networkRef.current) return;
 
-    const nodes = new DataSet<IdeaNode>(data.nodes);
-    const edges = new DataSet<IdeaEdge>(data.edges);
+    const nodes = new DataSet<IdeaNode>(apiData?.nodes || []);
+    const edges = new DataSet<IdeaEdge>(apiData?.edges || []);
 
     networkInstanceRef.current = new Network(
       networkRef.current,
@@ -143,7 +167,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = ({
         networkInstanceRef.current = null;
       }
     };
-  }, [data]);
+  }, [apiData]);
 
   if (loading) {
     return (
@@ -153,7 +177,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = ({
     );
   }
 
-  if (isEmpty(data?.nodes) && isEmpty(data?.edges)) {
+  if (isEmpty(apiData?.nodes) && isEmpty(apiData?.edges)) {
     return (
       <Empty
         className="flex-1 flex justify-center items-center flex-col h-full w-full"

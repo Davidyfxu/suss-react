@@ -25,5 +25,9 @@ export const get_active_topics = (p: any = {}) =>
 
 export const get_student_options = (p: any = {}) =>
   post('/api/discussions/student_options', p);
+
 export const check_assignment = (p: any = {}) =>
   post('/api/discussions/check_assignment', p);
+
+export const draw_idea_trajectory = (p: any = {}) =>
+  post('/api/discussions/no_auth/draw_idea_trajectory', p);
