@@ -20,6 +20,7 @@ const truncateTitle = (title: string, maxLength: number = 25): string => {
     ? title.substring(0, maxLength) + '...'
     : title;
 };
+import clsx from 'clsx';
 const FONT_SIZE = 10;
 // 添加日期格式化函数
 const formatDateRange = (dateRange: string): string => {
@@ -82,8 +83,10 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({
   return null;
 };
 
-const Visualization = () => {
+const Visualization = ({ className }: { className?: string }) => {
   const courseCode = useUserStore((state) => state.courseCode);
+  const version = useUserStore((state) => state.version);
+
   const dateRange = useUserStore((state) => state.dateRange);
   const [loading, setLoading] = useState<boolean>(false);
   const [topic, setTopic] = useState<string>('');
@@ -104,9 +107,20 @@ const Visualization = () => {
         start_date: dateRange?.[0],
         end_date: dateRange?.[1]
       });
-      setData(res);
+      setData(
+        res || {
+          serializer_data_participant: [],
+          serializer_data_reply: [],
+          reply_by_week: []
+        }
+      );
     } catch (err) {
       console.error('Failed to fetch data:', err);
+      setData({
+        serializer_data_participant: [],
+        serializer_data_reply: [],
+        reply_by_week: []
+      });
     } finally {
       setLoading(false);
     }
@@ -114,7 +128,7 @@ const Visualization = () => {
 
   useEffect(() => {
     courseCode && getParticipants();
-  }, [courseCode, topic, selectedUser, dateRange]);
+  }, [courseCode, topic, selectedUser, dateRange, version]);
 
   const processData = (
     participantData: ChartDataItem[] = []
@@ -158,19 +172,18 @@ const Visualization = () => {
   };
 
   const commonChartProps = {
-    width: '100%',
+    width: 100,
     height: 400,
     margin: { top: 10, right: 16, left: 16, bottom: 10 }
   };
 
-  const commonLegendProps = {
-    align: 'right' as const,
-    verticalAlign: 'top' as const,
-    iconType: 'circle' as const
-  };
-
   return (
-    <div className="h-full border rounded-lg p-2 min-h-[450px] flex flex-col overflow-hidden">
+    <div
+      className={clsx(
+        'h-full border rounded-lg p-2 min-h-[450px] flex flex-col overflow-hidden',
+        className
+      )}
+    >
       {!isEmpty(rawData?.['serializer_data_participant']) ||
       !isEmpty(rawData?.['serializer_data_reply']) ||
       !isEmpty(rawData?.['reply_by_week']) ? (
@@ -181,7 +194,7 @@ const Visualization = () => {
               <div className="text-lg font-medium text-gray-800 text-center">
                 Number of Posts by Topic
               </div>
-              <div className="h-[calc(100%-40px)]">
+              <div className="h-[calc(100%-40px)] min-h-[200px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={processData(rawData['serializer_data_participant'])}
@@ -239,7 +252,7 @@ const Visualization = () => {
               <h3 className="text-lg font-medium text-gray-800 text-center">
                 Number of Posts by Week
               </h3>
-              <div className="h-[calc(100%-40px)]">
+              <div className="h-[calc(100%-40px)] min-h-[200px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={rawData['reply_by_week']}
