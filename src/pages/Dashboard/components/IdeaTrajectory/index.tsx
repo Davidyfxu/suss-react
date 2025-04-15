@@ -122,25 +122,25 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
       }
     },
     interaction: {
-      hover: true
+      hover: true,
+      dragNodes: true,
+      hideEdgesOnDrag: false,
+      hideNodesOnDrag: false
     },
     physics: {
       enabled: true,
       solver: 'forceAtlas2Based',
-      forceAtlas2Based: {
-        gravitationalConstant: -26,
-        centralGravity: 0.005,
-        springLength: 230,
-        springConstant: 0.18,
-        damping: 0.3
+      repulsion: {
+        springLength: 500,
+        nodeDistance: 100
       },
       stabilization: {
         enabled: true,
+        fit: true,
         iterations: 1000,
-        updateInterval: 25
-      },
-      maxVelocity: 50,
-      minVelocity: 0.1
+        onlyDynamicEdges: false,
+        updateInterval: 50
+      }
     }
   };
 
@@ -211,7 +211,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
           value={topic}
         />
         {showNodeContent && (
-          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 w-80 bg-white shadow-lg rounded-lg p-4 border border-gray-200 z-10">
+          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-80 bg-white shadow-lg rounded-lg p-4 border border-gray-200 z-10">
             <div className="flex flex-col mb-2">
               <div className="flex items-center space-x-2">
                 <div
@@ -228,7 +228,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
               </div>
             </div>
 
-            <div className="bg-gray-50 p-3 rounded-lg max-h-[300px] overflow-y-auto">
+            <div className="bg-gray-50 p-3 rounded-lg max-h-[calc(100vh-200px)] overflow-y-auto">
               <Typography.Paragraph>
                 {parse(
                   (
