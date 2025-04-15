@@ -112,6 +112,13 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
       scaling: {
         min: 1,
         max: 8
+      },
+      arrows: {
+        to: {
+          enabled: true,
+          scaleFactor: 0.5,
+          type: 'arrow'
+        }
       }
     },
     interaction: {
@@ -189,7 +196,10 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
 
   if (loading) {
     return (
-      <div className="flex-1 h-full flex items-center justify-center">
+      <div
+        className="flex-1 h-full flex items-center justify-center"
+        style={{ minHeight: 'calc(100vh - 160px)' }}
+      >
         <Spin size="large" />
       </div>
     );
@@ -213,22 +223,30 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
           value={topic}
         />
         {showNodeContent && (
-          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 w-64 bg-white shadow-lg rounded-lg p-4 border border-gray-200 z-10">
-            <div className="flex items-center justify-between mb-2">
+          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 w-80 bg-white shadow-lg rounded-lg p-4 border border-gray-200 z-10">
+            <div className="flex flex-col mb-2">
               <div className="flex items-center space-x-2">
                 <div
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: '#97c2fc' }}
                 />
-                <Typography.Text strong>Node ID: {displayNode}</Typography.Text>
+                <Typography.Text strong>
+                  {
+                    apiData?.nodes
+                      ?.find?.((n) => n?.id === displayNode)
+                      ?.label?.split('\n')[0]
+                  }
+                </Typography.Text>
               </div>
             </div>
 
             <div className="bg-gray-50 p-3 rounded-lg max-h-[300px] overflow-y-auto">
               <Typography.Paragraph>
                 {parse(
-                  apiData?.nodes?.find?.((n) => n?.id === displayNode)
-                    ?.hoverContent || ''
+                  (
+                    apiData?.nodes?.find?.((n) => n?.id === displayNode)
+                      ?.hoverContent || ''
+                  ).trim()
                 )}
               </Typography.Paragraph>
             </div>
