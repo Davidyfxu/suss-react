@@ -205,7 +205,11 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
           allowClear
           placeholder={'Please select a topic from the course.'}
           className={'w-full mt-2'}
-          handleSelect={(v) => setTopic(v)}
+          handleSelect={(v) => {
+            setTopic(v);
+            setHoverNode(null);
+            setSelectedNode(null);
+          }}
           value={topic}
         />
         {showNodeContent && (
