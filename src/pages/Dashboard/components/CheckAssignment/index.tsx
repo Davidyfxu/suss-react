@@ -92,10 +92,10 @@ const CheckAssignment = () => {
 
   return (
     <div
-      className="flex flex-row gap-6"
+      className="flex flex-col md:flex-row gap-6"
       style={{ minHeight: 'calc(100vh - 160px)' }}
     >
-      <div className="w-80 flex flex-col gap-6">
+      <div className="w-full md:w-80 flex flex-col gap-6">
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item
             label="Please select the topic title to check the assignment completion status."
@@ -176,7 +176,11 @@ const CheckAssignment = () => {
                 students have posted replies according to requirements.
               </div>
 
-              <div className={'w-full flex gap-4 justify-between'}>
+              <div
+                className={
+                  'w-full flex gap-4 justify-between flex-col xl:flex-row'
+                }
+              >
                 <div className={'flex-1'}>
                   <h3 className="text-lg font-bold mb-2">Completed Students</h3>
                   <div>

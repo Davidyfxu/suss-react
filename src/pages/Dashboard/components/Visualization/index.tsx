@@ -21,6 +21,7 @@ const truncateTitle = (title: string, maxLength: number = 25): string => {
     : title;
 };
 import clsx from 'clsx';
+import { useResponsive } from 'ahooks';
 const FONT_SIZE = 10;
 // 添加日期格式化函数
 const formatDateRange = (dateRange: string): string => {
@@ -86,9 +87,8 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({
 const Visualization = ({ className }: { className?: string }) => {
   const courseCode = useUserStore((state) => state.courseCode);
   const version = useUserStore((state) => state.version);
-
+  const responsive = useResponsive();
   const dateRange = useUserStore((state) => state.dateRange);
-  const [loading, setLoading] = useState<boolean>(false);
   const [topic, setTopic] = useState<string>('');
   const [selectedUser, setSelectedUser] = useState<number | null>();
   const [rawData, setData] = useState<RawData>({
@@ -99,7 +99,6 @@ const Visualization = ({ className }: { className?: string }) => {
 
   const getParticipants = async () => {
     try {
-      setLoading(true);
       const res = await draw_participants_posts({
         option_course: courseCode,
         topic_title: topic,
@@ -121,8 +120,6 @@ const Visualization = ({ className }: { className?: string }) => {
         serializer_data_reply: [],
         reply_by_week: []
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -180,7 +177,7 @@ const Visualization = ({ className }: { className?: string }) => {
   return (
     <div
       className={clsx(
-        'h-full border rounded-lg p-2 min-h-[450px] flex flex-col overflow-hidden',
+        'h-full border rounded-lg p-2 min-h-[450px] min-w-80 flex flex-col overflow-hidden',
         className
       )}
     >
@@ -194,7 +191,12 @@ const Visualization = ({ className }: { className?: string }) => {
               <div className="text-lg font-medium text-gray-800 text-center">
                 Number of Posts by Topic
               </div>
-              <div className="h-[calc(100%-40px)] min-h-[200px]">
+              <div
+                className={clsx(
+                  'min-h-[200px]',
+                  responsive.md ? 'h-[calc(100%-40px)]' : 'h-80'
+                )}
+              >
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={processData(rawData['serializer_data_participant'])}
@@ -212,7 +214,6 @@ const Visualization = ({ className }: { className?: string }) => {
                     />
                     <YAxis tick={{ fontSize: FONT_SIZE }} />
                     <Tooltip content={<CustomTooltip />} />
-                    {/*<Legend {...commonLegendProps} />*/}
                     <Bar
                       dataKey="reply_count"
                       fill={CHART_COLORS.tertiary}
@@ -252,8 +253,13 @@ const Visualization = ({ className }: { className?: string }) => {
               <h3 className="text-lg font-medium text-gray-800 text-center">
                 Number of Posts by Week
               </h3>
-              <div className="h-[calc(100%-40px)] min-h-[200px]">
-                <ResponsiveContainer width="100%" height="100%">
+              <div
+                className={clsx(
+                  'min-h-[200px]',
+                  responsive.lg ? 'h-[calc(100%-40px)]' : 'h-80'
+                )}
+              >
+                <ResponsiveContainer width="100%" height={'100%'}>
                   <BarChart
                     data={rawData['reply_by_week']}
                     {...commonChartProps}
