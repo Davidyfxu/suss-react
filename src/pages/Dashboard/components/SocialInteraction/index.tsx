@@ -145,17 +145,16 @@ const SocialGraph: React.FC = () => {
         },
         physics: {
           enabled: true,
-          solver: 'forceAtlas2Based',
-          forceAtlas2Based: {
-            gravitationalConstant: -26,
-            centralGravity: 0.005,
-            springLength: 230,
-            springConstant: 0.18
+          solver: 'repulsion',
+          repulsion: {
+            springLength: 50
           },
           stabilization: {
             enabled: true,
+            fit: true,
             iterations: 1000,
-            updateInterval: 25
+            onlyDynamicEdges: false,
+            updateInterval: 50
           }
         },
         groups: {
@@ -167,7 +166,10 @@ const SocialGraph: React.FC = () => {
         },
         interaction: {
           hover: true,
-          tooltipDelay: 200
+          tooltipDelay: 200,
+          dragNodes: true,
+          hideEdgesOnDrag: false,
+          hideNodesOnDrag: false
         }
       };
 
