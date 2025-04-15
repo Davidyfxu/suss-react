@@ -194,17 +194,6 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
   const showNodeContent = isNumber(hoverNode) || isNumber(selectedNode);
   const displayNode = selectedNode || hoverNode;
 
-  if (loading) {
-    return (
-      <div
-        className="flex-1 h-full flex items-center justify-center"
-        style={{ minHeight: 'calc(100vh - 160px)' }}
-      >
-        <Spin size="large" />
-      </div>
-    );
-  }
-
   return (
     <div
       className={clsx('flex-1 space-y-2 bg-white flex flex-col relative')}
@@ -296,9 +285,13 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
         </Tooltip>
       </div>
 
-      <div className="flex-1 bg-white rounded-xl p-2 border border-gray-100">
+      <Spin
+        size="large"
+        spinning={loading}
+        className="flex-1 rounded-xl p-2 border border-gray-100"
+      >
         <div ref={networkRef} className="h-[600px]" />
-      </div>
+      </Spin>
     </div>
   );
 };
