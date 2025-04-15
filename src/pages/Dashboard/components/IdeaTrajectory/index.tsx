@@ -1,19 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Network, Edge, Node } from 'vis-network';
 import { DataSet } from 'vis-network/standalone';
-import { Empty, Spin, Typography, Button, Tooltip } from 'antd';
-import { isEmpty } from 'lodash-es';
+import { Spin, Typography, Button, Tooltip } from 'antd';
+import { isNumber } from 'lodash-es';
 import { InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import clsx from 'clsx';
 import { draw_idea_trajectory } from '../../api';
 import { useUserStore } from '../../../../stores/userStore';
+import parse from 'html-react-parser';
+import SelectSUSS from '../../../../components/SelectSUSS';
 
 const { Paragraph } = Typography;
 
 interface IdeaNode extends Node {
   id: number;
   label: string;
-  title?: string;
+  hoverContent?: string;
   type?: string;
   shape?: string;
 }
@@ -23,110 +25,12 @@ interface IdeaEdge extends Edge {
   to: number;
 }
 
-interface IdeaTrajectoryProps {
-  loading?: boolean;
-  data?: {
-    nodes: IdeaNode[];
-    edges: IdeaEdge[];
-  };
-}
-
-const options = {
-  nodes: {
-    borderWidthSelected: 5,
-    font: {
-      size: 10,
-      face: 'Tahoma',
-      color: '#333333',
-      strokeWidth: 2,
-      strokeColor: '#ffffff'
-    },
-    color: {
-      background: '#97c2fc', // 节点背景色
-      border: '#648fc9', // 节点边框色
-      highlight: {
-        border: '#648fc9', // 选中时的边框色
-        background: '#97c2fc'
-      },
-      hover: {
-        border: '#648fc9', // 悬停时的边框色
-        background: '#b3d4fc' // 悬停时的背景色
-      }
-    },
-    shape: 'dot',
-    scaling: {
-      min: 10,
-      max: 30,
-      label: {
-        enabled: true,
-        min: 8,
-        max: 16,
-        drawThreshold: 1,
-        maxVisible: 30
-      }
-    },
-    size: 20, // 默认节点大小
-    shadow: {
-      enabled: true,
-      color: 'rgba(0,0,0,0.1)',
-      size: 10,
-      x: 0,
-      y: 0
-    }
-  },
-  edges: {
-    selectionWidth: 2,
-    color: {
-      color: '#A9A9A9',
-      highlight: '#648fc9', // 选中时的边颜色
-      hover: '#648fc9', // 悬停时的边颜色
-      opacity: 0.7
-    },
-    smooth: {
-      enabled: true,
-      type: 'continuous',
-      forceDirection: 'none',
-      roundness: 0.5
-    },
-    scaling: {
-      min: 1,
-      max: 8
-    }
-  },
-  interaction: {
-    hover: true,
-    tooltipDelay: 200,
-    tooltipStyle: {
-      backgroundColor: 'white',
-      border: '1px solid #d9d9d9',
-      borderRadius: '4px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-      padding: '12px',
-      maxWidth: '300px'
-    },
-    hoverConnectedEdges: true, // 悬停时高亮相连的边
-    multiselect: true, // 允许多选
-    zoomView: true, // 允许缩放
-    dragView: true // 允许拖动
-  },
-  physics: {
-    enabled: true,
-    solver: 'forceAtlas2Based',
-    forceAtlas2Based: {
-      gravitationalConstant: -26,
-      centralGravity: 0.005,
-      springLength: 230,
-      springConstant: 0.18
-    },
-    stabilization: {
-      enabled: true,
-      iterations: 1000,
-      updateInterval: 25
-    }
-  }
-};
-
-const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = ({ loading = false }) => {
+interface IdeaTrajectoryProps {}
+const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
+  const [loading, setLoading] = useState(false);
+  const [hoverNode, setHoverNode] = useState<number | null>(null);
+  const [selectedNode, setSelectedNode] = useState<number | null>(null);
+  const [topic, setTopic] = useState<string | null>(null);
   const networkRef = useRef<HTMLDivElement>(null);
   const networkInstanceRef = useRef<Network | null>(null);
   const courseCode = useUserStore((state) => state.courseCode);
@@ -134,20 +38,104 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = ({ loading = false }) => {
     nodes: IdeaNode[];
     edges: IdeaEdge[];
   } | null>(null);
+
   const fetchData = async () => {
     try {
+      setLoading(true);
       const params = {
-        option_course: courseCode
+        option_course: courseCode,
+        topic_title: topic
       };
       const response = await draw_idea_trajectory(params);
       setApiData(response);
     } catch (error) {
       console.error('Error fetching idea trajectory data:', error);
+    } finally {
+      setLoading(false);
     }
   };
+
   useEffect(() => {
-    courseCode && fetchData();
-  }, [courseCode]);
+    courseCode && topic && fetchData();
+  }, [topic, courseCode]);
+
+  const options = {
+    nodes: {
+      borderWidthSelected: 5,
+      font: {
+        size: 10,
+        face: 'Tahoma',
+        color: '#333333',
+        strokeWidth: 2,
+        strokeColor: '#ffffff'
+      },
+      color: {
+        background: '#97c2fc',
+        border: '#648fc9',
+        highlight: {
+          border: '#648fc9',
+          background: '#97c2fc'
+        },
+        hover: {
+          border: '#648fc9',
+          background: '#b3d4fc'
+        }
+      },
+      shape: 'dot',
+      scaling: {
+        min: 10,
+        max: 30,
+        label: {
+          enabled: true,
+          min: 8,
+          max: 16,
+          drawThreshold: 1,
+          maxVisible: 30
+        }
+      },
+      size: 20
+    },
+    edges: {
+      selectionWidth: 2,
+      color: {
+        color: '#A9A9A9',
+        highlight: '#648fc9',
+        hover: '#648fc9',
+        opacity: 0.7
+      },
+      smooth: {
+        enabled: true,
+        type: 'continuous',
+        forceDirection: 'none',
+        roundness: 0.5
+      },
+      scaling: {
+        min: 1,
+        max: 8
+      }
+    },
+    interaction: {
+      hover: true
+    },
+    physics: {
+      enabled: true,
+      solver: 'forceAtlas2Based',
+      forceAtlas2Based: {
+        gravitationalConstant: -26,
+        centralGravity: 0.005,
+        springLength: 230,
+        springConstant: 0.18,
+        damping: 0.3
+      },
+      stabilization: {
+        enabled: true,
+        iterations: 1000,
+        updateInterval: 25
+      },
+      maxVelocity: 50,
+      minVelocity: 0.1
+    }
+  };
 
   useEffect(() => {
     if (!networkRef.current) return;
@@ -161,6 +149,33 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = ({ loading = false }) => {
       options
     );
 
+    // 监听节点悬停事件
+    networkInstanceRef.current.on('hoverNode', function (params) {
+      setHoverNode(params.node);
+    });
+
+    // 监听节点失去悬停事件
+    networkInstanceRef.current.on('blurNode', function (params) {
+      if (params.node !== selectedNode) {
+        setHoverNode(null);
+      }
+    });
+
+    // // 监听节点选中事件
+    networkInstanceRef.current.on('selectNode', function (params) {
+      console.log(params);
+      if (params.nodes.length > 0) {
+        setSelectedNode(params.nodes[0]);
+      } else {
+        setSelectedNode(null);
+      }
+    });
+
+    // // 监听取消选中事件
+    networkInstanceRef.current.on('deselectNode', function () {
+      setSelectedNode(null);
+    });
+
     return () => {
       if (networkInstanceRef.current) {
         networkInstanceRef.current.destroy();
@@ -168,6 +183,9 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = ({ loading = false }) => {
       }
     };
   }, [apiData]);
+
+  const showNodeContent = isNumber(hoverNode) || isNumber(selectedNode);
+  const displayNode = selectedNode || hoverNode;
 
   if (loading) {
     return (
@@ -177,21 +195,41 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = ({ loading = false }) => {
     );
   }
 
-  if (isEmpty(apiData?.nodes) && isEmpty(apiData?.edges)) {
-    return (
-      <Empty
-        className="flex-1 flex justify-center items-center flex-col h-full w-full"
-        description="No idea trajectory data available."
-      />
-    );
-  }
-
   return (
     <div
-      className={clsx('flex-1 space-y-2 bg-white flex flex-col')}
+      className={clsx('flex-1 space-y-2 bg-white flex flex-col relative')}
       style={{ minHeight: 'calc(100vh - 160px)' }}
     >
       <div>
+        <SelectSUSS
+          allowClear
+          placeholder={'Please select a topic from the course.'}
+          className={'w-full mt-2'}
+          handleSelect={(v) => setTopic(v)}
+          value={topic}
+        />
+        {showNodeContent && (
+          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 w-64 bg-white shadow-lg rounded-lg p-4 border border-gray-200 z-10">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center space-x-2">
+                <div
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: '#97c2fc' }}
+                />
+                <Typography.Text strong>Node ID: {displayNode}</Typography.Text>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 p-3 rounded-lg max-h-[300px] overflow-y-auto">
+              <Typography.Paragraph>
+                {parse(
+                  apiData?.nodes?.find?.((n) => n?.id === displayNode)
+                    ?.hoverContent || ''
+                )}
+              </Typography.Paragraph>
+            </div>
+          </div>
+        )}
         <Paragraph
           ellipsis={{
             rows: 1,
