@@ -56,7 +56,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
   };
 
   useEffect(() => {
-    courseCode && topic && fetchData();
+    courseCode && fetchData();
   }, [topic, courseCode]);
 
   const options = {
@@ -170,7 +170,6 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
 
     // // 监听节点选中事件
     networkInstanceRef.current.on('selectNode', function (params) {
-      console.log(params);
       if (params.nodes.length > 0) {
         setSelectedNode(params.nodes[0]);
       } else {
@@ -290,7 +289,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
         spinning={loading}
         className="flex-1 rounded-xl p-2 border border-gray-100"
       >
-        <div ref={networkRef} className="h-[600px]" />
+        <div ref={networkRef} className="h-[550px]" />
       </Spin>
     </div>
   );

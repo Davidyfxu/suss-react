@@ -268,13 +268,13 @@ const VisualizationStudent = ({ className }: { className?: string }) => {
   return (
     <div
       className={clsx(
-        'h-full border rounded-lg p-4 min-h-[450px] overflow-hidden',
+        'h-full border rounded-lg pt-2 px-4 min-h-[450px] overflow-hidden',
         className
       )}
     >
       {hasData ? (
         <div className="w-full h-full flex flex-col">
-          <div className="grid grid-cols-2 gap-4 flex-1">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1">
             {(!isEmpty(rawData?.['serializer_data_participant']) ||
               !isEmpty(rawData?.['serializer_data_reply'])) &&
               renderChart(

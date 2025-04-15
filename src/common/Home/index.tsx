@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Layout, Avatar, Dropdown, Button, Anchor, MenuProps } from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../stores/userStore';
@@ -14,15 +14,12 @@ import menuLogo from '../../assets/suss-logo-with-tagline.jpg';
 import { SelectSUSSHeader, VersionSelect } from '../../components';
 import styles from './index.module.scss';
 import { clearSWRCache } from '../../config/swr.ts';
+import { useResponsive } from 'ahooks';
 
 const { Header, Footer, Content, Sider } = Layout;
 const Home = (): any => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
-  const [selectItem, setSelectItem] = useState<{ k: string[]; label: string }>({
-    k: [],
-    label: ''
-  });
   const name = useUserStore((state) => state.username);
   const version = useUserStore((state) => state.version);
   const siderStyle: React.CSSProperties = {
@@ -33,6 +30,41 @@ const Home = (): any => {
     top: 0,
     bottom: 0,
     zIndex: 1
+  };
+  const responsive = useResponsive();
+
+  useEffect(() => {
+    setCollapsed(!responsive.lg);
+  }, [responsive.lg]);
+
+  const getHeaderItems = () => {
+    const items = [
+      {
+        key: 'discussion',
+        href: '#discussion',
+        title: 'Discussion Participation'
+      },
+      {
+        key: 'social',
+        href: '#social',
+        title: 'Social Interaction'
+      },
+      version === 'Teacher'
+        ? {
+            key: 'assignment',
+            href: '#assignment',
+            title: 'Assignment Progress'
+          }
+        : {
+            key: 'trajectory',
+            href: '#trajectory',
+            title: 'Idea Trajectory'
+          }
+    ];
+
+    return responsive.xl
+      ? items
+      : items.map((v) => ({ ...v, title: v.title.split(' ')[1] }));
   };
 
   const items: MenuProps['items'] = [
@@ -48,14 +80,6 @@ const Home = (): any => {
       icon: <UserSwitchOutlined />,
       onClick: () => navClick({ k: 'profile', label: 'Profile' })
     }
-    //
-    // {
-    //   key: '3',
-    //   danger: true,
-    //   label: 'Logout',
-    //   icon: <LogoutOutlined />,
-    //   onClick: () => handleLogout()
-    // }
   ];
 
   const handleLogout = () => {
@@ -65,9 +89,8 @@ const Home = (): any => {
   };
 
   const navClick = (props: { k: string; label: string }) => {
-    const { k, label } = props;
+    const { k } = props;
     navigate(`/dashboard/${k}`);
-    setSelectItem({ k: [k], label: label });
   };
   const renderSider = () => (
     <Sider
@@ -104,14 +127,6 @@ const Home = (): any => {
         </Button>
       </div>
       <SelectSUSSHeader />
-      {/*<Menu*/}
-      {/*  mode="inline"*/}
-      {/*  selectedKeys={selectItem?.k}*/}
-      {/*  items={routers.map((router: any) => ({*/}
-      {/*    ...router,*/}
-      {/*    onClick: () => navClick({ k: router?.key, label: router?.label })*/}
-      {/*  }))}*/}
-      {/*/>*/}
       <div className="flex flex-col gap-2 mt-auto p-4">
         <Button type="text" onClick={() => setCollapsed(!collapsed)} block>
           {collapsed ? <RightOutlined /> : <LeftOutlined />}
@@ -131,7 +146,7 @@ const Home = (): any => {
         paddingInline: '20px',
         transition: 'left 0.2s'
       }}
-      className={'bg-white flex justify-between items-center fixed gap-4'}
+      className={'bg-white flex justify-between items-center fixed'}
     >
       <img
         className={'h-10 cursor-pointer hover:shadow'}
@@ -139,34 +154,12 @@ const Home = (): any => {
         alt={''}
         onClick={() => window.open('https://www.suss.edu.sg/')}
       />
-      {window.location.pathname === '/dashboard/dashboard' && (
+      {window.location.pathname === '/dashboard/dashboard' && responsive.md && (
         <Anchor
           direction="horizontal"
           targetOffset={60}
           className={styles.anchorContainer}
-          items={[
-            {
-              key: 'discussion',
-              href: '#discussion',
-              title: 'Discussion Participation'
-            },
-            {
-              key: 'social',
-              href: '#social',
-              title: 'Social Interaction'
-            },
-            version === 'Teacher'
-              ? {
-                  key: 'assignment',
-                  href: '#assignment',
-                  title: 'Assignment Progress'
-                }
-              : {
-                  key: 'trajectory',
-                  href: '#trajectory',
-                  title: 'Idea Trajectory'
-                }
-          ]}
+          items={getHeaderItems()}
         />
       )}
       <VersionSelect />
