@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Network, Edge, Node } from 'vis-network';
+import { Network, Edge, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-network/standalone';
 import { Spin, Typography, Button, Tooltip } from 'antd';
-import { isNumber } from 'lodash-es';
+import { isNumber, set } from 'lodash-es';
 import { InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import clsx from 'clsx';
 import { draw_idea_trajectory } from '../../api';
@@ -24,7 +24,8 @@ interface IdeaEdge extends Edge {
   from: number;
   to: number;
 }
-
+const DEFAULT_FONT_SIZE = 10;
+const LARGE_FONT_SIZE = 16;
 interface IdeaTrajectoryProps {}
 const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
   const [loading, setLoading] = useState(false);
@@ -45,7 +46,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
       const params = {
         option_course: courseCode
       };
-      topic && (params['topic_title'] = topic);
+      topic && set(params, 'topic_title', topic);
       const response = await draw_idea_trajectory(params);
       setApiData(response);
     } catch (error) {
@@ -63,16 +64,32 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
     setTopic(null);
   }, [courseCode]);
 
-  const options = {
+  const canZoomView = () =>
+    networkInstanceRef.current?.setOptions?.({
+      interaction: {
+        zoomView: true
+      }
+    });
+
+  const options: Options = {
+    autoResize: true,
+    width: '100%',
+    height: '100%',
     nodes: {
       borderWidthSelected: 5,
       font: {
-        size: 10,
+        multi: 'html',
+        size: DEFAULT_FONT_SIZE,
         face: 'Tahoma',
-        color: '#333333',
+        color: 'gray',
         strokeWidth: 2,
-        strokeColor: '#ffffff'
+        strokeColor: '#ffffff',
+        ital: {
+          size: DEFAULT_FONT_SIZE,
+          color: '#648fc9'
+        }
       },
+      labelHighlightBold: false,
       color: {
         background: '#97c2fc',
         border: '#648fc9',
@@ -129,7 +146,8 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
       hover: true,
       dragNodes: true,
       hideEdgesOnDrag: false,
-      hideNodesOnDrag: false
+      hideNodesOnDrag: false,
+      zoomView: false
     },
     physics: {
       enabled: true,
@@ -151,7 +169,15 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
   useEffect(() => {
     if (!networkRef.current) return;
 
-    const nodes = new DataSet<IdeaNode>(apiData?.nodes || []);
+    const nodes = new DataSet<IdeaNode>(
+      (apiData?.nodes || []).map((n) => {
+        const [title, subtitle] = n.label.split('\n');
+        return {
+          ...n,
+          label: `<i>${title}</i>\n${subtitle || ''}`
+        };
+      })
+    );
     const edges = new DataSet<IdeaEdge>(apiData?.edges || []);
 
     networkInstanceRef.current = new Network(
@@ -160,9 +186,18 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
       options
     );
 
+    const updateNodeFont = (id: number, fontSize: number) => {
+      nodes.update({
+        id: id,
+        font: { size: fontSize, ital: { size: fontSize } }
+      });
+    };
+
     // 监听节点悬停事件
     networkInstanceRef.current.on('hoverNode', function (params) {
       setHoverNode(params.node);
+      canZoomView();
+      updateNodeFont(params.node, LARGE_FONT_SIZE);
     });
 
     // 监听节点失去悬停事件
@@ -170,10 +205,12 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
       if (params.node !== selectedNode) {
         setHoverNode(null);
       }
+      updateNodeFont(params.node, DEFAULT_FONT_SIZE);
     });
 
     // // 监听节点选中事件
     networkInstanceRef.current.on('selectNode', function (params) {
+      canZoomView();
       if (params.nodes.length > 0) {
         setSelectedNode(params.nodes[0]);
       } else {
@@ -288,12 +325,11 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
         </Tooltip>
       </div>
 
-      <Spin
-        size="large"
-        spinning={loading}
-        className="flex-1 rounded-xl p-2 border border-gray-100"
-      >
-        <div ref={networkRef} className="h-[550px]" />
+      <Spin size="large" spinning={loading} className="flex-1 p-2">
+        <div
+          ref={networkRef}
+          className="h-[calc(100vh-260px)] border rounded-xl"
+        />
       </Spin>
     </div>
   );
