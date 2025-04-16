@@ -43,9 +43,9 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
     try {
       setLoading(true);
       const params = {
-        option_course: courseCode,
-        topic_title: topic
+        option_course: courseCode
       };
+      topic && (params['topic_title'] = topic);
       const response = await draw_idea_trajectory(params);
       setApiData(response);
     } catch (error) {
@@ -58,6 +58,10 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
   useEffect(() => {
     courseCode && fetchData();
   }, [topic, courseCode]);
+
+  useEffect(() => {
+    setTopic(null);
+  }, [courseCode]);
 
   const options = {
     nodes: {

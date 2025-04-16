@@ -147,7 +147,8 @@ const SocialGraph: React.FC = () => {
           enabled: true,
           solver: 'repulsion',
           repulsion: {
-            springLength: 50
+            springLength: 100,
+            nodeDistance: 200
           },
           stabilization: {
             enabled: true,
