@@ -50,6 +50,13 @@ const SocialGraph: React.FC = () => {
     setTopic('');
   }, [courseCode]);
 
+  const canZoomView = () =>
+    network.current?.setOptions?.({
+      interaction: {
+        zoomView: true
+      }
+    });
+
   const initNetwork = useCallback(() => {
     if (networkRef.current) {
       // 获取所有边的权重
@@ -169,7 +176,8 @@ const SocialGraph: React.FC = () => {
           tooltipDelay: 200,
           dragNodes: true,
           hideEdgesOnDrag: false,
-          hideNodesOnDrag: false
+          hideNodesOnDrag: false,
+          zoomView: false
         }
       };
 
@@ -178,6 +186,10 @@ const SocialGraph: React.FC = () => {
         network.current.destroy();
       }
       network.current = new Network(networkRef.current, data, options as any);
+      // 监听节点悬停事件
+      network.current.on('hoverNode', function () {
+        canZoomView();
+      });
     }
   }, [rawData]);
 
