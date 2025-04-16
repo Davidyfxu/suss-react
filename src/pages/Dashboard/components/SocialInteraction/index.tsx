@@ -15,7 +15,7 @@ const SocialGraph: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [topic, setTopic] = useState<string>('');
   const [density, setDensity] = useState<number>(0);
-  const [clustering, setClustering] = useState<number>(0);
+  // const [clustering, setClustering] = useState<number>(0);
   const [rawData, setData] = useState<{
     nodes: Array<{ id: string; user_type: string; centrality: number }>;
     edges: Array<{ source: string; target: string; weight: number }>;
@@ -34,7 +34,7 @@ const SocialGraph: React.FC = () => {
       });
       setData(res);
       setDensity(res?.density || 0);
-      setClustering(res?.clustering || 0);
+      // setClustering(res?.clustering || 0);
     } catch (err) {
       console.error(err);
     } finally {
@@ -70,7 +70,6 @@ const SocialGraph: React.FC = () => {
           label: node.id,
           value: node.centrality,
           group: node.user_type,
-
           size: Math.sqrt(node.centrality) * 10,
           title: `${node.id} Centrality: ${node.centrality}`
         }))
@@ -178,7 +177,7 @@ const SocialGraph: React.FC = () => {
       if (network.current) {
         network.current.destroy();
       }
-      network.current = new Network(networkRef.current, data, options);
+      network.current = new Network(networkRef.current, data, options as any);
     }
   }, [rawData]);
 

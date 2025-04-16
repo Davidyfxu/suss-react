@@ -48,19 +48,20 @@ const Home = (): any => {
         key: 'social',
         href: '#social',
         title: 'Social Interaction'
-      },
-      version === 'Teacher'
-        ? {
-            key: 'assignment',
-            href: '#assignment',
-            title: 'Assignment Progress'
-          }
-        : {
-            key: 'trajectory',
-            href: '#trajectory',
-            title: 'Idea Trajectory'
-          }
+      }
     ];
+    if (version === 'Teacher') {
+      items.push({
+        key: 'assignment',
+        href: '#assignment',
+        title: 'Assignment Progress'
+      });
+    }
+    items.push({
+      key: 'trajectory',
+      href: '#trajectory',
+      title: 'Idea Trajectory'
+    });
 
     return responsive.xl
       ? items

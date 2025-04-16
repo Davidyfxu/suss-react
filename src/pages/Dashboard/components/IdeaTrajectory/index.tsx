@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Network, Edge, Node } from 'vis-network';
+import { Network, Edge, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-network/standalone';
 import { Spin, Typography, Button, Tooltip } from 'antd';
-import { isNumber } from 'lodash-es';
+import { isNumber, set } from 'lodash-es';
 import { InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import clsx from 'clsx';
 import { draw_idea_trajectory } from '../../api';
@@ -45,7 +45,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
       const params = {
         option_course: courseCode
       };
-      topic && (params['topic_title'] = topic);
+      topic && set(params, 'topic_title', topic);
       const response = await draw_idea_trajectory(params);
       setApiData(response);
     } catch (error) {
@@ -63,11 +63,12 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
     setTopic(null);
   }, [courseCode]);
 
-  const options = {
+  const options: Options = {
     nodes: {
       borderWidthSelected: 5,
       font: {
         size: 10,
+        // vadjust: -40,
         face: 'Tahoma',
         color: '#333333',
         strokeWidth: 2,
@@ -288,12 +289,8 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
         </Tooltip>
       </div>
 
-      <Spin
-        size="large"
-        spinning={loading}
-        className="flex-1 rounded-xl p-2 border border-gray-100"
-      >
-        <div ref={networkRef} className="h-[550px]" />
+      <Spin size="large" spinning={loading} className="flex-1 p-2">
+        <div ref={networkRef} className="h-[550px] border rounded-xl " />
       </Spin>
     </div>
   );

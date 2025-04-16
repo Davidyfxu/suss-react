@@ -38,8 +38,7 @@ const DashboardTabs = () => {
           <WordCloudComp />
         </div>
       </div>
-
-      {version === 'Teacher' ? (
+      {version === 'Teacher' && (
         <div
           id="assignment"
           className="py-2 px-5 bg-white max-h-[calc(100vh-110px)]"
@@ -49,17 +48,16 @@ const DashboardTabs = () => {
           </Title>
           <CheckAssignment />
         </div>
-      ) : (
-        <div
-          id="trajectory"
-          className="py-2 px-5 bg-white max-h-[calc(100vh-110px)]"
-        >
-          <Title level={4} className="!mb-1">
-            Idea Trajectory
-          </Title>
-          <IdeaTrajectory />
-        </div>
       )}
+      <div
+        id="trajectory"
+        className="py-2 px-5 bg-white max-h-[calc(100vh-110px)]"
+      >
+        <Title level={4} className="!mb-1">
+          Idea Trajectory
+        </Title>
+        <IdeaTrajectory />
+      </div>
     </div>
   );
 };
