@@ -73,6 +73,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
 
   const options: Options = {
     autoResize: true,
+    configure: true,
     width: '100%',
     height: '100%',
     nodes: {
@@ -152,17 +153,10 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
     physics: {
       enabled: true,
       solver: 'forceAtlas2Based',
-      repulsion: {
-        springLength: 500,
-        nodeDistance: 100
+      forceAtlas2Based: {
+        springLength: 200
       },
-      stabilization: {
-        enabled: true,
-        fit: true,
-        iterations: 1000,
-        onlyDynamicEdges: false,
-        updateInterval: 50
-      }
+      minVelocity: 0.75
     }
   };
 
