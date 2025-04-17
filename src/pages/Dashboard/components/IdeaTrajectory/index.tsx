@@ -1,14 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Network, Edge, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-network/standalone';
-import { Spin, Typography, Button, Tooltip } from 'antd';
+import { Spin, Typography, Button, Tooltip, Space } from 'antd';
 import { isNumber, set } from 'lodash-es';
-import { InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import {
+  InfoCircleOutlined,
+  QuestionCircleOutlined,
+  FullscreenOutlined,
+  FullscreenExitOutlined
+} from '@ant-design/icons';
 import clsx from 'clsx';
 import { draw_idea_trajectory } from '../../api';
 import { useUserStore } from '../../../../stores/userStore';
 import parse from 'html-react-parser';
 import SelectSUSS from '../../../../components/SelectSUSS';
+import screenfull from 'screenfull';
+import {
+  canZoomView,
+  highlightNodesEdges,
+  resetNodesColor
+} from '../../../../utils/networkUtils';
 
 const { Paragraph } = Typography;
 
@@ -28,12 +39,15 @@ const DEFAULT_FONT_SIZE = 10;
 const LARGE_FONT_SIZE = 16;
 const FONT_RATE = 1.5;
 interface IdeaTrajectoryProps {}
+
 const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
   const [loading, setLoading] = useState(false);
   const [hoverNode, setHoverNode] = useState<number | null>(null);
   const [selectedNode, setSelectedNode] = useState<number | null>(null);
   const [topic, setTopic] = useState<string | null>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const networkRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const networkInstanceRef = useRef<Network | null>(null);
   const courseCode = useUserStore((state) => state.courseCode);
   const [apiData, setApiData] = useState<{
@@ -65,16 +79,9 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
     setTopic(null);
   }, [courseCode]);
 
-  const canZoomView = () =>
-    networkInstanceRef.current?.setOptions?.({
-      interaction: {
-        zoomView: true
-      }
-    });
-
   const options: Options = {
     autoResize: true,
-    configure: true,
+    // configure: true,
     width: '100%',
     height: '100%',
     nodes: {
@@ -84,8 +91,6 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
         size: DEFAULT_FONT_SIZE,
         face: 'Tahoma',
         color: 'gray',
-        strokeWidth: 2,
-        strokeColor: '#ffffff',
         ital: {
           size: DEFAULT_FONT_SIZE * FONT_RATE,
           color: '#648fc9'
@@ -106,14 +111,11 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
       },
       shape: 'dot',
       scaling: {
-        min: 10,
-        max: 30,
         label: {
           enabled: true,
           min: 8,
           max: 16,
-          drawThreshold: 1,
-          maxVisible: 30
+          drawThreshold: 1
         }
       },
       size: 20
@@ -121,10 +123,13 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
     edges: {
       selectionWidth: 1.5,
       color: {
-        color: '#97c2fc',
-        highlight: '#648fc9',
-        hover: '#648fc9',
-        opacity: 0.7
+        color: '#658fc9',
+        highlight: '#658fc9',
+        hover: '#658fc9',
+        opacity: 1
+      },
+      selfReference: {
+        angle: 0.785
       },
       smooth: {
         enabled: true,
@@ -133,8 +138,8 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
         roundness: 0.5
       },
       scaling: {
-        min: 1,
-        max: 8
+        min: 0.5,
+        max: 4
       },
       arrows: {
         to: {
@@ -153,9 +158,11 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
     },
     physics: {
       enabled: true,
-      solver: 'forceAtlas2Based',
-      forceAtlas2Based: {
-        springLength: 200
+      solver: 'hierarchicalRepulsion',
+      hierarchicalRepulsion: {
+        centralGravity: 0,
+        nodeDistance: 200,
+        avoidOverlap: 0.3
       },
       minVelocity: 0.75
     }
@@ -191,7 +198,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
     // 监听节点悬停事件
     networkInstanceRef.current.on('hoverNode', function (params) {
       setHoverNode(params.node);
-      canZoomView();
+      canZoomView(networkInstanceRef);
       updateNodeFont(params.node, LARGE_FONT_SIZE);
     });
 
@@ -205,9 +212,10 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
 
     // // 监听节点选中事件
     networkInstanceRef.current.on('selectNode', function (params) {
-      canZoomView();
+      canZoomView(networkInstanceRef);
       if (params.nodes.length > 0) {
         setSelectedNode(params.nodes[0]);
+        highlightNodesEdges(networkInstanceRef, params.nodes[0]);
       } else {
         setSelectedNode(null);
       }
@@ -216,6 +224,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
     // // 监听取消选中事件
     networkInstanceRef.current.on('deselectNode', function () {
       setSelectedNode(null);
+      resetNodesColor(networkInstanceRef);
     });
 
     return () => {
@@ -229,14 +238,36 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
   const showNodeContent = isNumber(hoverNode) || isNumber(selectedNode);
   const displayNode = selectedNode || hoverNode;
 
+  const toggleFullscreen = () => {
+    if (screenfull.isEnabled && containerRef.current) {
+      screenfull.toggle(containerRef.current);
+      setIsFullscreen(!isFullscreen);
+    }
+  };
+
+  useEffect(() => {
+    if (screenfull.isEnabled) {
+      screenfull.on('change', () => {
+        setIsFullscreen(screenfull.isFullscreen);
+      });
+    }
+    return () => {
+      if (screenfull.isEnabled) {
+        screenfull.off('change', () => {});
+      }
+    };
+  }, []);
+
   return (
     <div
+      ref={containerRef}
       className={clsx('flex-1 space-y-2 bg-white flex flex-col relative')}
       style={{ minHeight: 'calc(100vh - 160px)' }}
     >
       <div>
         <SelectSUSS
           allowClear
+          disabled={isFullscreen}
           placeholder={'Please select a topic from the course.'}
           className={'w-full mt-2'}
           handleSelect={(v) => {
@@ -245,6 +276,14 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
             setSelectedNode(null);
           }}
           value={topic}
+        />
+        <Button
+          icon={
+            isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />
+          }
+          type="text"
+          onClick={toggleFullscreen}
+          className={clsx('absolute right-2 z-10', 'top-32')}
         />
         {showNodeContent && (
           <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-80 bg-white shadow-lg rounded-lg p-4 border border-gray-200 z-10">
@@ -276,20 +315,22 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
             </div>
           </div>
         )}
-        <Paragraph
-          ellipsis={{
-            rows: 1,
-            expandable: 'collapsible'
-          }}
-          copyable
-          className={'!mb-0'}
-        >
-          Idea Trajectory visualization shows how ideas evolve and connect over
-          time in the discussion forum. Each node represents an idea or concept,
-          and the connections show how ideas develop and relate to each other.
-        </Paragraph>
+      </div>
+
+      <Paragraph
+        ellipsis={{
+          rows: 1,
+          expandable: 'collapsible'
+        }}
+        copyable
+        className={'!mb-0'}
+      >
+        Idea Trajectory visualization shows how ideas evolve and connect over
+        time in the discussion forum. Each node represents an idea or concept,
+        and the connections show how ideas develop and relate to each other.
+      </Paragraph>
+      <Space>
         <Button
-          className={'mr-2'}
           onClick={() =>
             window.open('https://en.wikipedia.org/wiki/Idea_trajectory')
           }
@@ -318,12 +359,15 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
         >
           <Button icon={<QuestionCircleOutlined />}>Instructions</Button>
         </Tooltip>
-      </div>
+      </Space>
 
       <Spin size="large" spinning={loading} className="flex-1 p-2">
         <div
           ref={networkRef}
-          className="h-[calc(100vh-260px)] border rounded-xl"
+          className={clsx(
+            'border rounded-xl',
+            isFullscreen ? 'h-[calc(100vh-150px)]' : 'h-[calc(100vh-260px)]'
+          )}
         />
       </Spin>
     </div>
