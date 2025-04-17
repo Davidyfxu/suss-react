@@ -26,6 +26,7 @@ interface IdeaEdge extends Edge {
 }
 const DEFAULT_FONT_SIZE = 10;
 const LARGE_FONT_SIZE = 16;
+const FONT_RATE = 1.5;
 interface IdeaTrajectoryProps {}
 const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
   const [loading, setLoading] = useState(false);
@@ -86,7 +87,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
         strokeWidth: 2,
         strokeColor: '#ffffff',
         ital: {
-          size: DEFAULT_FONT_SIZE,
+          size: DEFAULT_FONT_SIZE * FONT_RATE,
           color: '#648fc9'
         }
       },
@@ -183,7 +184,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
     const updateNodeFont = (id: number, fontSize: number) => {
       nodes.update({
         id: id,
-        font: { size: fontSize, ital: { size: fontSize } }
+        font: { size: fontSize, ital: { size: fontSize * FONT_RATE } }
       });
     };
 
