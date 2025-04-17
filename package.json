@@ -29,6 +29,7 @@
     "react-wordcloud": "^1.2.7",
     "recharts": "^2.15.1",
     "sass": "^1.84.0",
+    "screenfull": "^6.0.2",
     "swr": "^2.3.2",
     "xlsx": "^0.18.5",
     "zustand": "^4.5.6"
