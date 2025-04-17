@@ -97,6 +97,7 @@ const SocialGraph: React.FC = () => {
       const data = { nodes, edges };
       // 配置选项
       const options = {
+        configure: true,
         nodes: {
           shape: 'dot',
           scaling: {
