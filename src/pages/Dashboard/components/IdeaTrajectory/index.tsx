@@ -119,9 +119,9 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
       size: 20
     },
     edges: {
-      selectionWidth: 2,
+      selectionWidth: 1.5,
       color: {
-        color: '#A9A9A9',
+        color: '#97c2fc',
         highlight: '#648fc9',
         hover: '#648fc9',
         opacity: 0.7

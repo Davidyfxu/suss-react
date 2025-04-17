@@ -137,7 +137,7 @@ const SocialGraph: React.FC = () => {
             forceDirection: 'none'
           },
           color: {
-            color: '#A9A9A9',
+            color: '#97c2fc',
             highlight: '#648fc9', // 选中时的边颜色
             hover: '#648fc9', // 悬停时的边颜色
             opacity: 0.7
@@ -146,8 +146,8 @@ const SocialGraph: React.FC = () => {
             min: 1,
             max: 8
           },
-          selectionWidth: 2,
-          hoverWidth: 2
+          selectionWidth: 1.5,
+          hoverWidth: 1.5
         },
         physics: {
           enabled: true,
