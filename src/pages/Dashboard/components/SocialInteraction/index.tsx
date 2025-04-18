@@ -159,17 +159,13 @@ const SocialGraph: React.FC = () => {
         },
         physics: {
           enabled: true,
-          solver: 'repulsion',
-          repulsion: {
-            springLength: 100
+          solver: 'hierarchicalRepulsion',
+          hierarchicalRepulsion: {
+            centralGravity: 0,
+            nodeDistance: 200,
+            avoidOverlap: 0.3
           },
-          stabilization: {
-            enabled: true,
-            fit: true,
-            iterations: 1000,
-            onlyDynamicEdges: false,
-            updateInterval: 50
-          }
+          minVelocity: 0.75
         },
         groups: {
           with_threads: { color: '#97c2fc' },

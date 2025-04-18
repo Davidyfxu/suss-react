@@ -13,7 +13,7 @@ export function highlightNodesEdges(
     } else {
       updateArray.push({
         id: node.id,
-        color: { background: 'lightgray' }
+        color: { background: 'lightgray', border: 'lightgray' }
       });
     }
   });
@@ -27,7 +27,7 @@ export function resetNodesColor(
     .get()
     .map((node) => ({
       id: node.id,
-      color: { background: defaultColor }
+      color: { background: defaultColor, border: defaultColor }
     }));
   if (updateArray) {
     networkInstanceRef.current?.body.data.nodes.update(updateArray);
