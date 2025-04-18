@@ -164,6 +164,11 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
         nodeDistance: 200,
         avoidOverlap: 0.3
       },
+      stabilization: {
+        enabled: true,
+        iterations: 1000,
+        updateInterval: 25
+      },
       minVelocity: 0.75
     }
   };
