@@ -67,7 +67,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
     } catch (error) {
       console.error('Error fetching idea trajectory data:', error);
     } finally {
-      setLoading(false);
+      setTimeout(() => setLoading(false), 2000);
     }
   };
 
@@ -80,7 +80,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
   }, [courseCode]);
 
   const options: Options = {
-    autoResize: true,
+    // autoResize: true,
     // configure: true,
     width: '100%',
     height: '100%',
@@ -160,16 +160,21 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
       enabled: true,
       solver: 'hierarchicalRepulsion',
       hierarchicalRepulsion: {
-        centralGravity: 0,
-        nodeDistance: 200,
-        avoidOverlap: 0.3
+        centralGravity: 0.1, // 增加适量中心引力
+        nodeDistance: 150, // 适当减小
+        avoidOverlap: 0.7, // 增加
+        springLength: 150, // 减小
+        springConstant: 0.01, // 减小
+        damping: 0.9 // 显著增加阻尼
       },
       stabilization: {
         enabled: true,
-        iterations: 1000,
-        updateInterval: 25
+        iterations: 1000, // 更多迭代
+        updateInterval: 50, // 更新间隔更长
+        fit: true
       },
-      minVelocity: 0.75
+      minVelocity: 0.2, // 降低最小速度阈值
+      maxVelocity: 3 // 降低最大速度限制
     }
   };
 
