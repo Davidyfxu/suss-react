@@ -3,7 +3,7 @@ const { Footer } = Layout;
 
 const LPFooter = () => {
   return (
-    <Footer style={{ textAlign: 'center' }}>
+    <Footer style={{ padding: 16, textAlign: 'center' }}>
       ©{new Date().getFullYear()} Copyright <strong>SUSS</strong>. All Rights
       Reserved
     </Footer>

@@ -20,24 +20,14 @@ const CAROUSEL_IMGs = [
 
 const INTRO_PARTs = [
   {
-    title: 'Earning Points',
-    intro:
-      'You will earn points as you progress through AdLeS. The points earned will form part of your OCAS, and will be made known to you via Canvas.'
-  },
-  {
-    title: 'Adaptivity',
+    title: 'About CLATo',
     intro:
       'It is important for you to put in your best effort as AdLeS will dynamically adjust the level of learning materials and MCQ presented based on how you interact with it, with the aim of determining the most efficient learning pathway for you in your subsequent logins.'
   },
   {
-    title: 'Termination',
+    title: 'Feature',
     intro:
       'In the unlikely event that you get too many MCQ wrong, AdLeS will recommend that you contact your instructor. You will be unable to proceed further or earn more points.'
-  },
-  {
-    title: 'Accessing Learning Materials',
-    intro:
-      'A set of basic learning materials remains accessible to you at all times. You can access it by clicking "Learning Materials" at the top right hand menu of the screen.'
   },
   {
     title: 'Tracking Your Progress',
