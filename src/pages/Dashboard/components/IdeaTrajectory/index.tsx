@@ -158,14 +158,9 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
     },
     physics: {
       enabled: true,
-      solver: 'hierarchicalRepulsion',
-      hierarchicalRepulsion: {
-        centralGravity: 0.1, // 增加适量中心引力
-        nodeDistance: 150, // 适当减小
-        avoidOverlap: 0.7, // 增加
-        springLength: 150, // 减小
-        springConstant: 0.01, // 减小
-        damping: 0.9 // 显著增加阻尼
+      solver: 'barnesHut',
+      barnesHut: {
+        springLength: 70
       },
       stabilization: {
         enabled: true,
@@ -231,11 +226,29 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
       }
     });
 
-    // // 监听取消选中事件
+    // 监听取消选中事件
     networkInstanceRef.current.on('deselectNode', function () {
       setSelectedNode(null);
       resetNodesColor(networkInstanceRef);
     });
+    // 根据不同状态选择不同solver
+    networkInstanceRef.current?.setOptions({
+      physics: {
+        enabled: true,
+        solver: topic ? 'forceAtlas2Based' : 'barnesHut',
+        ...(topic
+          ? {}
+          : {
+              barnesHut: { springLength: 70 }
+            })
+      },
+      edges: {
+        smooth: {
+          enabled: true,
+          type: topic ? 'dynamic' : 'continuous'
+        }
+      }
+    } as Options);
 
     return () => {
       if (networkInstanceRef.current) {
@@ -340,29 +353,21 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
         and the connections show how ideas develop and relate to each other.
       </Paragraph>
       <Space>
-        <Button
-          onClick={() =>
-            window.open('https://en.wikipedia.org/wiki/Idea_trajectory')
-          }
-          icon={<InfoCircleOutlined />}
-        >
-          Know more about Idea Trajectory!
-        </Button>
         <Tooltip
           placement="topLeft"
           title={
             <ol className="list-decimal list-inside space-y-1">
               <li className="transition-all duration-200 hover:translate-x-1 pl-2">
-                Each node represents an idea or concept
+                Each node represents one post from user. Below each node is the
+                generated title of the post, name of the poster and date of the
+                post.
               </li>
               <li className="transition-all duration-200 hover:translate-x-1 pl-2">
-                The arrows show how ideas develop and connect
+                The arrow connecting two nodes shows the direction of reply.
               </li>
               <li className="transition-all duration-200 hover:translate-x-1 pl-2">
-                Hover over nodes and edges to see more details
-              </li>
-              <li className="transition-all duration-200 hover:translate-x-1 pl-2">
-                Drag nodes to rearrange the visualization
+                Click on the node to view the original post in Canvas
+                discussion.
               </li>
             </ol>
           }
