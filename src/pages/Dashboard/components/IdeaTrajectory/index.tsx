@@ -81,7 +81,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
 
   const options: Options = {
     // autoResize: true,
-    configure: true,
+    configure: false,
     width: '100%',
     height: '100%',
     nodes: {
