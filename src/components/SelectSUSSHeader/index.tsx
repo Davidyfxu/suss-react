@@ -26,7 +26,7 @@ const SelectSUSSHeader = () => {
   // 统一处理日期范围更新
   const updateDateRange = (start: Dayjs | null, end: Dayjs | null) => {
     if (!start && !end) {
-      setDateRange(null);
+      setDateRange?.(null);
       return;
     }
 
@@ -38,11 +38,23 @@ const SelectSUSSHeader = () => {
       range[1] = end.format('YYYY-MM-DD');
     }
 
-    setDateRange(range as [string?, string?]);
+    setDateRange?.(range as [string, string]);
   };
 
   const { data, isLoading } = useSWR('courseOptions', async () => {
-    const { JAN23 = [], JUL23 = [] } = await get_course_options();
+    const {
+      JAN23 = [],
+      JUL23 = [],
+      OTHER = [] as string[]
+    } = await get_course_options();
+
+    const otherSemesters: string[] = Array.from(
+      new Set(
+        OTHER.map((o: string) => o.split('_')[1]).filter(
+          (o: string) => o && /^[a-zA-Z]{3}\d{2}$/.test(o)
+        )
+      )
+    );
     return [
       {
         value: 'JAN23',
@@ -59,14 +71,22 @@ const SelectSUSSHeader = () => {
           value: value,
           label: value
         }))
-      }
+      },
+      ...otherSemesters.map((s: string) => ({
+        value: s,
+        label: s,
+        children: OTHER.filter((o: string) => o.includes(s)).map(
+          (v: string) => ({
+            value: v,
+            label: v
+          })
+        )
+      }))
     ];
   });
 
-  const semesterOptions = [
-    { value: 'JAN23', label: 'JAN23' },
-    { value: 'JUL23', label: 'JUL23' }
-  ];
+  const semesterOptions =
+    data?.map((d) => ({ value: d?.value, label: d?.label })) || [];
 
   const courseOptions =
     data?.find?.((v) => v?.value === semester)?.children || [];

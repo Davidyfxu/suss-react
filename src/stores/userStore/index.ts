@@ -6,6 +6,7 @@ interface IUserStoreState {
   username: string;
   email: string;
   avatar: string;
+  status?: string;
   // setUser: (props: { name: string; email: string }) => void;
   loading: boolean;
   initVer: 'Student' | 'Teacher';
@@ -75,6 +76,7 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
 
       set(() => ({
         ...res,
+        status: res['status'],
         version: res['enrollment_type'].replace(/Enrollment$/, ''),
         initVer: res['enrollment_type'].replace(/Enrollment$/, ''),
         loading: false

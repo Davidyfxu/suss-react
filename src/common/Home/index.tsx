@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Layout, Avatar, Dropdown, Button, Anchor, MenuProps } from 'antd';
+import {
+  Layout,
+  Avatar,
+  Dropdown,
+  Button,
+  Anchor,
+  MenuProps,
+  Result
+} from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../stores/userStore';
 import {
@@ -22,6 +30,7 @@ const Home = (): any => {
   const navigate = useNavigate();
   const name = useUserStore((state) => state.username);
   const version = useUserStore((state) => state.version);
+  const status = useUserStore((state) => state.status);
   const siderStyle: React.CSSProperties = {
     overflow: 'auto',
     height: '100vh',
@@ -192,7 +201,15 @@ const Home = (): any => {
             // overflow: 'auto'
           }}
         >
-          <Outlet />
+          {status === 'deleted' ? (
+            <Result
+              status="error"
+              title="Account Deleted"
+              subTitle="Your account has been deleted. Please contact the admin for more information."
+            />
+          ) : (
+            <Outlet />
+          )}
         </Content>
         {renderFooter()}
       </Layout>
