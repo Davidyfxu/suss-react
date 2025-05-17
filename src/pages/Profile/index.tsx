@@ -38,11 +38,11 @@ const Profile = () => {
         </h2>
         <Form name="basic" form={form} layout="vertical" className="space-y-4">
           <Spin spinning={loading}>
-            <Form.Item label="UserID" name="username" initialValue={username}>
+            <Form.Item label="User ID" name="username" initialValue={username}>
               <Input
                 prefix={<UserOutlined className="text-gray-400" />}
                 disabled
-                placeholder="Please fill your userId"
+                placeholder="Please fill your Canvas User ID"
                 className="rounded-md"
               />
             </Form.Item>

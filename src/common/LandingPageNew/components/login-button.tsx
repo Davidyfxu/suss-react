@@ -12,7 +12,7 @@ const LoginButton = () => {
         window.open(`${location.origin}/dashboard/dashboard`, '_blank')
       }
     >
-      Log in
+      Login
     </Button>
   );
 };

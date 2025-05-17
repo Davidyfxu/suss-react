@@ -24,23 +24,23 @@ const ImageSection = () => {
           className="w-full max-w-xs md:max-w-sm mb-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
         />
       </motion.div>
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
-        className="flex flex-row justify-center space-x-4 w-full max-w-xs md:max-w-sm"
-      >
-        <Image
-          src={ImageP2}
-          preview={false}
-          className="w-1/2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-        />
-        <Image
-          src={ImageP3}
-          preview={false}
-          className="w-1/2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-        />
-      </motion.div>
+      {/*<motion.div*/}
+      {/*  initial={{ scale: 0.9, opacity: 0 }}*/}
+      {/*  animate={{ scale: 1, opacity: 1 }}*/}
+      {/*  transition={{ duration: 0.8, delay: 0.4 }}*/}
+      {/*  className="flex flex-row justify-center space-x-4 w-full max-w-xs md:max-w-sm"*/}
+      {/*>*/}
+      {/*  <Image*/}
+      {/*    src={ImageP2}*/}
+      {/*    preview={false}*/}
+      {/*    className="w-1/2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"*/}
+      {/*  />*/}
+      {/*  <Image*/}
+      {/*    src={ImageP3}*/}
+      {/*    preview={false}*/}
+      {/*    className="w-1/2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"*/}
+      {/*  />*/}
+      {/*</motion.div>*/}
     </motion.div>
   );
 };

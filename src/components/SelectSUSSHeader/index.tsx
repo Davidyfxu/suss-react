@@ -55,6 +55,7 @@ const SelectSUSSHeader = () => {
         )
       )
     );
+
     return [
       {
         value: 'JAN23',
@@ -82,7 +83,7 @@ const SelectSUSSHeader = () => {
           })
         )
       }))
-    ];
+    ].filter((r) => r?.children?.length > 0);
   });
 
   const semesterOptions =

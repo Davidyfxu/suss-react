@@ -133,11 +133,13 @@ const Register = () => {
           >
             <Spin spinning={loading}>
               <Form.Item
-                label="UserID"
+                label="User ID"
                 name="username"
-                rules={[{ required: true, message: 'Please fill your userId' }]}
+                rules={[
+                  { required: true, message: 'Please fill your Canvas User ID' }
+                ]}
               >
-                <Input placeholder="Please fill your userId" />
+                <Input placeholder="Please fill your Canvas User ID" />
               </Form.Item>
               <Form.Item
                 label="Email"
@@ -146,18 +148,23 @@ const Register = () => {
                   {
                     type: 'email',
                     required: true,
-                    message: 'Please fill your email'
+                    message: 'Please fill your SUSS email address'
                   }
                 ]}
               >
-                <Input allowClear placeholder="Please fill your email" />
+                <Input
+                  allowClear
+                  placeholder="Please fill your SUSS email address"
+                />
               </Form.Item>
               <Form.Item
-                label="Name"
+                label="User Name"
                 name="last_name"
-                rules={[{ required: true, message: 'Please fill your name' }]}
+                rules={[
+                  { required: true, message: 'Please fill your user name' }
+                ]}
               >
-                <Input placeholder="Please fill your name" />
+                <Input placeholder="Please fill your user name" />
               </Form.Item>
               <Form.Item
                 label="Password"
@@ -168,7 +175,7 @@ const Register = () => {
                     pattern:
                       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/,
                     message:
-                      'Password must be at least 8 characters long and contain uppercase, lowercase, numbers, and symbols'
+                      'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number and one special character.'
                   }
                 ]}
               >
@@ -241,26 +248,13 @@ const Register = () => {
               >
                 <Input.OTP length={4} />
               </Form.Item>
-              <Form.Item
-                wrapperCol={{ offset: 3, span: 21 }}
-                name="agree"
-                valuePropName="checked"
-              >
-                <Checkbox>
-                  I have read and agree to the terms of service
-                </Checkbox>
-              </Form.Item>
-
               <div className={'flex justify-between items-center'}>
-                <p>
-                  <span>Or</span>
-                  <Link to={'/login'}>
-                    <Button className="ml-2">Log in</Button>
-                  </Link>
-                </p>
+                <Link to={'/login'}>
+                  <Button className="ml-2">Login</Button>
+                </Link>
 
                 <Button type="primary" onClick={handleSubmit}>
-                  Sign up
+                  Register
                 </Button>
               </div>
             </Spin>

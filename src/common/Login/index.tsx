@@ -38,13 +38,16 @@ const Login = () => {
             <Form form={form}>
               <Spin spinning={loading}>
                 <Form.Item
-                  label="Username"
+                  label="User ID"
                   name="username"
                   rules={[
-                    { required: true, message: 'Please fill your username' }
+                    {
+                      required: true,
+                      message: 'Please fill your Canvas User ID'
+                    }
                   ]}
                 >
-                  <Input placeholder="Please fill your username" />
+                  <Input placeholder="Please fill your Canvas User ID" />
                 </Form.Item>
                 <Form.Item
                   label="Password"
@@ -68,10 +71,10 @@ const Login = () => {
                   </Link>
                   <div className={'flex gap-4'}>
                     <Link to={'/register'}>
-                      <Button>Sign up</Button>
+                      <Button>Register</Button>
                     </Link>
                     <Button type={'primary'} onClick={handleSubmit}>
-                      Log in
+                      Login
                     </Button>
                   </div>
                 </div>

@@ -81,17 +81,20 @@ const ForgetPsw = () => {
               response?.message || 'Failed to send password reset email'
             );
             await getCaptcha(true);
+            form.resetFields(['captchaInput']);
           }
         } catch (error: any) {
           console.error('Password reset request error:', error);
           message.error(
-            `Password reset request failed. Reason: ${error?.response?.data?.message || error?.message || 'Unknown error'}`
+            `${error?.response?.data?.message || error?.message || 'Unknown error'} Please try again`
           );
           await getCaptcha(true);
+          form.resetFields(['captchaInput']);
         }
       } else {
         message.error('Captcha not loaded properly');
         await getCaptcha(true);
+        form.resetFields(['captchaInput']);
       }
     } catch (e) {
       console.error('forgetPsw', e);
@@ -119,11 +122,11 @@ const ForgetPsw = () => {
                     {
                       required: true,
                       type: 'email',
-                      message: 'Please fill your email'
+                      message: 'Please fill your SUSS email address'
                     }
                   ]}
                 >
-                  <Input placeholder="Please fill your email" />
+                  <Input placeholder="Please fill your SUSS email address" />
                 </Form.Item>
                 <Form.Item
                   label="Captcha"
@@ -168,7 +171,7 @@ const ForgetPsw = () => {
 
                 <div className={'flex justify-end items-center gap-4'}>
                   <Link to={'/login'}>
-                    <Button>Log in</Button>
+                    <Button>Login</Button>
                   </Link>
                   <Button type={'primary'} onClick={handleSubmit}>
                     Submit

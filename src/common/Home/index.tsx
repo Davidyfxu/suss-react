@@ -29,6 +29,7 @@ const Home = (): any => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const name = useUserStore((state) => state.username);
+  const fullName = useUserStore((state) => state.fullName);
   const version = useUserStore((state) => state.version);
   const status = useUserStore((state) => state.status);
   const siderStyle: React.CSSProperties = {
@@ -122,7 +123,7 @@ const Home = (): any => {
         </Dropdown>
         {!collapsed && (
           <h4 className="text-2xl font-bold bg-gradient-to-r from-[#d92d27] to-[#ff6f61] bg-clip-text text-transparent text-center mt-4">
-            {name}
+            {fullName || name}
           </h4>
         )}
         <Button
@@ -172,7 +173,7 @@ const Home = (): any => {
           items={getHeaderItems()}
         />
       )}
-      <VersionSelect />
+      {window.location.pathname === '/dashboard/dashboard' && <VersionSelect />}
     </Header>
   );
   const renderFooter = () => (

@@ -9,6 +9,7 @@ interface IUserStoreState {
   status?: string;
   // setUser: (props: { name: string; email: string }) => void;
   loading: boolean;
+  fullName: string;
   initVer: 'Student' | 'Teacher';
   version: 'Student' | 'Teacher';
   handleVer: (v: 'Student' | 'Teacher') => void;
@@ -17,6 +18,7 @@ interface IUserStoreState {
     username: string;
     email: string;
     password: string;
+    last_name: string;
   }) => Promise<any>;
   loginUser: (props: { username: string; password: string }) => Promise<any>;
   init: () => Promise<any>;
@@ -29,6 +31,7 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
   username: '',
   email: '',
   avatar: '',
+  fullName: '',
   loading: false,
   initVer: 'Teacher',
   version: 'Teacher',
@@ -73,7 +76,6 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
     try {
       set(() => ({ loading: true }));
       const res = await init({});
-
       set(() => ({
         ...res,
         status: res['status'],

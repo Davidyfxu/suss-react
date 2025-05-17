@@ -25,7 +25,7 @@ const LPContent = () => {
         />
         <ImageSection />
       </div>
-      <IntroCards />
+      {/*<IntroCards />*/}
     </Content>
   );
 };
