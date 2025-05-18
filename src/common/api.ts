@@ -14,3 +14,6 @@ export const verify_captcha = (p: any = {}) =>
 export const refresh_captcha = (p: any = {}) =>
   post('/api/users/no_auth/refresh_captcha', p);
 export const init = (p: any = {}) => post('/api/users/init/', p);
+export const verify_otp = (p: any = {}) => {
+  return post('/api/users/verify_otp/', p);
+};

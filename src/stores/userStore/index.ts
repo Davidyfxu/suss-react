@@ -20,7 +20,10 @@ interface IUserStoreState {
     password: string;
     last_name: string;
   }) => Promise<any>;
-  loginUser: (props: { username: string; password: string }) => Promise<any>;
+  loginUser: (props: {
+    username: string;
+    password: string;
+  }) => Promise<{ token: string; username: string; is_superuser: boolean }>;
   init: () => Promise<any>;
   courseCode?: string;
   setCourseCode?: (code: string | null) => void;
@@ -64,7 +67,7 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
         loading: false
       }));
       res?.token && localStorage.setItem('token', `Bearer ${res?.token}`);
-      message.success('login success');
+      return res;
     } catch (e) {
       set(() => ({
         loading: false

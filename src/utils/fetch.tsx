@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-// export const BASE_URL = 'http://localhost:8000';
-export const BASE_URL =
-  'https://canvas-ec2-dev-lb-940792725.ap-southeast-1.elb.amazonaws.com';
+export const BASE_URL = 'http://localhost:8000';
+// export const BASE_URL =
+//   'https://canvas-ec2-dev-lb-940792725.ap-southeast-1.elb.amazonaws.com';
 
 class HttpClient {
   private api: AxiosInstance;

@@ -1,28 +1,65 @@
-import { useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Form, Input, Spin, Typography } from 'antd';
+import { Button, Form, Input, Spin, Typography, Modal, message } from 'antd';
 import { useUserStore } from '../../stores/userStore';
 import { useNavigate } from 'react-router-dom';
 import styles from './index.module.scss';
+import qrcodeImg from '../../assets/uri_qrcode.png';
+import { verify_otp } from '../api';
+
 const Login = () => {
   const [form] = Form.useForm();
   const loginUser = useUserStore((state) => state.loginUser);
-  const username = useUserStore((state) => state.username);
   const loading = useUserStore((state) => state.loading);
   const navigate = useNavigate();
-  function handleSubmit(): void {
-    form.validateFields().then(() => {
-      const { username, password } = form.getFieldsValue();
-      void loginUser({ username, password });
-    });
-  }
-  useEffect(() => {
-    if (username) {
-      setTimeout(() => {
-        navigate('/dashboard/dashboard');
-      }, 100);
+  const [vLoading, setVLoading] = useState(false);
+  // superuser 二次验证相关
+  const [superuserModal, setSuperuserModal] = useState(false);
+  const [otp, setOtp] = useState('');
+  const superuserLoginInfo = useRef<{
+    username: string;
+    password: string;
+  } | null>(null);
+
+  async function handleSubmit() {
+    await form.validateFields();
+    const { username, password } = form.getFieldsValue();
+    // 先登录
+    const res = await loginUser({ username, password });
+    // 如果是superuser，弹窗扫码+验证码
+    if (res?.is_superuser) {
+      setSuperuserModal(true);
+      superuserLoginInfo.current = { username, password };
     }
-  }, [username, navigate]);
+    // 普通用户自动跳转
+    else if (res && !res.is_superuser) {
+      navigate('/dashboard/dashboard');
+    }
+  }
+
+  // superuser 验证码提交
+  const handleOtpSubmit = async () => {
+    if (!otp || otp.length !== 6) {
+      message.error('Please enter the 6-digit code');
+      return;
+    }
+    try {
+      setVLoading(true);
+      const res = await verify_otp({ captcha_otp: otp });
+      if (res?.result) {
+        setSuperuserModal(false);
+        message.success(res.message);
+        navigate('/dashboard/dashboard');
+      } else {
+        message.error(res.message);
+      }
+      setOtp('');
+    } catch (e: any) {
+      message.error(e?.response?.data?.message || 'Please try again');
+    } finally {
+      setVLoading(false);
+    }
+  };
 
   return (
     <div className={styles.bg}>
@@ -83,6 +120,43 @@ const Login = () => {
           </div>
         </div>
       </div>
+      {/* superuser 二次验证弹窗 */}
+      <Modal
+        open={superuserModal}
+        title="Superuser Two-Factor Authentication"
+        onCancel={() => setSuperuserModal(false)}
+        footer={null}
+      >
+        <div className="flex flex-col items-center gap-4">
+          <div>
+            Please scan the QR code with your Authenticator app and enter the
+            6-digit code
+          </div>
+          <img
+            src={qrcodeImg}
+            alt="QR code"
+            width={200}
+            height={200}
+            style={{ borderRadius: 8 }}
+          />
+          <Input
+            placeholder="Enter 6-digit code"
+            maxLength={6}
+            value={otp}
+            onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+            onPressEnter={handleOtpSubmit}
+            style={{ width: 180, textAlign: 'center' }}
+          />
+          <Button
+            loading={vLoading}
+            type="primary"
+            block
+            onClick={handleOtpSubmit}
+          >
+            Verify
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };
