@@ -7,6 +7,8 @@ import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 const Profile = () => {
   const [form] = Form.useForm();
   const username = useUserStore((state) => state.username);
+  const email = useUserStore((state) => state.email);
+  const fullName = useUserStore((state) => state.fullName);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
@@ -15,7 +17,10 @@ const Profile = () => {
       const { username, email, password, confirmPwd, last_name } =
         form.getFieldsValue();
       setLoading(true);
-      if (password !== confirmPwd) return;
+      if (password !== confirmPwd)
+        return message.error(
+          'Confirmation password must match the original password.'
+        );
       await updateUser({ username, email, password, last_name });
       setLoading(false);
       message.success('Update user successfully');
@@ -49,16 +54,22 @@ const Profile = () => {
             <Form.Item
               label="Email"
               name="email"
+              initialValue={email}
               rules={[{ type: 'email', message: 'Please enter a valid email' }]}
             >
               <Input
                 prefix={<MailOutlined className="text-gray-400" />}
                 allowClear
+                disabled
                 placeholder="Please fill your SUSS email address"
                 className="rounded-md"
               />
             </Form.Item>
-            <Form.Item label="User Name" name="last_name">
+            <Form.Item
+              label="User Name"
+              name="last_name"
+              initialValue={fullName}
+            >
               <Input
                 prefix={<UserOutlined className="text-gray-400" />}
                 allowClear
@@ -66,7 +77,19 @@ const Profile = () => {
                 className="rounded-md"
               />
             </Form.Item>
-            <Form.Item label="Password" name="password">
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                { required: true, message: 'Please fill your password' },
+                {
+                  pattern:
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/,
+                  message:
+                    'Password must be at least 8 characters long and contain uppercase, lowercase, numbers, and symbols'
+                }
+              ]}
+            >
               <Input.Password
                 prefix={<LockOutlined className="text-gray-400" />}
                 allowClear
