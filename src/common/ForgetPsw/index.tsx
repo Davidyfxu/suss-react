@@ -169,7 +169,7 @@ const ForgetPsw = () => {
                   <Input.OTP length={4} />
                 </Form.Item>
 
-                <div className={'flex justify-end items-center gap-4'}>
+                <div className={'flex justify-between items-center gap-4'}>
                   <Link to={'/login'}>
                     <Button>Login</Button>
                   </Link>

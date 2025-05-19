@@ -54,15 +54,15 @@ const Profile = () => {
               <Input
                 prefix={<MailOutlined className="text-gray-400" />}
                 allowClear
-                placeholder="Please fill your email"
+                placeholder="Please fill your SUSS email address"
                 className="rounded-md"
               />
             </Form.Item>
-            <Form.Item label="Name" name="last_name">
+            <Form.Item label="User Name" name="last_name">
               <Input
                 prefix={<UserOutlined className="text-gray-400" />}
                 allowClear
-                placeholder="Please fill your last name"
+                placeholder="Please fill your user name"
                 className="rounded-md"
               />
             </Form.Item>
