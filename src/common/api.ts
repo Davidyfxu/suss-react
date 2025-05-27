@@ -7,6 +7,8 @@ export const forgetPsw = (p: any = {}) =>
   post('/api/users/no_auth/password_reset_request/', p);
 export const resetPsw = (p: any = {}) =>
   post('/api/users/no_auth/password_reset_confirm/', p);
+export const verify_reset_token = (p: any = {}) =>
+  post('/api/users/no_auth/verify_reset_token/', p);
 export const get_captcha = (p: any = {}) =>
   post('/api/users/no_auth/get_captcha', p);
 export const verify_captcha = (p: any = {}) =>

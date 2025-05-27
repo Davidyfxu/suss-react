@@ -10,7 +10,7 @@ const ImageSection = () => {
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
-      className="flex flex-col items-center justify-center p-6 space-y-4 w-full md:w-1/2"
+      className="flex flex-col items-center justify-center px-6 space-y-4 w-full md:py-6 md:w-1/2"
     >
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
