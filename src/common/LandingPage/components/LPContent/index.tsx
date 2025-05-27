@@ -1,7 +1,6 @@
 import { Layout } from 'antd';
 import WelcomeSection from './WelcomeSection';
 import ImageSection from './ImageSection';
-import IntroCards from './IntroCards';
 
 const { Content } = Layout;
 
@@ -14,12 +13,12 @@ const LPContent = () => {
           background:
             'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(240,245,255,0.9) 100%)'
         }}
-        className="rounded-lg flex flex-col gap-0 md:flex-row justify-evenly items-center p-8 md:p-12 gap-8 md:gap-12 shadow-lg"
+        className="rounded-lg flex flex-col gap-0 md:flex-row justify-evenly items-center p-8 md:p-12 md:gap-12 shadow-lg"
       >
         <WelcomeSection
           title="Welcome to SUSS"
           subtitle="Collaborative Analytic Tool"
-          abbreviation="CLATo"
+          abbreviation="CLAto"
           description="is an in-house developed platform to support collaborative learning. Through the interactive visualizations and innovative features, this tool makes it handy for users to view discussion participations, track discussion flow and engagement dynamics."
         />
         <ImageSection />

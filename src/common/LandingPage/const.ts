@@ -20,7 +20,7 @@ const CAROUSEL_IMGs = [
 
 const INTRO_PARTs = [
   {
-    title: 'About CLATo',
+    title: 'About CLAto',
     intro:
       'It is important for you to put in your best effort as AdLeS will dynamically adjust the level of learning materials and MCQ presented based on how you interact with it, with the aim of determining the most efficient learning pathway for you in your subsequent logins.'
   },
