@@ -10,12 +10,11 @@ const LPContent = () => {
     <Content>
       <div
         style={{
+          height: 'calc(100vh - 120px)',
           background:
             'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(240,245,255,0.9) 100%)'
         }}
-        className={
-          'rounded-lg flex flex-col md:flex-row justify-evenly items-center'
-        }
+        className="rounded-lg flex flex-col gap-0 md:flex-row justify-evenly items-center p-8 md:p-12 gap-8 md:gap-12 shadow-lg"
       >
         <WelcomeSection
           title="Welcome to SUSS"

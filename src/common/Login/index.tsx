@@ -4,7 +4,6 @@ import { Button, Form, Input, Spin, Typography, Modal, message } from 'antd';
 import { useUserStore } from '../../stores/userStore';
 import { useNavigate } from 'react-router-dom';
 import styles from './index.module.scss';
-import qrcodeImg from '../../assets/uri_qrcode.png';
 import { verify_otp } from '../api';
 
 const Login = () => {
@@ -123,22 +122,14 @@ const Login = () => {
       {/* superuser 二次验证弹窗 */}
       <Modal
         open={superuserModal}
-        title="Superuser Two-Factor Authentication"
+        title="Two-Factor Authentication"
         onCancel={() => setSuperuserModal(false)}
+        centered
+        width={300}
         footer={null}
       >
         <div className="flex flex-col items-center gap-4">
-          <div>
-            Please scan the QR code with your Authenticator app and enter the
-            6-digit code
-          </div>
-          <img
-            src={qrcodeImg}
-            alt="QR code"
-            width={200}
-            height={200}
-            style={{ borderRadius: 8 }}
-          />
+          <div>Please enter the 6-digit code</div>
           <Input
             placeholder="Enter 6-digit code"
             maxLength={6}
