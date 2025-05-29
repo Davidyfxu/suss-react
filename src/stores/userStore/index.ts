@@ -12,6 +12,8 @@ interface IUserStoreState {
   fullName: string;
   initVer: 'Student' | 'Teacher';
   version: 'Student' | 'Teacher';
+  is_superuser: boolean;
+  is_superuser_verified: boolean;
   handleVer: (v: 'Student' | 'Teacher') => void;
   setLoading: (p: boolean) => void;
   registerUser: (props: {
@@ -26,9 +28,10 @@ interface IUserStoreState {
   }) => Promise<{ token: string; username: string; is_superuser: boolean }>;
   init: () => Promise<any>;
   courseCode?: string;
-  setCourseCode?: (code: string | null) => void;
+  setCourseCode?: (code: string) => void;
   dateRange?: Array<string>;
-  setDateRange?: (range: string[] | null) => void;
+  setDateRange?: (range: string[]) => void;
+  setSuperuserVerified: (verified: boolean) => void;
 }
 export const useUserStore = create<IUserStoreState>()((set) => ({
   username: '',
@@ -38,10 +41,12 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
   loading: false,
   initVer: 'Teacher',
   version: 'Teacher',
-  setUser: (props) => set({ ...props }),
+  is_superuser: false,
+  is_superuser_verified: false,
   setLoading: (p: boolean) => set({ loading: p }),
-  setCourseCode: (p) => set({ courseCode: p }),
-  setDateRange: (p) => set({ dateRange: p }),
+  setCourseCode: (p: string) => set({ courseCode: p }),
+  setDateRange: (p: string[]) => set({ dateRange: p }),
+  setSuperuserVerified: (verified) => set({ is_superuser_verified: verified }),
   registerUser: async (props): Promise<any> => {
     localStorage.removeItem('token');
     set(() => ({ loading: true }));
@@ -64,6 +69,8 @@ export const useUserStore = create<IUserStoreState>()((set) => ({
 
       set(() => ({
         ...res,
+        is_superuser: res?.is_superuser || false,
+        is_superuser_verified: !res?.is_superuser,
         loading: false
       }));
       res?.token && localStorage.setItem('token', `Bearer ${res?.token}`);

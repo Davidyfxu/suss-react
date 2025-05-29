@@ -10,6 +10,9 @@ const Login = () => {
   const [form] = Form.useForm();
   const loginUser = useUserStore((state) => state.loginUser);
   const loading = useUserStore((state) => state.loading);
+  const setSuperuserVerified = useUserStore(
+    (state) => state.setSuperuserVerified
+  );
   const navigate = useNavigate();
   const [vLoading, setVLoading] = useState(false);
   // superuser 二次验证相关
@@ -47,6 +50,7 @@ const Login = () => {
       const res = await verify_otp({ captcha_otp: otp });
       if (res?.result) {
         setSuperuserModal(false);
+        setSuperuserVerified(true);
         message.success(res.message);
         navigate('/dashboard/dashboard');
       } else {
