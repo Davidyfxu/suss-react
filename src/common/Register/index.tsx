@@ -240,7 +240,7 @@ const Register = () => {
                         onClick={() => getCaptcha(true)}
                         title="Refresh captcha"
                       >
-                        Can't see clearly? Refresh
+                        Refresh
                       </Button>
                     </Col>
                   </Row>

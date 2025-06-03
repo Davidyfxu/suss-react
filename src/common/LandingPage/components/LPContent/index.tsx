@@ -1,19 +1,27 @@
 import { Layout } from 'antd';
 import WelcomeSection from './WelcomeSection';
 import ImageSection from './ImageSection';
-
+import '../../index.css';
 const { Content } = Layout;
 
 const LPContent = () => {
   return (
-    <Content>
+    <Content
+      className="landing-page"
+      style={{
+        height: 'calc(100vh - 120px)',
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center'
+      }}
+    >
       <div
         style={{
-          height: 'calc(100vh - 120px)',
+          flex: 1,
           background:
             'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(240,245,255,0.9) 100%)'
         }}
-        className="rounded-lg flex flex-col gap-0 md:flex-row justify-evenly items-center p-8 md:p-12 shadow-lg"
+        className="rounded-lg flex flex-col gap-0 md:flex-row justify-evenly items-center p-8 md:p-12 h-full lg:h-4/5"
       >
         <WelcomeSection
           title="Welcome to SUSS"
@@ -23,6 +31,7 @@ const LPContent = () => {
         />
         <ImageSection />
       </div>
+
       {/*<IntroCards />*/}
     </Content>
   );

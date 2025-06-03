@@ -134,7 +134,7 @@ const Profile = () => {
               <Input.Password
                 prefix={<LockOutlined className="text-gray-400" />}
                 allowClear
-                placeholder="Please fill your password (optional)"
+                placeholder="Please fill your password"
                 className="rounded-md"
               />
             </Form.Item>

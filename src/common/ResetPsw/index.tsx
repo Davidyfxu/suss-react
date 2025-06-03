@@ -36,14 +36,14 @@ const ResetPsw = () => {
       const { password, confirmPwd } = form.getFieldsValue();
       if (password !== confirmPwd) return;
       setLoading(true);
-      const { status, msg } = await resetPsw({
+      const { status, message: msg } = await resetPsw({
         new_password: password,
         uid,
         token
       });
       setLoading(false);
       if (status === 'success') {
-        message.success(msg + 'Redirect to Login Page...');
+        message.success(msg + ' Redirect to Login Page...');
         setTimeout(() => navigate('/login'), 1000);
       }
     } catch (e) {

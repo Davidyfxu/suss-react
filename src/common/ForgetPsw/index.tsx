@@ -66,7 +66,7 @@ const ForgetPsw = () => {
 
           // Only proceed with password reset request if captcha verification was successful
           const response: { status?: string; message?: string } =
-            await forgetPsw({ email });
+            await forgetPsw({ email: email?.toLocaleLowerCase?.() });
 
           if (response?.status === 'success') {
             Modal.success({

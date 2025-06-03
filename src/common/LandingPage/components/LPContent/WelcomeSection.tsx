@@ -22,7 +22,7 @@ const WelcomeSection = ({
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
       className={
-        'flex flex-col items-start md:items-center justify-center p-6 w-full md:w-1/2'
+        'flex flex-col items-center justify-center p-6 w-full md:w-1/2'
       }
     >
       <motion.div
@@ -31,17 +31,27 @@ const WelcomeSection = ({
         transition={{ duration: 0.8, delay: 0.2 }}
         className="flex flex-col items-center"
       >
-        <Title level={2} style={{ color: 'black', marginBottom: 0 }}>
+        <Title
+          level={1}
+          style={{
+            fontSize: '3rem',
+            color: '#001e60',
+            marginBottom: 0,
+            fontFamily: 'Roboto Mono, monospace'
+          }}
+        >
           {title}
         </Title>
         <Title
           level={5}
           style={{
-            color: '#003366',
+            color: '#001e60',
             marginTop: 0,
             marginBottom: 0,
-            fontSize: '1.5rem',
-            fontWeight: 500
+            fontSize: '2.5rem',
+            fontWeight: 500,
+            fontStyle: 'italic',
+            textAlign: 'center'
           }}
         >
           {subtitle}
@@ -49,11 +59,12 @@ const WelcomeSection = ({
         <Title
           level={5}
           style={{
-            color: '#003366',
+            fontSize: '2.5rem',
+            color: '#001e60',
             marginTop: 0,
             marginBottom: 16,
-            fontSize: '1.5rem',
-            fontWeight: 500
+            fontWeight: 500,
+            fontStyle: 'italic'
           }}
         >
           ({abbreviation})
@@ -66,15 +77,23 @@ const WelcomeSection = ({
       >
         <Paragraph
           style={{
-            color: '#D92D27',
+            fontSize: '1.5rem',
+            color: '#da291c',
             fontWeight: 'bold',
-            lineHeight: '1.8'
+            textAlign: 'center'
           }}
           className={'max-w-xl'}
         >
           {abbreviation}
-          {'  '}
-          <span style={{ color: 'black', fontWeight: 'normal' }}>
+          {'    '}
+          <span
+            style={{
+              fontFamily: 'Roboto Mono, monospace',
+              fontSize: '1rem',
+              color: 'black',
+              fontWeight: 'normal'
+            }}
+          >
             {description}
           </span>
         </Paragraph>
