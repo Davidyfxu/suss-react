@@ -10,7 +10,7 @@ const WordCloudComp: React.FC = () => {
   const dateRange = useUserStore((state) => state.dateRange);
   const [words, setWords] = useState<{ value: number; text: string }[]>([]);
   const [loading, setLoading] = useState(false);
-  const [topic, setTopic] = useState('');
+  const [topic, setTopic] = useState<string>();
 
   const getWords = useCallback(async () => {
     try {
@@ -40,6 +40,10 @@ const WordCloudComp: React.FC = () => {
     courseCode && getWords();
   }, [courseCode, topic, dateRange]);
 
+  useEffect(() => {
+    setTopic(undefined);
+  }, [courseCode]);
+
   return (
     <div className="flex flex-col gap-2 flex-1">
       <div>
@@ -52,6 +56,7 @@ const WordCloudComp: React.FC = () => {
           placeholder={'Please select a topic from the course.'}
           className={'w-full mt-2'}
           handleSelect={(v) => setTopic(v)}
+          value={topic}
         />
       </div>
 

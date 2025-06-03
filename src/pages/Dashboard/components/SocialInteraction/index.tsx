@@ -373,7 +373,7 @@ const SocialGraph: React.FC = () => {
           handleSelect={(v) => setTopic(v)}
           allowClear
           className="w-full"
-          placeholder="Please select the topic title here"
+          placeholder="Please select a topic from the course."
         />
         {/* Right Panel - Network Graph */}
         <div

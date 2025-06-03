@@ -109,34 +109,45 @@ const ChartContainer: React.FC<{
 );
 
 const SelectorGroup: React.FC<{
-  onTopicChange: (value: string) => void;
-  onUserChange: (value: number | null) => void;
-}> = ({ onTopicChange, onUserChange }) => (
-  <div className="w-full flex flex-col gap-2">
-    <span>Select topic title</span>
-    <SelectSUSS
-      placeholder="Select topic title"
-      allowClear
-      className="w-full"
-      handleSelect={onTopicChange}
-    />
-    <span>Select username</span>
-    <SelectStudent
-      placeholder="Select username"
-      allowClear
-      className="w-full"
-      handleSelect={onUserChange}
-    />
-  </div>
-);
+  onTopicChange: (value?: string) => void;
+  onUserChange: (value?: number) => void;
+  topic?: string;
+  selectedUser?: number;
+}> = ({ onTopicChange, onUserChange, topic, selectedUser }) => {
+  const courseCode = useUserStore((state) => state.courseCode);
+  useEffect(() => {
+    onTopicChange(undefined);
+    onUserChange(undefined);
+  }, [courseCode]);
+  return (
+    <div className="w-full flex flex-col gap-2">
+      <span>Select topic title</span>
+      <SelectSUSS
+        placeholder="Select topic title"
+        allowClear
+        className="w-full"
+        handleSelect={onTopicChange}
+        value={topic}
+      />
+      <span>Select username</span>
+      <SelectStudent
+        placeholder="Select username"
+        allowClear
+        className="w-full"
+        handleSelect={onUserChange}
+        value={selectedUser}
+      />
+    </div>
+  );
+};
 
 const VisualizationStudent = ({ className }: { className?: string }) => {
   const courseCode = useUserStore((state) => state.courseCode);
   const version = useUserStore((state) => state.version);
   const dateRange = useUserStore((state) => state.dateRange);
   const [loading, setLoading] = useState<boolean>(false);
-  const [topic, setTopic] = useState<string>('');
-  const [selectedUser, setSelectedUser] = useState<number | null>();
+  const [topic, setTopic] = useState<string>();
+  const [selectedUser, setSelectedUser] = useState<number>();
   const [rawData, setData] = useState<RawData>({
     serializer_data_participant: [],
     serializer_data_reply: [],
@@ -291,6 +302,8 @@ const VisualizationStudent = ({ className }: { className?: string }) => {
                 <SelectorGroup
                   onTopicChange={setTopic}
                   onUserChange={setSelectedUser}
+                  topic={topic}
+                  selectedUser={selectedUser}
                 />
                 <div className="flex-1">
                   {renderChart(

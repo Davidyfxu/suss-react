@@ -89,8 +89,8 @@ const Visualization = ({ className }: { className?: string }) => {
   const version = useUserStore((state) => state.version);
   const responsive = useResponsive();
   const dateRange = useUserStore((state) => state.dateRange);
-  const [topic, setTopic] = useState<string>('');
-  const [selectedUser, setSelectedUser] = useState<number | null>();
+  const [topic, setTopic] = useState<string>();
+  const [selectedUser, setSelectedUser] = useState<number>();
   const [rawData, setData] = useState<RawData>({
     serializer_data_participant: [],
     serializer_data_reply: [],
@@ -126,6 +126,11 @@ const Visualization = ({ className }: { className?: string }) => {
   useEffect(() => {
     courseCode && getParticipants();
   }, [courseCode, topic, selectedUser, dateRange, version]);
+
+  useEffect(() => {
+    setTopic(undefined);
+    setSelectedUser(undefined);
+  }, [courseCode]);
 
   const processData = (
     participantData: ChartDataItem[] = []
@@ -239,13 +244,15 @@ const Visualization = ({ className }: { className?: string }) => {
               allowClear
               className={'w-full flex-1'}
               handleSelect={(value) => setTopic(value)}
+              value={topic}
             />
             <span>Please select the username here.</span>
             <SelectStudent
-              placeholder="Select topic title"
+              placeholder="Select username"
               allowClear
               className={'w-full flex-1'}
               handleSelect={(value) => setSelectedUser(value)}
+              value={selectedUser}
             />
           </div>
           {!isEmpty(rawData?.['reply_by_week']) && (

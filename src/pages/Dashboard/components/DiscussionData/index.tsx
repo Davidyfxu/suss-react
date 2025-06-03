@@ -98,6 +98,7 @@ const DiscussionData = () => {
         placeholder={'Please select a topic from the course.'}
         className={'w-full'}
         handleSelect={(v) => setTopic(v)}
+        value={topic}
       />
       <Alert
         message="Click the table header to sort the column (ascending/descending)."
