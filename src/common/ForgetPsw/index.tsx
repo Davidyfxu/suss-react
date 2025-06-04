@@ -1,100 +1,88 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  Button,
-  Form,
-  Input,
-  Modal,
-  Spin,
-  Image,
-  Row,
-  Col,
-  message
-} from 'antd';
-import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Modal, Spin, Row, Col, message } from 'antd';
 import styles from '../Login/index.module.scss';
-import {
-  forgetPsw,
-  get_captcha,
-  verify_captcha,
-  refresh_captcha
-} from '../api.ts';
-interface ICaptcha {
-  captcha_key: string;
-  captcha_image: string;
-}
+import { forgetPsw, get_captcha, verify_captcha } from '../api.ts';
 
 const ForgetPsw = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [captcha, setCaptcha] = useState<ICaptcha>({} as ICaptcha);
-
-  const getCaptcha = async (isReset = false) => {
-    try {
-      if (isReset && captcha?.captcha_key) {
-        const res = await refresh_captcha(captcha);
-        setCaptcha(res);
-      } else {
-        const res = await get_captcha({});
-        setCaptcha(res);
-      }
-    } catch (e) {
-      console.error(e);
-      message.error('Failed to load captcha, please refresh the page');
-    }
-  };
+  const [countdown, setCountdown] = useState(0);
+  const [captchaKey, setCaptchaKey] = useState();
 
   useEffect(() => {
-    void getCaptcha();
-  }, []);
+    let timer: NodeJS.Timeout;
+    if (countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [countdown]);
+
+  const sendVerificationCode = async () => {
+    try {
+      const userID = form.getFieldValue('userID');
+      if (!userID) {
+        message.error('Please enter your User ID first');
+        return;
+      }
+      setLoading(true);
+      const { captcha_key } = await get_captcha({ userID });
+      message.success('Verification code has been sent to your email');
+      setCountdown(60);
+      setCaptchaKey(captcha_key);
+    } catch (error) {
+      console.error('Failed to send verification code:', error);
+      message.error(
+        `Failed to send verification code. Reason: ${error?.response?.data?.message || error?.message || 'Unknown error'}`
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async () => {
     try {
       await form.validateFields();
-      const { email, captchaInput } = form.getFieldsValue();
+      const { userID, verificationCode } = form.getFieldsValue();
       setLoading(true);
 
-      // Verify captcha before sending password reset request
-      if (captcha?.captcha_key) {
-        try {
-          // First verify the captcha
-          await verify_captcha({
-            captcha_key: captcha.captcha_key,
-            captcha_value: captchaInput.toUpperCase()
+      try {
+        // First verify the verification code
+        await verify_captcha({
+          captcha_key: captchaKey,
+          captcha_value: verificationCode
+        });
+
+        // Only proceed with password reset request if verification was successful
+        const response: { status?: string; message?: string } = await forgetPsw(
+          { userID }
+        );
+
+        if (response?.status === 'success') {
+          Modal.success({
+            content:
+              response?.message ||
+              'Password reset link has been sent to your email',
+            okText: 'Back to Login Page',
+            onOk: () => navigate('/login')
           });
-
-          // Only proceed with password reset request if captcha verification was successful
-          const response: { status?: string; message?: string } =
-            await forgetPsw({ email: email?.toLocaleLowerCase?.() });
-
-          if (response?.status === 'success') {
-            Modal.success({
-              content:
-                response?.message ||
-                'Password reset link has been sent to your email',
-              okText: 'Back to Login Page',
-              onOk: () => navigate('/login')
-            });
-          } else {
-            message.error(
-              response?.message || 'Failed to send password reset email'
-            );
-            await getCaptcha(true);
-            form.resetFields(['captchaInput']);
-          }
-        } catch (error: any) {
-          console.error('Password reset request error:', error);
+        } else {
           message.error(
-            `${error?.response?.data?.message || error?.message || 'Unknown error'} Please try again`
+            response?.message || 'Failed to send password reset email'
           );
-          await getCaptcha(true);
-          form.resetFields(['captchaInput']);
+          form.resetFields(['verificationCode']);
         }
-      } else {
-        message.error('Captcha not loaded properly');
-        await getCaptcha(true);
-        form.resetFields(['captchaInput']);
+      } catch (error: any) {
+        console.error('Password reset request error:', error);
+        message.error(
+          `${error?.response?.data?.message || error?.message || 'Unknown error'} Please try again`
+        );
+        form.resetFields(['verificationCode']);
       }
     } catch (e) {
       console.error('forgetPsw', e);
@@ -116,51 +104,37 @@ const ForgetPsw = () => {
             <Form form={form}>
               <Spin spinning={loading}>
                 <Form.Item
-                  label="Email"
-                  name="email"
+                  label="User ID"
+                  name="userID"
                   rules={[
                     {
                       required: true,
-                      type: 'email',
-                      message: 'Please fill your SUSS email address'
+                      message: 'Please fill your Canvas User ID'
                     }
                   ]}
                 >
-                  <Input placeholder="Please fill your SUSS email address" />
+                  <Input placeholder="Please fill your Canvas User ID" />
                 </Form.Item>
                 <Form.Item
-                  label="Captcha"
-                  name="captchaInput"
+                  label="Verification Code"
+                  name="verificationCode"
                   rules={[
-                    { required: true, message: 'Please input the captcha' }
+                    {
+                      required: true,
+                      message: 'Please input the verification code'
+                    }
                   ]}
                   extra={
                     <Row gutter={16} align="middle" style={{ marginTop: 8 }}>
                       <Col>
-                        {captcha?.captcha_image ? (
-                          <Image
-                            className={'rounded'}
-                            width={160}
-                            height={64}
-                            src={captcha.captcha_image}
-                            preview={false}
-                          />
-                        ) : (
-                          <div
-                            className={
-                              'w-40 h-16 flex justify-center rounded items-center border mb-1'
-                            }
-                          >
-                            <LoadingOutlined />
-                          </div>
-                        )}
-                      </Col>
-                      <Col>
                         <Button
-                          icon={<ReloadOutlined />}
-                          onClick={() => getCaptcha(true)}
+                          type="primary"
+                          onClick={sendVerificationCode}
+                          disabled={countdown > 0}
                         >
-                          Refresh
+                          {countdown > 0
+                            ? `Resend in ${countdown}s`
+                            : 'Send Code'}
                         </Button>
                       </Col>
                     </Row>

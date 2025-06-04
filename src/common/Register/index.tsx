@@ -1,103 +1,90 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Button,
-  Checkbox,
-  Form,
-  Input,
-  Spin,
-  Image,
-  message,
-  Row,
-  Col
-} from 'antd';
-import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Spin, message, Row, Col } from 'antd';
 import { useUserStore } from '../../stores/userStore';
 import { useNavigate } from 'react-router-dom';
 import styles from '../Login/index.module.scss';
 import { get } from 'lodash-es';
-import { get_captcha, verify_captcha, refresh_captcha } from '../api.ts';
+import { get_captcha, verify_captcha } from '../api.ts';
 
-interface ICaptcha {
-  captcha_key: string;
-  captcha_image: string;
-}
 const Register = () => {
   const [form] = Form.useForm();
   const registerUser = useUserStore((state) => state.registerUser);
   const username = useUserStore((state) => state.username);
   const loading = useUserStore((state) => state.loading);
   const setLoading = useUserStore((state) => state.setLoading);
+  const [captchaKey, setCaptchaKey] = useState();
   const navigate = useNavigate();
-  const [captcha, setCaptcha] = useState<ICaptcha>({} as ICaptcha);
-
-  const getCaptcha = async (isReset = false) => {
-    try {
-      if (isReset && captcha?.captcha_key) {
-        const res = await refresh_captcha(captcha);
-        setCaptcha(res);
-      } else {
-        const res = await get_captcha({});
-        setCaptcha(res);
-      }
-    } catch (e) {
-      console.error(e);
-      message.error('Failed to load captcha, please refresh the page');
-    }
-  };
+  const [countdown, setCountdown] = useState(0);
 
   useEffect(() => {
-    void getCaptcha();
-  }, []);
+    let timer: NodeJS.Timeout;
+    if (countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [countdown]);
+
+  const sendVerificationCode = async () => {
+    try {
+      const userID = form.getFieldValue('username');
+      if (!userID) {
+        message.error('Please enter your User ID first');
+        return;
+      }
+      setLoading(true);
+      const { captcha_key } = await get_captcha({ userID });
+      message.success('Verification code has been sent to your email');
+      setCountdown(60);
+      setCaptchaKey(captcha_key);
+    } catch (error) {
+      console.error('Failed to send verification code:', error);
+      message.error(
+        `Failed to send verification code. Reason: ${get(error, 'response.data.message') || get(error, 'message')}`
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   function handleSubmit(): void {
     form
       .validateFields()
       .then(async (value) => {
-        const {
-          username,
-          email,
-          password,
-          confirmPwd,
-          captchaInput,
-          last_name
-        } = value;
+        const { username, password, confirmPwd, verificationCode, last_name } =
+          value;
 
         if (password !== confirmPwd) {
           message.error('Passwords do not match');
           return;
         }
 
-        // Verify captcha before registration
         try {
           setLoading(true);
-          if (captcha?.captcha_key) {
-            // First verify the captcha
-            await verify_captcha({
-              captcha_key: captcha.captcha_key,
-              captcha_value: captchaInput.toUpperCase()
-            });
-            // Only proceed with registration if captcha verification was successful
-            await registerUser({
-              username,
-              email,
-              password,
-              last_name
-            });
-            // Navigate to login page after successful registration
-            setTimeout(() => {
-              navigate('/login');
-            }, 500);
-          } else {
-            message.error('Captcha not loaded properly');
-            await getCaptcha(true);
-          }
+          // Verify the email verification code
+          await verify_captcha({
+            captcha_key: captchaKey,
+            captcha_value: verificationCode
+          });
+          // Only proceed with registration if verification was successful
+          await registerUser({
+            username,
+            password,
+            last_name
+          });
+          // Navigate to login page after successful registration
+          setTimeout(() => {
+            navigate('/login');
+          }, 500);
         } catch (error) {
           console.error('Registration error:', error);
           message.error(
             `Registration failed. Reason: ${get(error, 'response.data.message') || get(error, 'message')}`
           );
-          await getCaptcha(true);
         } finally {
           setLoading(false);
         }
@@ -140,22 +127,6 @@ const Register = () => {
                 ]}
               >
                 <Input placeholder="Please fill your Canvas User ID" />
-              </Form.Item>
-              <Form.Item
-                label="Email"
-                name="email"
-                rules={[
-                  {
-                    type: 'email',
-                    required: true,
-                    message: 'Please fill your SUSS email address'
-                  }
-                ]}
-              >
-                <Input
-                  allowClear
-                  placeholder="Please fill your SUSS email address"
-                />
               </Form.Item>
               <Form.Item
                 label="User Name"
@@ -208,39 +179,25 @@ const Register = () => {
                 />
               </Form.Item>
               <Form.Item
-                label="Captcha"
-                name="captchaInput"
+                label="Verification Code"
+                name="verificationCode"
                 rules={[
-                  { required: true, message: 'Please input the captcha' }
+                  {
+                    required: true,
+                    message: 'Please input the verification code'
+                  }
                 ]}
                 extra={
                   <Row gutter={16} align="middle" style={{ marginTop: 8 }}>
                     <Col>
-                      {captcha?.captcha_image ? (
-                        <Image
-                          className={'rounded'}
-                          width={160}
-                          height={64}
-                          src={captcha.captcha_image}
-                          preview={false}
-                        />
-                      ) : (
-                        <div
-                          className={
-                            'w-40 h-16 flex justify-center rounded items-center border mb-1'
-                          }
-                        >
-                          <LoadingOutlined />
-                        </div>
-                      )}
-                    </Col>
-                    <Col>
                       <Button
-                        icon={<ReloadOutlined />}
-                        onClick={() => getCaptcha(true)}
-                        title="Refresh captcha"
+                        type="primary"
+                        onClick={sendVerificationCode}
+                        disabled={countdown > 0}
                       >
-                        Refresh
+                        {countdown > 0
+                          ? `Resend in ${countdown}s`
+                          : 'Send Code'}
                       </Button>
                     </Col>
                   </Row>

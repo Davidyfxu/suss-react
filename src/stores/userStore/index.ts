@@ -20,7 +20,7 @@ interface IUserStoreState {
   setLoading: (p: boolean) => void;
   registerUser: (props: {
     username: string;
-    email: string;
+    email?: string;
     password: string;
     last_name: string;
   }) => Promise<any>;
