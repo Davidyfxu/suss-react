@@ -203,7 +203,7 @@ const Register = () => {
                   </Row>
                 }
               >
-                <Input.OTP length={4} />
+                <Input.OTP length={6} />
               </Form.Item>
               <div className={'flex justify-between items-center'}>
                 <Link to={'/login'}>
