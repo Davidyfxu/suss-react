@@ -133,9 +133,7 @@ const Overview = () => {
           >
             <Statistic
               loading={loading}
-              title={
-                <span style={{ fontSize: '16px' }}>Number of replies</span>
-              }
+              title={<span style={{ fontSize: '16px' }}>Number of posts</span>}
               value={overview?.number_entries_posted || 0}
               valueStyle={{
                 fontSize: '28px',

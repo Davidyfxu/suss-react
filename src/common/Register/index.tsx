@@ -38,13 +38,13 @@ const Register = () => {
       }
       setLoading(true);
       const { captcha_key } = await get_captcha({ userID });
-      message.success('Verification code has been sent to your email');
+      message.success('Verification code has been sent to your SUSS email');
       setCountdown(60);
       setCaptchaKey(captcha_key);
     } catch (error) {
       console.error('Failed to send verification code:', error);
       message.error(
-        `Failed to send verification code. Reason: ${get(error, 'response.data.message') || get(error, 'message')}`
+        `Failed to send verification code. ${get(error, 'response.data.message') || get(error, 'message')}`
       );
     } finally {
       setLoading(false);
@@ -83,7 +83,7 @@ const Register = () => {
         } catch (error) {
           console.error('Registration error:', error);
           message.error(
-            `Registration failed. Reason: ${get(error, 'response.data.message') || get(error, 'message')}`
+            `Registration failed. ${get(error, 'response.data.message') || get(error, 'message')}`
           );
         } finally {
           setLoading(false);

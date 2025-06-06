@@ -32,13 +32,13 @@ const ForgetPsw = () => {
       }
       setLoading(true);
       const { captcha_key } = await get_captcha({ userID });
-      message.success('Verification code has been sent to your email');
+      message.success('Verification code has been sent to your SUSS email');
       setCountdown(60);
       setCaptchaKey(captcha_key);
     } catch (error) {
       console.error('Failed to send verification code:', error);
       message.error(
-        `Failed to send verification code. Reason: ${error?.response?.data?.message || error?.message || 'Unknown error'}`
+        `Failed to send verification code. ${error?.response?.data?.message || error?.message || 'Unknown error'}`
       );
     } finally {
       setLoading(false);

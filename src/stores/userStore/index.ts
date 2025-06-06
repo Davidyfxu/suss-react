@@ -56,13 +56,17 @@ export const useUserStore = create<IUserStoreState>()(
       registerUser: async (props): Promise<any> => {
         localStorage.removeItem('token');
         set(() => ({ loading: true }));
-        await register({
+        const { message: resMessage } = await register({
           ...props
         });
         set(() => ({
           loading: false
         }));
-        message.success('register success');
+        if (resMessage) {
+          throw new Error(resMessage);
+        } else {
+          message.success('register success');
+        }
       },
       loginUser: async (props): Promise<any> => {
         try {

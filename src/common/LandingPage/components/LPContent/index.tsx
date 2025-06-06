@@ -25,7 +25,7 @@ const LPContent = () => {
       >
         <WelcomeSection
           title="Welcome to SUSS"
-          subtitle="Collaborative Analytic Tool"
+          subtitle="Collaborative Learning Analytic Tool"
           abbreviation="CLAto"
           description="is an in-house developed platform to support collaborative learning. Through the interactive visualizations and innovative features, this tool makes it handy for users to view discussion participations, track discussion flow and engagement dynamics."
         />

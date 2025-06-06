@@ -48,9 +48,9 @@ const WelcomeSection = ({
             color: '#001e60',
             marginTop: 0,
             marginBottom: 0,
-            fontSize: '2.5rem',
+            fontSize: '2.2rem',
             fontWeight: 500,
-            fontStyle: 'italic',
+            // fontStyle: 'italic',
             textAlign: 'center'
           }}
         >
@@ -59,12 +59,12 @@ const WelcomeSection = ({
         <Title
           level={5}
           style={{
-            fontSize: '2.5rem',
+            fontSize: '2rem',
             color: '#001e60',
             marginTop: 0,
             marginBottom: 16,
-            fontWeight: 500,
-            fontStyle: 'italic'
+            fontWeight: 500
+            // fontStyle: 'italic'
           }}
         >
           ({abbreviation})
@@ -80,7 +80,7 @@ const WelcomeSection = ({
             fontSize: '1.5rem',
             color: '#da291c',
             fontWeight: 'bold',
-            textAlign: 'center'
+            textAlign: 'justify'
           }}
           className={'max-w-xl'}
         >
