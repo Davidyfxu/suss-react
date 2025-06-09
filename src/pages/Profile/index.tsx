@@ -1,4 +1,4 @@
-import { Button, Form, Input, message, Spin } from 'antd';
+import { Button, Form, Input, message, Spin, Typography } from 'antd';
 import { useUserStore } from '../../stores/userStore';
 import { useState } from 'react';
 import { updateUser } from './api.ts';
@@ -177,6 +177,11 @@ const Profile = () => {
             </Button>
           </Spin>
         </Form>
+        <div className="mt-2">
+          <Typography.Text type="secondary">
+            You can update either User Name or Password or both.
+          </Typography.Text>
+        </div>
       </div>
     </div>
   );

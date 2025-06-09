@@ -72,9 +72,18 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({
   if (active && payload && payload.length) {
     return (
       <div className="bg-white p-4 border border-gray-200 rounded-lg shadow-md">
-        <p className="text-gray-600 mb-2">{label}</p>
+        <p
+          className="text-gray-600 mb-2 break-words"
+          style={{ maxWidth: '300px' }}
+        >
+          {label}
+        </p>
         {payload.map((entry, index) => (
-          <p key={index} className="text-sm" style={{ color: entry.color }}>
+          <p
+            key={index}
+            className="text-sm break-words"
+            style={{ color: entry.color, maxWidth: '300px' }}
+          >
             {entry.name}: {entry.value}
           </p>
         ))}
@@ -163,8 +172,8 @@ const Visualization = ({ className }: { className?: string }) => {
       } else {
         topicMap.set(title, {
           ...item,
-          topic_title:
-            title.length > 30 ? title.substring(0, 30) + '...' : title,
+          topic_title: title,
+          // title.length > 30 ? title.substring(0, 30) + '...' : title,
           reply_count: replyCount
         });
       }
