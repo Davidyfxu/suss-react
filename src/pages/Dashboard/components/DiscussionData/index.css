@@ -1,6 +1,104 @@
-.ant-table-column-title {
-  font-size: 10px !important;
+/* TanStack Table styles */
+.tanstack-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  line-height: 1.2;
 }
-.ant-table-cell {
-  font-size: 10px !important;
+
+.tanstack-table th {
+  background-color: #fafafa;
+  border: 1px solid #f0f0f0;
+  padding: 4px 6px;
+  text-align: left;
+  font-weight: 600;
+  user-select: none;
+  position: relative;
+  height: 28px;
+  vertical-align: middle;
+}
+
+.tanstack-table th:hover {
+  background-color: #f0f0f0;
+}
+
+.tanstack-table th.sortable {
+  cursor: pointer;
+}
+
+.tanstack-table td {
+  border: 1px solid #f0f0f0;
+  padding: 3px 6px;
+  vertical-align: middle;
+  height: auto;
+  min-height: 24px;
+}
+
+.tanstack-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.tanstack-table .numeric-cell {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.tanstack-table .resize-handle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 5px;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.tanstack-table th:hover .resize-handle {
+  opacity: 1;
+}
+
+.tanstack-table .resize-handle.is-resizing {
+  opacity: 1;
+  background: #1890ff;
+}
+
+.tanstack-table .sort-indicator {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 10px;
+  color: #1890ff;
+}
+
+/* Scrollable container styles */
+.table-container {
+  overflow-x: auto;
+  overflow-y: auto;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  background: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tanstack-table {
+    font-size: 10px;
+  }
+
+  .tanstack-table th,
+  .tanstack-table td {
+    padding: 2px 4px;
+  }
+
+  .tanstack-table th {
+    height: 24px;
+  }
+
+  .tanstack-table td {
+    min-height: 20px;
+  }
 }
