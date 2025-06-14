@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-// export const BASE_URL = 'http://localhost:8000';
-export const BASE_URL = 'https://suss-django.zeabur.app';
+export const BASE_URL = 'http://localhost:8000';
+// export const BASE_URL = 'https://clato-api.suss.edu.sg';
 
 class HttpClient {
   private api: AxiosInstance;

@@ -135,7 +135,7 @@ const SelectorGroup: React.FC<{
         allowClear
         className="w-full"
         handleSelect={onUserChange}
-        value={selectedUser}
+        // value={selectedUser}
       />
     </div>
   );
