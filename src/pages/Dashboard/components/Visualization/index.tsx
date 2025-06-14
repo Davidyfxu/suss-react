@@ -261,7 +261,7 @@ const Visualization = ({ className }: { className?: string }) => {
               allowClear
               className={'w-full flex-1'}
               handleSelect={(value) => setSelectedUser(value)}
-              value={selectedUser}
+              // value={selectedUser}
             />
           </div>
           {!isEmpty(rawData?.['reply_by_week']) && (

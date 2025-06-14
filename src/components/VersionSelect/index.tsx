@@ -64,7 +64,10 @@ const VersionSelect: React.FC<VersionSelectProps> = (props) => {
       size={'large'}
       onChange={(e) => e.target.value && handleVer(e.target.value)}
     >
-      {options.map((option) => (
+      {(initVer === 'Teacher'
+        ? options
+        : options.filter((o) => o.value !== 'Teacher')
+      ).map((option) => (
         <Radio.Button
           key={option.value}
           value={option.value}
