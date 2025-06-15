@@ -38,7 +38,6 @@ const SelectStudent: React.FC<CustomAutoCompleteProps> = ({
       console.error('Failed to fetch active topics', err);
     }
   };
-
   useEffect(() => {
     if (courseCode) {
       handleSelect(null as any);
@@ -67,7 +66,7 @@ const SelectStudent: React.FC<CustomAutoCompleteProps> = ({
 
   useEffect(() => {
     handleSearch(inputValue);
-  }, [inputValue]);
+  }, [inputValue, students]);
 
   const handleSelectOption = (value: string, option: any) => {
     setInputValue(option.label);
