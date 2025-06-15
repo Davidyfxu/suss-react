@@ -36,7 +36,7 @@ const SelectSUSS: React.FC<CustomSelectProps> = ({
       options={activeTopics || []}
       onChange={handleSelect}
       {...props}
-      loading={!activeTopics}
+      // loading={courseCode && !activeTopics}
     />
   );
 };
