@@ -62,9 +62,9 @@ importers:
       react-router-dom:
         specifier: ^6.29.0
         version: 6.30.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-wordcloud:
-        specifier: ^1.2.7
-        version: 1.2.7(react@18.3.1)
+      react-wordcloud-fork:
+        specifier: ^1.2.909
+        version: 1.2.909(react@18.3.1)
       recharts:
         specifier: ^2.15.1
         version: 2.15.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3077,10 +3077,10 @@ packages:
       react: '>=16.6.0'
       react-dom: '>=16.6.0'
 
-  react-wordcloud@1.2.7:
-    resolution: {integrity: sha512-pyXvL8Iu2J258Qk2/kAwY23dIVhNpMC3dnvbXRkw5+Ert5EkJWwnwVjs9q8CmX38NWbfCKhGmpjuumBoQEtniw==}
+  react-wordcloud-fork@1.2.909:
+    resolution: {integrity: sha512-YyTMPZgD2f1msLDstrzqJcGmE+iNAyypd9fu1RX27LeBhTz6wMOhOcc//YtctViT94bahHtAGgwtcbvgUk8KVA==}
     peerDependencies:
-      react: ^16.13.0
+      react: ^16.13.0 || ^17.0.0 || ^18.0.0
 
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
@@ -7000,7 +7000,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  react-wordcloud@1.2.7(react@18.3.1):
+  react-wordcloud-fork@1.2.909(react@18.3.1):
     dependencies:
       d3-array: 2.12.1
       d3-cloud: 1.2.7

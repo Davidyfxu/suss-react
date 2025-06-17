@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { draw_wordcloud } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
-import ReactWordcloud from 'react-wordcloud';
+import ReactWordcloud from 'react-wordcloud-fork';
 import { Empty, Spin, Typography } from 'antd';
 import { SelectSUSS } from '../../../../components';
 
