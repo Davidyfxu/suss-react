@@ -2,16 +2,33 @@ import React, { useEffect } from 'react';
 import { useUserStore } from '../../stores/userStore';
 import { useNavigate } from 'react-router-dom';
 import { Spin } from 'antd';
+import { usePostHog } from 'posthog-js/react';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }): any => {
   const navigate = useNavigate();
+  const posthog = usePostHog();
 
-  const loading = useUserStore((state) => state.loading);
-  const init = useUserStore((state) => state.init);
-  const is_superuser = useUserStore((state) => state.is_superuser);
-  const is_superuser_verified = useUserStore(
-    (state) => state.is_superuser_verified
-  );
+  const {
+    init,
+    is_superuser,
+    loading,
+    username,
+    is_superuser_verified,
+    email,
+    fullName
+  } = useUserStore();
+
+  useEffect(() => {
+    if (username) {
+      // Identify sends an event, so you may want to limit how often you call it
+      posthog?.identify(username, {
+        email,
+        is_superuser,
+
+        fullName
+      });
+    }
+  }, [posthog, username, is_superuser, email, fullName]);
 
   const checkToken = async () => {
     try {
