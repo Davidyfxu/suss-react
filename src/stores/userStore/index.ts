@@ -30,8 +30,8 @@ interface IUserStoreState {
   }) => Promise<{ token: string; username: string; is_superuser: boolean }>;
   init: () => Promise<any>;
   courseCode?: string;
-  setCourseCode?: (code: string) => void;
-  dateRange?: Array<string>;
+  setCourseCode?: (code: string | undefined) => void;
+  dateRange?: string[];
   setDateRange?: (range: string[]) => void;
   setSuperuserVerified: (verified: boolean) => void;
 }
@@ -47,9 +47,10 @@ export const useUserStore = create<IUserStoreState>()(
       initVer: 'Teacher',
       version: 'Teacher',
       is_superuser: false,
+      courseCode: undefined,
       is_superuser_verified: false,
       setLoading: (p: boolean) => set({ loading: p }),
-      setCourseCode: (p: string) => set({ courseCode: p }),
+      setCourseCode: (p: string | undefined) => set({ courseCode: p }),
       setDateRange: (p: string[]) => set({ dateRange: p }),
       setSuperuserVerified: (verified) =>
         set({ is_superuser_verified: verified }),

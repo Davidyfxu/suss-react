@@ -9,7 +9,8 @@ const SelectSUSSHeader = () => {
   const setCourseCode = useUserStore((state) => state.setCourseCode);
   const courseCode = useUserStore((state) => state.courseCode);
   const setDateRange = useUserStore((state) => state.setDateRange);
-  const [semester, setSemester] = useState();
+  const version = useUserStore((state) => state.version);
+  const [semester, setSemester] = useState<string | undefined>();
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
@@ -26,11 +27,11 @@ const SelectSUSSHeader = () => {
   // 统一处理日期范围更新
   const updateDateRange = (start: Dayjs | null, end: Dayjs | null) => {
     if (!start && !end) {
-      setDateRange?.(null);
+      setDateRange?.([]);
       return;
     }
 
-    const range: [string?, string?] = [];
+    const range: string[] = [];
     if (start) {
       range[0] = start.format('YYYY-MM-DD');
     }
@@ -38,52 +39,46 @@ const SelectSUSSHeader = () => {
       range[1] = end.format('YYYY-MM-DD');
     }
 
-    setDateRange?.(range as [string, string]);
+    setDateRange?.(range);
   };
 
   const { data, isLoading } = useSWR('courseOptions', async () => {
-    const {
-      JAN23 = [],
-      JUL23 = [],
-      OTHER = [] as string[]
-    } = await get_course_options();
+    const response = await get_course_options();
+    const { teacher_courses = [], student_courses = [] } = response || {};
 
-    const otherSemesters: string[] = Array.from(
-      new Set(
-        OTHER.map((o: string) => o.split('_')[1]).filter(
-          (o: string) => o && /^[a-zA-Z]{3}\d{2}$/.test(o)
-        )
-      )
-    );
+    // 根据当前版本选择对应的课程数据
+    const currentEnrollmentData =
+      version === 'Teacher' ? teacher_courses : student_courses;
 
-    return [
-      {
-        value: 'JAN23',
-        label: 'JAN23',
-        children: JAN23.map((value: string) => ({
-          value: value,
-          label: value
+    // 提取学期信息
+    const semesterMap = new Map<string, string[]>();
+
+    currentEnrollmentData.forEach((courseCode: string) => {
+      // 假设格式为 XXX_JAN23_XX 或类似格式
+      const parts = courseCode.split('_');
+      if (parts.length >= 2) {
+        const semesterPart = parts[1];
+        // 验证学期格式（如 JAN23, JUL23 等）
+        if (/^[a-zA-Z]{3}\d{2}$/.test(semesterPart)) {
+          if (!semesterMap.has(semesterPart)) {
+            semesterMap.set(semesterPart, []);
+          }
+          semesterMap.get(semesterPart)?.push(courseCode);
+        }
+      }
+    });
+
+    // 转换为选项格式
+    return Array.from(semesterMap.entries())
+      .map(([semester, courses]) => ({
+        value: semester,
+        label: semester,
+        children: courses.map((course: string) => ({
+          value: course,
+          label: course
         }))
-      },
-      {
-        value: 'JUL23',
-        label: 'JUL23',
-        children: JUL23.map((value: string) => ({
-          value: value,
-          label: value
-        }))
-      },
-      ...otherSemesters.map((s: string) => ({
-        value: s,
-        label: s,
-        children: OTHER.filter((o: string) => o.includes(s)).map(
-          (v: string) => ({
-            value: v,
-            label: v
-          })
-        )
       }))
-    ].filter((r) => r?.children?.length > 0);
+      .filter((r) => r?.children?.length > 0);
   });
 
   const semesterOptions =
@@ -92,9 +87,51 @@ const SelectSUSSHeader = () => {
   const courseOptions =
     data?.find?.((v) => v?.value === semester)?.children || [];
 
+  // 处理版本变化
   useEffect(() => {
-    setCourseCode?.(null);
-  }, [semester]);
+    if (data && courseCode) {
+      // 检查当前courseCode是否在新版本中存在
+      const allCoursesInNewVersion = data.flatMap((d) =>
+        d.children.map((c) => c.value)
+      );
+      const courseExistsInNewVersion =
+        allCoursesInNewVersion.includes(courseCode);
+
+      if (courseExistsInNewVersion) {
+        // 如果课程存在，找到对应的学期
+        const newSemester = data.find((d) =>
+          d.children.some((c) => c.value === courseCode)
+        )?.value;
+        setSemester(newSemester);
+      } else {
+        // 如果课程不存在，则重置
+        setCourseCode?.(undefined);
+        setSemester(undefined);
+      }
+    } else {
+      // 如果没有选中的课程，则重置
+      setSemester(undefined);
+    }
+  }, [version, data, courseCode, setCourseCode]);
+
+  // 处理学期变化
+  useEffect(() => {
+    setCourseCode?.(undefined);
+  }, [semester, setCourseCode]);
+
+  // 检查当前课程代码在选定学期下是否存在（仅当学期手动改变时）
+  useEffect(() => {
+    if (courseCode && data && semester) {
+      const currentSemesterData = data.find((d) => d.value === semester);
+      const courseExists = currentSemesterData?.children?.some(
+        (child) => child.value === courseCode
+      );
+
+      if (!courseExists) {
+        setCourseCode?.(undefined);
+      }
+    }
+  }, [semester, courseCode, data, setCourseCode]);
 
   return (
     <div className={'py-2 flex flex-col gap-2'}>
@@ -115,7 +152,7 @@ const SelectSUSSHeader = () => {
           loading={isLoading}
           placeholder="Select a Course"
           options={courseOptions}
-          onChange={(value) => setCourseCode?.(value)}
+          onChange={(value) => setCourseCode?.(value || '')}
         />
       )}
 
