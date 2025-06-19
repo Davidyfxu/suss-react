@@ -1,11 +1,11 @@
 import { useUserStore } from '../../stores/userStore';
 import StudentModule from './components/StudentModule';
 import TeacherModule from './components/TeacherModule';
-import { useHeartbeat } from '../../utils/useHeartbeat';
+// import { useHeartbeat } from '../../utils/useHeartbeat';
 
 const Dashboard = () => {
   const version = useUserStore((state) => state.version);
-  useHeartbeat();
+  // useHeartbeat();
 
   return version === 'Teacher' ? <TeacherModule /> : <StudentModule />;
 };

@@ -57,7 +57,7 @@ async function requestWithRetry<T>(
 // 创建axios实例
 const api = axios.create({
   baseURL: window.location.href.includes('https')
-    ? 'https://suss-django.zeabur.app'
+    ? 'https://clato-api.suss.edu.sg'
     : BASE_URL,
   timeout: 30000
 });
