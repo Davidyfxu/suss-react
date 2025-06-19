@@ -1,5 +1,5 @@
 import { Card } from 'antd';
-import { Statistic, Typography } from 'antd';
+import { Statistic } from 'antd';
 import { useEffect, useState, useRef } from 'react';
 import { useUserStore } from '../../../../stores/userStore';
 import { get_course_overview } from '../../api.ts';
@@ -10,8 +10,6 @@ import {
   EyeOutlined,
   LikeOutlined
 } from '@ant-design/icons';
-
-const { Title } = Typography;
 
 const CARD_COLORS = {
   students: '#e8f4ff',
@@ -80,11 +78,11 @@ const Overview = () => {
       >
         <div className={'flex gap-2 flex-wrap'}>
           <Card
-            bodyStyle={{ padding: '8px 24px' }}
             style={{
               backgroundColor: CARD_COLORS.students,
               ...cardStyle
             }}
+            styles={{ body: { padding: '8px 24px' } }}
             className="hover:shadow-lg"
           >
             <Statistic
@@ -103,7 +101,7 @@ const Overview = () => {
           </Card>
 
           <Card
-            bodyStyle={{ padding: '8px 24px' }}
+            styles={{ body: { padding: '8px 24px' } }}
             style={{
               backgroundColor: CARD_COLORS.topics,
               ...cardStyle
@@ -124,7 +122,7 @@ const Overview = () => {
           </Card>
 
           <Card
-            bodyStyle={{ padding: '8px 24px' }}
+            styles={{ body: { padding: '8px 24px' } }}
             style={{
               backgroundColor: CARD_COLORS.replies,
               ...cardStyle
@@ -145,7 +143,7 @@ const Overview = () => {
           </Card>
 
           <Card
-            bodyStyle={{ padding: '8px 24px' }}
+            styles={{ body: { padding: '8px 24px' } }}
             style={{
               backgroundColor: CARD_COLORS.reads,
               ...cardStyle
@@ -168,7 +166,7 @@ const Overview = () => {
           </Card>
 
           <Card
-            bodyStyle={{ padding: '8px 24px' }}
+            styles={{ body: { padding: '8px 24px' } }}
             style={{
               backgroundColor: CARD_COLORS.likes,
               ...cardStyle

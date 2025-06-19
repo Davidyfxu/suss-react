@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { draw_wordcloud } from '../../api.ts';
 import { useUserStore } from '../../../../stores/userStore';
 import ReactWordcloud from 'react-wordcloud-fork';
 import { Empty, Spin, Typography } from 'antd';
 import { SelectSUSS } from '../../../../components';
 
-const WordCloudComp: React.FC = () => {
+const WordCloudComp = () => {
   const courseCode = useUserStore((state) => state.courseCode);
   const dateRange = useUserStore((state) => state.dateRange);
   const [words, setWords] = useState<{ value: number; text: string }[]>([]);

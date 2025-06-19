@@ -113,7 +113,7 @@ const SelectorGroup: React.FC<{
   onUserChange: (value?: number) => void;
   topic?: string;
   selectedUser?: number;
-}> = ({ onTopicChange, onUserChange, topic, selectedUser }) => {
+}> = ({ onTopicChange, onUserChange, topic }) => {
   const courseCode = useUserStore((state) => state.courseCode);
   useEffect(() => {
     onTopicChange(undefined);

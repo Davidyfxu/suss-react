@@ -29,7 +29,7 @@ const SelectStudent: React.FC<CustomAutoCompleteProps> = ({
       const studentOptions = student_options
         .map((t: any) => ({
           label: t?.user_name,
-          value: t?.user_id
+          value: String(t?.user_id)
         }))
         .filter((r: any) => r?.label);
       setStudents(studentOptions);
@@ -68,9 +68,9 @@ const SelectStudent: React.FC<CustomAutoCompleteProps> = ({
     handleSearch(inputValue);
   }, [inputValue, students]);
 
-  const handleSelectOption = (value: string, option: any) => {
+  const handleSelectOption = (_: string, option: any) => {
     setInputValue(option.label);
-    handleSelect(option.value);
+    handleSelect(Number(option.value));
   };
 
   const handleChange = (value: string) => {
