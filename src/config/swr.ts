@@ -20,7 +20,7 @@ export const localStorageProvider = () => {
 
   // 同时使用 localforage 做持久化
   map.forEach(async (value, key) => {
-    await storage.setItem(key, value);
+    await storage.setItem(key as string, value as string);
   });
 
   return map as Cache;
@@ -40,10 +40,11 @@ export const clearSWRCache = async (): Promise<void> => {
 
 // SWR 全局配置
 export const swrConfig: SWRConfiguration = {
-  provider: localStorageProvider,
+  provider: () => new Map(), // 使用临时内存存储，不持久化
   revalidateIfStale: true,
   revalidateOnFocus: true,
   revalidateOnReconnect: true,
-  dedupingInterval: 5 * 60 * 1000, // 5 minutes
-  shouldRetryOnError: false
+  dedupingInterval: 0, // 禁用重复请求去重，每次都重新请求
+  shouldRetryOnError: false,
+  onErrorRetry: () => {}
 };
