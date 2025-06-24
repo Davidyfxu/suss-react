@@ -187,7 +187,14 @@ const VisualizationStudent = ({ className }: { className?: string }) => {
     if (courseCode) {
       getParticipants();
     }
-  }, [courseCode, topic, selectedUser, dateRange, version]);
+  }, [
+    courseCode,
+    topic,
+    selectedUser,
+    dateRange?.[0],
+    dateRange?.[1],
+    version
+  ]);
 
   const processData = (
     participantData: ChartDataItem[] = []

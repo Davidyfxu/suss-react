@@ -64,7 +64,7 @@ const Overview = () => {
 
   useEffect(() => {
     courseCode && getCourseOverview();
-  }, [courseCode, dateRange]);
+  }, [courseCode, dateRange?.[0], dateRange?.[1]]);
 
   return (
     <div className="py-1 px-5 bg-white">

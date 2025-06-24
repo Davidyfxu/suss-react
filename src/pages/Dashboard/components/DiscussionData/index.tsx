@@ -125,7 +125,7 @@ const DiscussionData = () => {
 
   useEffect(() => {
     courseCode && get_participation();
-  }, [courseCode, topic, dateRange]);
+  }, [courseCode, topic, dateRange?.[0], dateRange?.[1]]);
 
   useEffect(() => {
     setTopic(undefined);

@@ -34,11 +34,11 @@ const WordCloudComp = () => {
     } finally {
       setLoading(false);
     }
-  }, [courseCode, topic, dateRange]);
+  }, [courseCode, topic, dateRange?.[0], dateRange?.[1]]);
 
   useEffect(() => {
     courseCode && getWords();
-  }, [courseCode, topic, dateRange]);
+  }, [courseCode, topic, dateRange?.[0], dateRange?.[1]]);
 
   useEffect(() => {
     setTopic(undefined);

@@ -127,8 +127,8 @@ export const useUserStore = create<IUserStoreState>()(
         version: state.version,
         is_superuser: state.is_superuser,
         is_superuser_verified: state.is_superuser_verified,
-        courseCode: state.courseCode,
-        dateRange: state.dateRange,
+        // courseCode: state.courseCode,
+        // dateRange: state.dateRange,
         status: state.status
       })
     }
