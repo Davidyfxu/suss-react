@@ -19,7 +19,11 @@ class HttpClient {
     this.api.interceptors.response.use(
       (response: AxiosResponse) => response.data,
       (error: any) => {
-        // Add more error handling logic here.
+        if (error.response?.status === 401) {
+          // Clear token and redirect to login
+          localStorage.clear();
+          setTimeout(() => (window.location.href = '/login'), 500);
+        }
         throw error;
       }
     );
