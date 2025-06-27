@@ -4,7 +4,6 @@ import { DataSet } from 'vis-network/standalone';
 import { Spin, Typography, Button, Tooltip, Space } from 'antd';
 import { isNumber, set } from 'lodash-es';
 import {
-  InfoCircleOutlined,
   QuestionCircleOutlined,
   FullscreenOutlined,
   FullscreenExitOutlined
@@ -77,6 +76,8 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
 
   useEffect(() => {
     setTopic(null);
+    setHoverNode(null);
+    setSelectedNode(null);
   }, [courseCode]);
 
   const options: Options = {
