@@ -49,6 +49,8 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const networkInstanceRef = useRef<Network | null>(null);
   const courseCode = useUserStore((state) => state.courseCode);
+  const dateRange = useUserStore((state) => state.dateRange);
+
   const [apiData, setApiData] = useState<{
     nodes: IdeaNode[];
     edges: IdeaEdge[];
@@ -61,6 +63,9 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
         option_course: courseCode
       };
       topic && set(params, 'topic_title', topic);
+      dateRange?.[0] && set(params, 'start_date', dateRange?.[0]);
+      dateRange?.[1] && set(params, 'end_date', dateRange?.[1]);
+
       const response = await draw_idea_trajectory(params);
       setApiData(response);
     } catch (error) {
@@ -72,7 +77,7 @@ const IdeaTrajectory: React.FC<IdeaTrajectoryProps> = () => {
 
   useEffect(() => {
     courseCode && fetchData();
-  }, [topic, courseCode]);
+  }, [topic, courseCode, dateRange?.[0], dateRange?.[1]]);
 
   useEffect(() => {
     setTopic(null);

@@ -27,7 +27,7 @@ const CheckAssignment = () => {
     setLoading(true);
     try {
       const params = { ...values, option_course: courseCode };
-      dateRange?.[0] && (params['end_date'] = dateRange?.[0]);
+      dateRange?.[0] && (params['start_date'] = dateRange?.[0]);
       dateRange?.[1] && (params['end_date'] = dateRange?.[1]);
       const response = await check_assignment(params);
       setResult(response);
