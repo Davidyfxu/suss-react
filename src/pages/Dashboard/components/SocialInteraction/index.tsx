@@ -113,14 +113,14 @@ const SocialGraph: React.FC = () => {
             max: 30,
             label: {
               enabled: true, // 确保标签启用
-              min: isFullscreen ? 20 : 15,
-              max: isFullscreen ? 24 : 16,
+              min: isFullscreen ? 36 : 30,
+              max: isFullscreen ? 44 : 38,
               drawThreshold: 1,
               maxVisible: 30
             }
           },
           font: {
-            size: isFullscreen ? 22 : 16, // 减小默认字体大小
+            size: isFullscreen ? 40 : 34, // 减小默认字体大小
             face: 'Tahoma',
             color: '#333333' // 添加字体颜色使其更清晰
             // strokeWidth: 2, // 添加描边宽度使文字更清晰
@@ -287,7 +287,9 @@ const SocialGraph: React.FC = () => {
               'Higher interaction density indicates more interactions, vise versa.'
             }
           >
-            <span className="font-medium">
+            <span
+              className={clsx('font-medium', isFullscreen ? 'text-xl' : '')}
+            >
               Interaction density: {round(density, 3)}{' '}
               <QuestionCircleOutlined />
             </span>

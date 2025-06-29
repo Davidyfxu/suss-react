@@ -14,7 +14,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }): any => {
     loading,
     username,
     is_superuser_verified,
-    email,
     fullName
   } = useUserStore();
 
@@ -22,13 +21,12 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }): any => {
     if (username) {
       // Identify sends an event, so you may want to limit how often you call it
       posthog?.identify(username, {
-        email,
         is_superuser,
-
-        fullName
+        fullName,
+        username
       });
     }
-  }, [posthog, username, is_superuser, email, fullName]);
+  }, [posthog, username, is_superuser, username, fullName]);
 
   const checkToken = async () => {
     try {
