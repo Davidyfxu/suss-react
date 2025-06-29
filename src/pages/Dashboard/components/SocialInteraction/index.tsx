@@ -113,14 +113,14 @@ const SocialGraph: React.FC = () => {
             max: 30,
             label: {
               enabled: true, // 确保标签启用
-              min: 8,
-              max: 16,
+              min: isFullscreen ? 20 : 15,
+              max: isFullscreen ? 24 : 16,
               drawThreshold: 1,
               maxVisible: 30
             }
           },
           font: {
-            size: 10, // 减小默认字体大小
+            size: isFullscreen ? 22 : 16, // 减小默认字体大小
             face: 'Tahoma',
             color: '#333333' // 添加字体颜色使其更清晰
             // strokeWidth: 2, // 添加描边宽度使文字更清晰
@@ -206,7 +206,7 @@ const SocialGraph: React.FC = () => {
         resetNodesColor(network);
       });
     }
-  }, [rawData]);
+  }, [rawData, isFullscreen]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -219,7 +219,7 @@ const SocialGraph: React.FC = () => {
         network.current = null;
       }
     };
-  }, [rawData, initNetwork]);
+  }, [rawData, initNetwork, isFullscreen]);
 
   const handleResize = useCallback(
     debounce(() => {
