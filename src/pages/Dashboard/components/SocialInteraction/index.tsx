@@ -84,7 +84,7 @@ const SocialGraph: React.FC = () => {
           value: node.centrality,
           group: node.user_type,
           size: Math.sqrt(node.centrality) * 10,
-          title: `${node.id} Centrality: ${round(node.centrality, 2)}`
+          title: `${node.id} Centrality: ${round(node.centrality, 3)}`
         }))
       );
 
