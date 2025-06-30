@@ -165,7 +165,7 @@ const Home = (): any => {
         alt={''}
         onClick={() => window.open('https://www.suss.edu.sg/')}
       />
-      {window.location.pathname === '/dashboard/dashboard' && responsive.md && (
+      {window.location.pathname.includes('/dashboard/dashboard')  && responsive.md && (
         <Anchor
           direction="horizontal"
           targetOffset={60}
@@ -173,7 +173,7 @@ const Home = (): any => {
           items={getHeaderItems()}
         />
       )}
-      {window.location.pathname === '/dashboard/dashboard' && <VersionSelect />}
+      {window.location.pathname.includes('/dashboard/dashboard') && <VersionSelect />}
     </Header>
   );
   const renderFooter = () => (
