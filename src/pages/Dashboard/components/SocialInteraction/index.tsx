@@ -114,13 +114,13 @@ const SocialGraph: React.FC = () => {
             label: {
               enabled: true, // 确保标签启用
               min: isFullscreen ? 36 : 30,
-              max: isFullscreen ? 44 : 38,
+              max: isFullscreen ? 40 : 38,
               drawThreshold: 1,
               maxVisible: 30
             }
           },
           font: {
-            size: isFullscreen ? 40 : 34, // 减小默认字体大小
+            size: isFullscreen ? 36 : 34, // 减小默认字体大小
             face: 'Tahoma',
             color: '#333333' // 添加字体颜色使其更清晰
             // strokeWidth: 2, // 添加描边宽度使文字更清晰
