@@ -19,3 +19,4 @@ export const init = (p: any = {}) => post('/api/users/init/', p);
 export const verify_otp = (p: any = {}) => {
   return post('/api/users/verify_otp/', p);
 };
+export const health = (p: any = {}) => post('/api/todos/test_connection/', p);
