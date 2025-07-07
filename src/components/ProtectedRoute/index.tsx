@@ -8,25 +8,16 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }): any => {
   const navigate = useNavigate();
   const posthog = usePostHog();
 
-  const {
-    init,
-    is_superuser,
-    loading,
-    username,
-    is_superuser_verified,
-    fullName
-  } = useUserStore();
+  const { init, is_superuser, loading, username, is_superuser_verified } =
+    useUserStore();
 
   useEffect(() => {
     if (username) {
       // Identify sends an event, so you may want to limit how often you call it
-      posthog?.identify(username, {
-        is_superuser,
-        fullName,
-        username
-      });
+      posthog?.identify(username);
+      posthog.setPersonProperties({ email: '' });
     }
-  }, [posthog, username, is_superuser, username, fullName]);
+  }, [posthog, username]);
 
   const checkToken = async () => {
     try {
