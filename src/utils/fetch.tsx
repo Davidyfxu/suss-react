@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-export const BASE_URL = 'http://localhost:8000';
+export const BASE_URL = 'http://20.243.84.228:8000/';
 // export const BASE_URL = 'https://clato-api.suss.edu.sg';
 
 // 重试配置
@@ -56,9 +56,7 @@ async function requestWithRetry<T>(
 
 // 创建axios实例
 const api = axios.create({
-  baseURL: window.location.href.includes('https')
-    ? 'https://suss-django.zeabur.app'
-    : BASE_URL,
+  baseURL: BASE_URL,
   timeout: 30000
 });
 
